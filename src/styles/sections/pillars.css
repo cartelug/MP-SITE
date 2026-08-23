@@ -1,0 +1,273 @@
+/* ─────────────────────────────────────────────────────────────────
+   DEVELOPMENT PILLARS — five chapters.
+
+   On a desktop the stage is held while the page scrolls through it:
+   the tone of the field, the numeral, the photograph, the heading and
+   the list all change together, so each pillar reads as its own
+   chapter rather than as the fifth identical card in a row.
+
+   On a phone the pinning is abandoned outright. The same five
+   chapters become full-bleed blocks that scroll normally.
+   ───────────────────────────────────────────────────────────────── */
+
+.pillars { position: relative; }
+
+.pillars__head {
+  display: grid;
+  gap: var(--s4);
+  padding-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+/* ── tones, one per chapter ──────────────────────────────────── */
+/* Five tones walked from canopy down to cleared soil — the same
+   ground at five different depths, not five different brand colours. */
+.pillar-ch { --tone: var(--forest); --tone-fg: #f0f2e8; }
+.pillar-ch--1 { --tone: #16412f; }
+.pillar-ch--2 { --tone: #21341f; }
+.pillar-ch--3 { --tone: #2a2419; }
+.pillar-ch--4 { --tone: #3d3324; }
+.pillar-ch--5 { --tone: #55341f; }
+
+.pillar-ch__num {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5.6vw, 4.2rem);
+  font-weight: var(--w-light);
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  -webkit-text-stroke: 1px var(--tone-fg);
+  color: transparent;
+  opacity: 0.4;
+}
+
+.pillar-ch__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5.2vw, 3.9rem);
+  font-weight: var(--w-air);
+  line-height: 1.06;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.pillar-ch__title .place {
+  display: block;
+  font-family: var(--font-text);
+  font-weight: 300;
+  text-transform: none;
+  letter-spacing: -0.03em;
+  opacity: 0.75;
+}
+
+.pillar-ch__lede {
+  font-family: var(--font-text);
+  font-size: clamp(1.02rem, 1.35vw, 1.2rem);
+  font-weight: 340;
+  line-height: 1.55;
+  max-width: 40ch;
+  opacity: 0.78;
+}
+
+.pillar-ch__list { display: grid; }
+.pillar-ch__list li {
+  font-family: var(--font-display);
+  font-size: var(--fs-small);
+  font-weight: 480;
+  letter-spacing: 0.01em;
+  padding-block: 0.62rem;
+  border-top: 1px solid rgba(240, 242, 232, 0.16);
+}
+.pillar-ch__list li:last-child { border-bottom: 1px solid rgba(240, 242, 232, 0.16); }
+
+.pillar-ch__plate { position: relative; }
+.pillar-ch__plate img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+.pillar-ch__caption {
+  display: grid;
+  gap: 0.25rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid rgba(240, 242, 232, 0.2);
+  margin-top: 0.7rem;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(240, 242, 232, 0.72);
+}
+
+/* ── phone / tablet: honest vertical chapters ────────────────── */
+/* Wrap padding lives on whichever element is the outer block at this
+   width: the chapter on a phone, the stage on a desktop. */
+.pillar-ch__inner {
+  width: 100%;
+  max-width: calc(var(--max) + var(--pad) * 2);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+@media (max-width: 759.98px) {
+  /* Each chapter closes on its photograph, run edge to edge so the tone
+     change between chapters lands on an image rather than a margin. */
+  .pillars.is-pinned .pillar-ch__plate { margin-inline: calc(var(--pad) * -1); }
+  .pillar-ch__caption { margin-inline: var(--pad); }
+}
+
+/* ── the default: five chapters, stacked and all visible ─────────
+   This is what a phone gets, what a desktop gets with reduced motion,
+   and what anyone gets with JavaScript off. The held stage below is an
+   enhancement applied on top of it, never a prerequisite for reading
+   the constituency's five priorities. */
+.pillars__stage { display: grid; }
+
+.pillar-ch {
+  background: var(--tone);
+  color: var(--tone-fg);
+  padding-block: clamp(3rem, 9vw, 5rem);
+}
+.pillar-ch__inner { display: grid; gap: var(--s5); }
+.pillar-ch__head { display: grid; gap: var(--s4); }
+.pillar-ch__meta { display: flex; align-items: baseline; gap: var(--s4); }
+.pillars__rail,
+.pillars__tone { display: none; }
+
+@media (min-width: 760px) {
+  .pillars:not(.is-pinned) .pillar-ch__inner {
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    column-gap: var(--gutter);
+  }
+  .pillars:not(.is-pinned) .pillar-ch__head { grid-column: 1 / 4; }
+  .pillars:not(.is-pinned) .pillar-ch__plate { grid-column: 4 / -1; }
+  .pillars:not(.is-pinned) .pillar-ch__list { grid-column: 1 / -1; margin-top: var(--s4); }
+}
+
+/* ── enhancement: the held stage ─────────────────────────────────
+   Scoped to a class the script adds only when it really pins, so the
+   absolute positioning below can never hide the chapters. */
+@media (min-width: 1100px) {
+  .pillars.is-pinned .pillars__rail,
+  .pillars.is-pinned .pillars__tone { display: block; }
+
+  .pillars.is-pinned .pillar-ch {
+    background: none;
+    padding-block: 0;
+  }
+
+  .pillars.is-pinned .pillars__stage {
+    position: relative;
+    height: 100svh;
+    min-height: 640px;
+    display: grid;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  /* Tone plates cross-fade underneath everything. */
+  .pillars.is-pinned .pillars__tone {
+    position: absolute;
+    inset: 0;
+    background: var(--tone);
+    opacity: 0;
+    transition: opacity 0.7s var(--ease-out);
+  }
+  .pillars.is-pinned .pillars__tone.is-on { opacity: 1; }
+
+  .pillars.is-pinned .pillar-ch__inner { max-width: none; margin-inline: 0; padding-inline: 0; }
+
+  .pillars.is-pinned .pillars__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: calc(var(--max) + var(--pad) * 2);
+    margin-inline: auto;
+    padding-inline: var(--pad);
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    column-gap: var(--gutter);
+    align-items: center;
+  }
+
+  .pillars.is-pinned .pillars__rail {
+    grid-column: 1 / 3;
+    display: grid;
+    gap: 0.35rem;
+    color: #f0f2e8;
+  }
+  .pillars__rail button {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-family: var(--font-display);
+    font-size: var(--fs-micro);
+    font-weight: var(--w-sign);
+    letter-spacing: 0.12em;
+    color: currentColor;
+    white-space: nowrap;
+    opacity: 0.38;
+    min-height: 40px;
+    padding-block: 0.55rem;
+    transition: opacity var(--t-fast) var(--ease-ui);
+  }
+  .pillars__rail button::after {
+    content: '';
+    width: 14px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0.4);
+    transform-origin: left;
+    transition: transform var(--t-mid) var(--ease-out);
+  }
+  .pillars__rail button[aria-current='true'] { opacity: 1; }
+  .pillars__rail button[aria-current='true']::after { transform: scaleX(2.6); }
+  .pillars__rail button:hover { opacity: 0.8; }
+
+  .pillars.is-pinned .pillars__chapters {
+    grid-column: 3 / -1;
+    position: relative;
+    min-height: min(70svh, 640px);
+  }
+
+  .pillars.is-pinned .pillar-ch {
+    position: absolute;
+    inset: 0;
+    color: var(--tone-fg);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .pillars.is-pinned .pillar-ch.is-active { opacity: 1; visibility: visible; pointer-events: auto; }
+
+  .pillars.is-pinned .pillar-ch__inner {
+    height: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+    column-gap: clamp(2rem, 5vw, 5rem);
+    align-content: center;
+    align-items: center;
+  }
+  .pillars.is-pinned .pillar-ch__head { display: grid; gap: var(--s5); align-content: center; }
+  .pillars.is-pinned .pillar-ch__meta { display: flex; align-items: baseline; gap: var(--s5); }
+  /* Held at the full height of the stage rather than as a 3:2 letterbox
+     with dead field beneath it: the photograph is the other half of the
+     chapter, so it is given the other half of the screen. */
+  .pillars.is-pinned .pillar-ch__plate { justify-self: end; width: 100%; }
+  /* Square rather than the 3:2 the file is cut at: it fills the half of
+     the stage the chapter is given, and still crops within the source
+     rather than scaling it up. */
+  .pillars.is-pinned .pillar-ch__plate img { aspect-ratio: 1 / 1; }
+  .pillars.is-pinned .pillar-ch__list { margin-top: var(--s5); }
+
+  /* Each chapter's parts arrive in order, not all at once. */
+  .js .is-pinned .pillar-ch__meta,
+  .js .is-pinned .pillar-ch__title,
+  .js .is-pinned .pillar-ch__lede,
+  .js .is-pinned .pillar-ch__list,
+  .js .is-pinned .pillar-ch__plate {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+  }
+  .js .is-pinned .pillar-ch.is-active .pillar-ch__meta  { opacity: 1; transform: none; transition-delay: 0.02s; }
+  .js .is-pinned .pillar-ch.is-active .pillar-ch__title { opacity: 1; transform: none; transition-delay: 0.07s; }
+  .js .is-pinned .pillar-ch.is-active .pillar-ch__lede  { opacity: 1; transform: none; transition-delay: 0.13s; }
+  .js .is-pinned .pillar-ch.is-active .pillar-ch__list  { opacity: 1; transform: none; transition-delay: 0.18s; }
+  .js .is-pinned .pillar-ch.is-active .pillar-ch__plate { opacity: 1; transform: none; transition-delay: 0.09s; }
+}

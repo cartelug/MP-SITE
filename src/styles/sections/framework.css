@@ -1,0 +1,120 @@
+/* ─────────────────────────────────────────────────────────────────
+   DEVELOPMENT FRAMEWORK
+
+   Seven stages from a national vision down to one household. Boxes
+   joined by arrows would have flattened it; instead a single hairline
+   grows down the page and each stage takes focus as it is reached.
+   ───────────────────────────────────────────────────────────────── */
+
+.framework { position: relative; }
+
+.framework__head { display: grid; gap: var(--s5); padding-bottom: clamp(3rem, 7vw, 6rem); }
+
+.framework__track {
+  position: relative;
+  padding-left: clamp(1.75rem, 4vw, 3.5rem);
+}
+
+/* The line: a static rail with a drawn overlay that follows scroll. */
+.framework__rail,
+.framework__line {
+  position: absolute;
+  left: 0;
+  top: 0.6rem;
+  bottom: 0.6rem;
+  width: 1px;
+}
+.framework__rail { background: var(--rule-2); }
+.framework__line {
+  background: var(--accent);
+  transform: scaleY(var(--p, 0));
+  transform-origin: top;
+}
+
+.stage {
+  position: relative;
+  padding-block: clamp(1.4rem, 3.4vw, 2.6rem);
+}
+
+.stage__dot {
+  position: absolute;
+  left: calc(clamp(1.75rem, 4vw, 3.5rem) * -1);
+  top: calc(clamp(1.4rem, 3.4vw, 2.6rem) + 0.55em);
+  width: 7px;
+  height: 7px;
+  margin-left: -3px;
+  background: var(--fg-mute);
+  transition: background 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+}
+.stage.is-on .stage__dot { background: var(--accent); transform: scale(1.6); }
+
+.stage__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 3.9vw, 2.85rem);
+  font-weight: var(--w-air);
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--fg);
+  opacity: 0.26;
+  transition: opacity 0.55s var(--ease-out);
+}
+.stage.is-on .stage__name { opacity: 1; }
+
+.stage__note {
+  font-family: var(--font-text);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--fg-dim);
+  max-width: 44ch;
+  margin-top: 0.5rem;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.55s var(--ease-out) 0.08s, transform 0.55s var(--ease-out) 0.08s;
+}
+.stage.is-on .stage__note { opacity: 1; transform: none; }
+
+.stage__scale {
+  font-family: var(--font-display);
+  font-size: var(--fs-micro);
+  font-weight: var(--w-sign);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+}
+
+/* The document link only appears once its stage is the active one. */
+.stage__doc { opacity: 0; transition: opacity 0.5s var(--ease-out) 0.12s; }
+.stage.is-on .stage__doc { opacity: 1; }
+
+@media (min-width: 900px) {
+  .stage {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr) auto;
+    column-gap: clamp(1.5rem, 3vw, 3rem);
+    align-items: baseline;
+  }
+  .stage__scale { text-align: right; padding-top: 0.55rem; }
+  .stage__doc { justify-self: end; }
+}
+@media (prefers-reduced-motion: reduce) { .stage__doc { opacity: 1; } }
+
+/* Reduced motion keeps every stage legible from the start. */
+@media (prefers-reduced-motion: reduce) {
+  .stage__name { opacity: 1; }
+  .stage__note { opacity: 1; transform: none; }
+  .framework__line { transform: scaleY(1); }
+}
+
+/* Below the desktop grid only one stage is ever inside the reading band
+   at a time, so dimming the rest leaves a column of grey names over
+   empty gaps where their notes should be. On a phone every stage is
+   simply readable; the line still draws as you go, which is the part
+   that actually carries the idea. */
+@media (max-width: 899.98px) {
+  .stage__name { opacity: 1; }
+  .stage__note { opacity: 1; transform: none; }
+  .stage__doc { opacity: 1; }
+  .stage__dot { background: var(--fg-mute); transform: none; }
+  .stage.is-on .stage__dot { background: var(--accent); transform: scale(1.6); }
+}

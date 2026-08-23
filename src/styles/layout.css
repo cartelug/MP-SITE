@@ -1,0 +1,92 @@
+/* ─────────────────────────────────────────────────────────────────
+   Grid and structure.
+
+   4 / 6 / 12 columns. Sections place themselves on the grid by name
+   in their own stylesheet — there is no span-utility vocabulary to
+   sprinkle through the markup, so every composition is deliberate
+   and lives in one readable place.
+   ───────────────────────────────────────────────────────────────── */
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--max) + var(--pad) * 2);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--gutter);
+}
+
+.section { padding-block: var(--section); }
+.section--flush-top { padding-top: 0; }
+
+/* Cross-page hash links land clear of the fixed header. */
+main [id] { scroll-margin-top: calc(var(--header-h) + var(--s4)); }
+
+/* The terrace mark: nine hairlines cut to a hillside profile. Used
+   where a section change needs more than a single line. */
+.terrace {
+  width: clamp(150px, 20vw, 230px);
+  height: auto;
+  color: var(--fg);
+  opacity: 0.5;
+}
+
+/* Contour field, sized as a background wash behind a section. */
+.contour-wash {
+  position: absolute;
+  inset: 0;
+  background: url('/img/contour-dark.svg') no-repeat center / cover;
+  opacity: 0.055;
+  pointer-events: none;
+  z-index: 0;
+}
+.field--forest .contour-wash,
+.field--ink .contour-wash {
+  background-image: url('/img/contour-light.svg');
+  opacity: 0.09;
+}
+
+/* ── section headers ────────────────────────────────────────────
+   Deliberately not one shape. Sections choose whichever of these
+   reads correctly for their content; several use none of them.  */
+.head-split {
+  display: grid;
+  gap: var(--s5);
+  align-items: end;
+}
+@media (min-width: 900px) {
+  .head-split {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: var(--s7);
+  }
+}
+
+/* ── stacks ─────────────────────────────────────────────────── */
+.stack { display: grid; align-content: start; }
+.stack-3 { gap: var(--s3); }
+.stack-4 { gap: var(--s4); }
+.stack-5 { gap: var(--s5); }
+
+/* ── figures ────────────────────────────────────────────────────
+   Photography is square-cornered and edge-aware. Captions sit under
+   a hairline, set in the signage face, never floating on the image. */
+.figure { display: grid; gap: var(--s3); }
+
+.figure__frame {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper-2);
+  border-radius: var(--r0);
+}
+.figure__frame img { width: 100%; height: 100%; object-fit: cover; }
+
+.figure__caption {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: var(--s3);
+  border-top: 1px solid var(--rule);
+}

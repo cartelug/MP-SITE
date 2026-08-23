@@ -1,0 +1,114 @@
+# Publish the constituency site to GitHub Pages.
+#
+# The build is path-independent — every URL it emits is relative — so there
+# is nothing here pointing at a particular domain or subfolder, and moving
+# the site later needs no change to this file.
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deploy finish rather than cancelling it half-uploaded.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # This repository had Pages on the legacy "deploy from a branch"
+      # source, which publishes the repo root verbatim — the unbuilt
+      # source — and finishes after this workflow, overwriting it every
+      # time. configure-pages' `enablement` only creates a site that does
+      # not exist yet; it will not move an existing one off legacy. So ask
+      # the API directly. The workflow token already has pages: write.
+      - name: Take Pages off the legacy branch build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          current=$(gh api "repos/${{ github.repository }}/pages" --jq .build_type 2>/dev/null || echo unknown)
+          echo "Pages build_type is currently: $current"
+          if [ "$current" = "workflow" ]; then
+            echo "Pages builds from this workflow. Nothing to do."
+            exit 0
+          fi
+          echo "Attempting to switch the Pages source to workflow builds..."
+          if out=$(gh api -X PUT "repos/${{ github.repository }}/pages" -f build_type=workflow 2>&1); then
+            echo "Switched. $out"
+          else
+            echo "$out"
+            {
+              echo "### Pages is still building from a branch"
+              echo
+              echo "This deploy will be overwritten by the \`pages build and deployment\`"
+              echo "run, which publishes the unbuilt repository root."
+              echo
+              echo "**Fix:** repository **Settings -> Pages -> Source -> GitHub Actions**."
+              echo
+              echo "The API refused the automatic switch:"
+              echo '```'
+              echo "$out"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::error::Pages still builds from a branch — set Settings > Pages > Source > GitHub Actions. This deploy will be overwritten."
+            # The default GITHUB_TOKEN cannot change repository Settings —
+            # that call needs a human with admin rights, and it always
+            # returns 403 here (confirmed: "Resource not accessible by
+            # integration"). Fail the job so that is visible on the Actions
+            # tab as a red run rather than a green one with a buried log
+            # line. Once a human flips the setting, build_type reads
+            # "workflow" above and this step exits 0 before ever reaching
+            # this branch — so it self-clears with no further action here.
+            exit 1
+          fi
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - run: npm ci
+
+      - run: npm run build
+
+      # One root-absolute URL is enough to break the site on a project
+      # page, and it fails silently in a browser. Catch it here instead.
+      - name: Check every URL is relative
+        run: |
+          bad=$(grep -rlE '(href|src)="/[^/]' dist --include='*.html' || true)
+          bad="$bad $(grep -rl 'url(/' dist --include='*.css' || true)"
+          if [ -n "$(echo "$bad" | tr -d '[:space:]')" ]; then
+            echo "::error::absolute URLs found in: $bad"
+            exit 1
+          fi
+          echo "all URLs are relative"
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

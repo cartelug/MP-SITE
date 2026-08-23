@@ -1,0 +1,150 @@
+/* ─────────────────────────────────────────────────────────────────
+   Motion.
+
+   Three moves, used consistently: a masked line reveal for headings,
+   a short settle for blocks, and a clip reveal for photographs.
+   Nothing spins, nothing bounces, nothing loops except the one
+   scroll rail in the hero.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Line reveal — the mask is a real overflow clip, not an opacity fade. */
+.js .line-mask { overflow: hidden; display: block; }
+.js .line-mask > span {
+  display: block;
+  transform: translateY(105%);
+  transition: transform var(--motion-editorial) var(--ease-out);
+}
+.js .is-in .line-mask > span,
+.js .line-mask.is-in > span { transform: none; }
+.js .line-mask:nth-child(2) > span { transition-delay: 0.06s; }
+.js .line-mask:nth-child(3) > span { transition-delay: 0.12s; }
+.js .line-mask:nth-child(4) > span { transition-delay: 0.18s; }
+
+/* Block settle. */
+.js [data-reveal] {
+  transform: translateY(var(--motion-distance));
+  transition: opacity var(--motion-enter) var(--ease-out),
+              transform var(--motion-enter) var(--ease-out);
+}
+.js [data-reveal].is-in { transform: none; }
+.js [data-reveal='delay-1'] { transition-delay: 0.08s; }
+.js [data-reveal='delay-2'] { transition-delay: 0.16s; }
+.js [data-reveal='delay-3'] { transition-delay: 0.24s; }
+
+/* On pointer desktop, the secondary column enters from its own side of the
+   composition. Phones and tablets retain the simpler vertical reading flow. */
+:root[data-motion='desktop'] .opener__lede[data-reveal],
+:root[data-motion='desktop'] .head-split > [data-reveal],
+:root[data-motion='desktop'] .close-call__side[data-reveal],
+:root[data-motion='desktop'] .map-section__figure[data-reveal] {
+  transform: translateX(var(--motion-distance));
+}
+:root[data-motion='desktop'] .opener__lede[data-reveal].is-in,
+:root[data-motion='desktop'] .head-split > [data-reveal].is-in,
+:root[data-motion='desktop'] .close-call__side[data-reveal].is-in,
+:root[data-motion='desktop'] .map-section__figure[data-reveal].is-in {
+  transform: none;
+}
+
+/* Photograph reveal — the frame opens, the image settles back to 1.
+   Some source images sit directly in the figure, others use <picture> for
+   modern formats; both must receive the exact same entrance. */
+.js [data-image-reveal] { overflow: hidden; }
+.js [data-image-reveal] > img,
+.js [data-image-reveal] > picture > img {
+  transform: scale(var(--motion-image-scale));
+  transition: transform var(--motion-scene) var(--ease-out),
+              clip-path var(--motion-editorial) var(--ease-out);
+  clip-path: inset(0 0 100% 0);
+}
+
+/* Smaller screens receive a single lightweight heading settle. Desktop
+   upgrades the same markup to masked lines after its fonts are measured. */
+:root.js:not([data-motion='desktop']) [data-lines] {
+  opacity: 0;
+  transform: translateY(var(--motion-distance));
+  transition: opacity var(--motion-enter) var(--ease-out),
+              transform var(--motion-enter) var(--ease-out);
+}
+:root.js:not([data-motion='desktop']) [data-lines].is-in {
+  opacity: 1;
+  transform: none;
+}
+.js [data-image-reveal].is-in > img,
+.js [data-image-reveal].is-in > picture > img {
+  transform: scale(1);
+  clip-path: inset(0 0 0 0);
+}
+.js [data-image-reveal] > figcaption {
+  opacity: 0;
+  transform: translateY(var(--motion-distance));
+  transition: opacity var(--motion-enter) var(--ease-out),
+              transform var(--motion-enter) var(--ease-out);
+}
+.js [data-image-reveal].is-in > figcaption {
+  opacity: 1;
+  transform: none;
+  transition-delay: var(--motion-stagger);
+}
+
+/* Hero sequence. The page announces itself in a measured reading order:
+   context, statement, service routes, then the illustrative identity plate.
+   It is deliberately short and has no scroll-scrub dependency. */
+.js .hero__marker,
+.js .hero__line,
+.js .hero__actions,
+.js .hero__note,
+.js .hero__foot {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--motion-enter) var(--ease-out),
+              transform var(--motion-editorial) var(--ease-out);
+}
+.js .hero__line { transform: translateY(0.55em); }
+.js .hero.is-ready .hero__marker,
+.js .hero.is-ready .hero__line,
+.js .hero.is-ready .hero__actions,
+.js .hero.is-ready .hero__note,
+.js .hero.is-ready .hero__foot {
+  opacity: 1;
+  transform: none;
+}
+.js .hero.is-ready .hero__line:nth-child(1) { transition-delay: 0.08s; }
+.js .hero.is-ready .hero__line:nth-child(2) { transition-delay: 0.16s; }
+.js .hero.is-ready .hero__line:nth-child(3) { transition-delay: 0.24s; }
+.js .hero.is-ready .hero__actions { transition-delay: 0.32s; }
+.js .hero.is-ready .hero__note { transition-delay: 0.4s; }
+.js .hero.is-ready .hero__foot { transition-delay: 0.48s; }
+
+/* Contour draw-on, used once in the hero. */
+.js .contours path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 2.4s var(--ease-out);
+  transition-delay: calc(var(--i) * 0.055s + 0.25s);
+}
+.js .is-drawn .contours path { stroke-dashoffset: 0; }
+
+/* A parallax offset of a few per cent, applied only where a photograph
+   sits inside a taller frame. The script writes --shift. */
+.js [data-parallax] > img { will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .line-mask > span,
+  .js [data-reveal],
+  .js [data-image-reveal] > img,
+  .js [data-image-reveal] > picture > img,
+  .js [data-image-reveal] > figcaption,
+  .js .hero__marker,
+  .js .hero__line,
+  .js .hero__actions,
+  .js .hero__note,
+  .js .hero__foot {
+    transform: none !important;
+    clip-path: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+  .js .contours path { stroke-dashoffset: 0; transition: none; }
+  .hero__scroll::after { animation: none; transform: scaleX(1); }
+}

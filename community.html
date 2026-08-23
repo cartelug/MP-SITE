@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--@ head
+  title="Community — the digital constituency office"
+  desc="Tell the office what your community needs. Report an issue by area and category, get a reference number, and find opportunities and engagements in Budadiri East."
+-->
+</head>
+<body data-page="community">
+<!--@ header -->
+
+<main id="main">
+
+<section class="opener field field--paper">
+  <div class="wrap">
+    <div class="opener__marker">
+      <span class="micro">Digital constituency office</span>
+      <span class="micro">Prototype &middot; browser only</span>
+    </div>
+    <div class="opener__body">
+      <h1 class="opener__title display" data-lines>Tell us what your community needs.</h1>
+      <p class="opener__lede lede">
+        The production service is designed to ask four questions and return a
+        reference number. This prototype demonstrates that journey, but it
+        does not send anything to the constituency office yet.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── the form ────────────────────────────────────────────────── -->
+<section class="section field field--stone office" id="raise">
+  <div class="wrap office__frame">
+    <div class="office__aside stack stack-5">
+      <span class="marker marker--rule">The production journey</span>
+      <ul class="office__path">
+        <li><span class="num">01</span><span>You submit and receive a reference number</span></li>
+        <li><span class="num">02</span><span>The office classifies it by area and pillar</span></li>
+        <li><span class="num">03</span><span>It is put to the responsible institution</span></li>
+        <li><span class="num">04</span><span>The response is published, whatever it says</span></li>
+      </ul>
+      <div class="prototype-notice" role="note">
+        <span class="micro">Prototype mode</span>
+        <strong>Nothing entered here is sent to the office.</strong>
+        <p>
+          Use sample information only. This build saves the demonstration on
+          this browser so the local workflow can be reviewed. A secure backend,
+          consent, retention and access rules are required before public use.
+        </p>
+      </div>
+    </div>
+
+    <div class="office__form">
+      <noscript>
+        <p class="note" style="margin-bottom: var(--s6)">
+          This form asks its four questions one at a time, which needs
+          JavaScript. With it switched off, please raise the issue through the
+          constituency office directly &mdash; contact details will be
+          published here once the office has confirmed them.
+        </p>
+      </noscript>
+
+      <form data-office-form novalidate>
+        <p class="visually-hidden" aria-live="polite" data-step-live>Step 1 of 4: Where</p>
+        <div class="steps" aria-hidden="true">
+          <span class="step-mark" data-step-mark data-state="current"><span class="step-mark__bar"></span><span class="step-mark__label">01 <span>Where</span></span></span>
+          <span class="step-mark" data-step-mark data-state="todo"><span class="step-mark__bar"></span><span class="step-mark__label">02 <span>What</span></span></span>
+          <span class="step-mark" data-step-mark data-state="todo"><span class="step-mark__bar"></span><span class="step-mark__label">03 <span>Detail</span></span></span>
+          <span class="step-mark" data-step-mark data-state="todo"><span class="step-mark__bar"></span><span class="step-mark__label">04 <span>Contact</span></span></span>
+        </div>
+
+        <div data-flow>
+          <!-- 01 -->
+          <fieldset class="step" data-step>
+            <legend class="visually-hidden">Step 1 of 4: where are you?</legend>
+            <h2 class="step__question" tabindex="-1">Where are you?</h2>
+            <p class="step__hint">
+              The sub-county tells the office who is responsible. The village or
+              parish tells them where to go.
+            </p>
+            <div class="step__fields step__fields--pair">
+              <div class="field-row">
+                <label for="area">Sub-county or town council</label>
+                <select class="select" id="area" name="area" required
+                        data-required="Choose the area this issue is in.">
+                  <option value="">Choose an area</option>
+                  <option>Budadiri Town Council</option>
+                  <option>Buhugu</option>
+                  <option>Bugitimwa</option>
+                  <option>Bukiise</option>
+                  <option>Bukyambi</option>
+                  <option>Bumalimba</option>
+                  <option>Bumasifwa</option>
+                  <option>Busulani</option>
+                  <option>Butandiga</option>
+                  <option>Zesui</option>
+                  <option>Elgon</option>
+                  <option>Elsewhere in Budadiri East</option>
+                </select>
+                <span class="field-error" data-error role="alert"></span>
+              </div>
+              <div class="field-row">
+                <label for="village">Village or parish</label>
+                <input class="input" id="village" name="village" type="text"
+                       autocomplete="address-level3" placeholder="e.g. Nalugugu">
+                <span class="field-error" data-error role="alert"></span>
+              </div>
+            </div>
+            <div class="step__nav">
+              <button class="action action--solid action--lg" type="button" data-next>
+                Continue <span class="arrow" aria-hidden="true">&#8594;</span>
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- 02 -->
+          <fieldset class="step" data-step hidden>
+            <legend class="visually-hidden">Step 2 of 4: what is the issue?</legend>
+            <h2 class="step__question" tabindex="-1">What is the issue?</h2>
+            <p class="step__hint">Pick the closest category. The office will refine it.</p>
+            <div class="field-row">
+              <span class="visually-hidden" id="cat-label">Category</span>
+              <div class="choices" role="radiogroup" aria-labelledby="cat-label">
+                <label class="choice"><input type="radio" name="category" value="Roads and bridges" required data-required="Choose a category so the issue reaches the right desk."> Roads &amp; bridges</label>
+                <label class="choice"><input type="radio" name="category" value="Health"> Health</label>
+                <label class="choice"><input type="radio" name="category" value="Education"> Education</label>
+                <label class="choice"><input type="radio" name="category" value="Water and sanitation"> Water &amp; sanitation</label>
+                <label class="choice"><input type="radio" name="category" value="Electricity"> Electricity</label>
+                <label class="choice"><input type="radio" name="category" value="Agriculture and coffee"> Agriculture &amp; coffee</label>
+                <label class="choice"><input type="radio" name="category" value="Landslide or disaster risk"> Landslide or disaster risk</label>
+                <label class="choice"><input type="radio" name="category" value="Youth and jobs"> Youth &amp; jobs</label>
+                <label class="choice"><input type="radio" name="category" value="Women and households"> Women &amp; households</label>
+                <label class="choice"><input type="radio" name="category" value="Other"> Something else</label>
+              </div>
+              <span class="field-error" data-error role="alert"></span>
+            </div>
+            <div class="step__nav">
+              <button class="action step__back" type="button" data-back>
+                <span class="arrow" aria-hidden="true">&#8592;</span> Back
+              </button>
+              <button class="action action--solid action--lg" type="button" data-next>
+                Continue <span class="arrow" aria-hidden="true">&#8594;</span>
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- 03 -->
+          <fieldset class="step" data-step hidden>
+            <legend class="visually-hidden">Step 3 of 4: tell us more</legend>
+            <h2 class="step__question" tabindex="-1">Tell us more.</h2>
+            <p class="step__hint">
+              What is happening, since when, who it affects, and what would fix
+              it. Plain language is fine &mdash; nobody is marking this.
+            </p>
+            <div class="field-row">
+              <label for="details">Description</label>
+              <textarea class="textarea" id="details" name="details" required minlength="20"
+                        data-required="A short description is needed before this can be routed."
+                        placeholder="The footbridge on the path to the market has been broken since the April rains. Children cross on a log."></textarea>
+              <span class="field-error" data-error role="alert"></span>
+            </div>
+            <div class="step__nav">
+              <button class="action step__back" type="button" data-back>
+                <span class="arrow" aria-hidden="true">&#8592;</span> Back
+              </button>
+              <button class="action action--solid action--lg" type="button" data-next>
+                Continue <span class="arrow" aria-hidden="true">&#8594;</span>
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- 04 -->
+          <fieldset class="step" data-step hidden>
+            <legend class="visually-hidden">Step 4 of 4: how should we reach you?</legend>
+            <h2 class="step__question" tabindex="-1">How should we reach you?</h2>
+            <p class="step__hint">
+              A phone number lets the office confirm details and tell you what
+              happened. You can leave it out and still submit.
+            </p>
+            <div class="step__fields step__fields--pair">
+              <div class="field-row">
+                <label for="name">Your name</label>
+                <input class="input" id="name" name="name" type="text" required
+                       autocomplete="name" data-required="Please give a name for the record.">
+                <span class="field-error" data-error role="alert"></span>
+              </div>
+              <div class="field-row">
+                <label for="phone">Phone (optional)</label>
+                <input class="input" id="phone" name="phone" type="tel"
+                       inputmode="tel" autocomplete="tel" placeholder="07…">
+                <span class="field-error" data-error role="alert"></span>
+              </div>
+            </div>
+            <div class="field-row">
+              <label class="choice" style="align-items: flex-start; padding: 0.9rem 1.05rem">
+                <input type="checkbox" name="confirm" required
+                       data-required="Please confirm before submitting.">
+                <span style="padding-left: 0.6rem">This is accurate as far as I know, and the office may contact me about it.</span>
+              </label>
+              <span class="field-error" data-error role="alert"></span>
+            </div>
+            <div class="step__nav">
+              <button class="action step__back" type="button" data-back>
+                <span class="arrow" aria-hidden="true">&#8592;</span> Back
+              </button>
+              <button class="action action--solid action--lg" type="submit">
+                Save prototype report <span class="arrow" aria-hidden="true">&#8599;</span>
+              </button>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="receipt" data-receipt hidden tabindex="-1">
+          <span class="marker marker--rule">Saved on this device</span>
+          <p class="receipt__ref num" data-ref>BE-2026-0000</p>
+          <div class="receipt__grid">
+            <div class="receipt__cell">
+              <span class="micro">Area</span>
+              <span class="sub" data-receipt-area>&mdash;</span>
+            </div>
+            <div class="receipt__cell">
+              <span class="micro">Category</span>
+              <span class="sub" data-receipt-category>&mdash;</span>
+            </div>
+          </div>
+          <p class="note">
+            Keep this reference. In this prototype the record was written to
+            this browser only &mdash; it has not been sent anywhere. Once the
+            office backend is connected, this number is what you quote to ask
+            what happened next.
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ── your area ───────────────────────────────────────────────── -->
+<section class="section field field--paper" id="areas">
+  <div class="wrap map-section">
+    <div class="map-section__text stack stack-5">
+      <span class="marker marker--rule">Your area</span>
+      <h2 class="title">Every issue belongs somewhere.</h2>
+      <p class="prose">
+        Submissions and project updates are grouped by sub-county and town
+        council, so a resident of Bumasifwa can read what is happening in
+        Bumasifwa without wading through the rest of the constituency.
+      </p>
+      <div class="tags" style="gap: 0.6rem 1.4rem">
+        <span class="tag">Budadiri T/C</span><span class="tag">Buhugu</span><span class="tag">Bugitimwa</span>
+        <span class="tag">Bukiise</span><span class="tag">Bukyambi</span><span class="tag">Bumalimba</span>
+        <span class="tag">Bumasifwa</span><span class="tag">Busulani</span><span class="tag">Butandiga</span>
+        <span class="tag">Zesui</span><span class="tag">Elgon</span>
+      </div>
+      <p class="caption">
+        Area names shown from publicly available Sironko administrative
+        listings. The final list must be confirmed with the district and
+        constituency offices.
+      </p>
+    </div>
+
+    <div class="map-section__figure">
+      <!--@ constituency -->
+    </div>
+  </div>
+</section>
+
+<!-- ── opportunities ───────────────────────────────────────────── -->
+<section class="section field field--ink" id="opportunities">
+  <span class="grain" aria-hidden="true"></span>
+  <div class="wrap">
+    <div class="head-split" style="margin-bottom: clamp(2.5rem,6vw,4.5rem)">
+      <h2 class="title" data-lines>One place to find what is open.</h2>
+      <p class="lede">
+        Scholarships, training places, enterprise finance and public programmes
+        are announced in a dozen places at once and missed by the people they
+        were written for. This section is meant to end that.
+      </p>
+    </div>
+
+    <div class="clauses">
+      <!--@ clause n="01" word="Young people" obliges="Training places, apprenticeships, internships, sports and digital work." -->
+      <!--@ clause n="02" word="Women" obliges="Enterprise finance, business training, market access, productive equipment." -->
+      <!--@ clause n="03" word="Students" obliges="Scholarships, bursaries, admissions, TVET and tertiary pathways." -->
+      <!--@ clause n="04" word="Households" obliges="Parish Development Model, agricultural support and social protection." -->
+    </div>
+
+    <p class="note" style="margin-top: var(--s6)">
+      Listings will be published here once each one has been verified with the
+      institution offering it. An unverified opportunity wastes a journey that
+      somebody could not afford to make.
+    </p>
+  </div>
+</section>
+
+<!-- ── engagements ─────────────────────────────────────────────── -->
+<section class="section field field--paper" id="engagements">
+  <div class="wrap map-section">
+    <div class="map-section__text stack stack-5">
+      <span class="marker marker--rule">Engagements</span>
+      <h2 class="title">Where the office will be, before it gets there.</h2>
+      <p class="prose">
+        Community dialogues, field visits and programme days published in
+        advance with the location, the time and the agenda &mdash; and a way to
+        send a question ahead of the meeting, so the answer is ready when the
+        room fills up.
+      </p>
+      <a class="action" href="/community.html#raise">Send a question ahead <span class="arrow" aria-hidden="true">&#8599;</span></a>
+    </div>
+    <div class="map-section__figure">
+      <p class="note">
+        No engagement calendar is published in this build, and no contact
+        number has been inserted, because neither was verified in the material
+        supplied. Publishing an unverified number for a constituency office
+        would be worse than publishing none.
+      </p>
+    </div>
+  </div>
+</section>
+
+</main>
+<!--@ footer -->
+</body>
+</html>

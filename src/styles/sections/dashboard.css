@@ -1,0 +1,219 @@
+/* ─────────────────────────────────────────────────────────────────
+   PEOPLE'S DASHBOARD
+
+   A published return, not an admin console. Three counts sit on one
+   ruled line; below them every record is a row on the same grid —
+   subject, classification, measure, status, latest action, date —
+   so the eye can read down a column and compare like with like.
+   ───────────────────────────────────────────────────────────────── */
+
+.dash__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s4);
+  padding-bottom: var(--s4);
+  border-bottom: 1px solid var(--fg);
+}
+
+/* ── the three counts ────────────────────────────────────────── */
+.dash__counts {
+  display: grid;
+  border-bottom: 1px solid var(--rule);
+}
+@media (min-width: 760px) {
+  .dash__counts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.dash__count {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: var(--s4);
+  padding: clamp(1.4rem, 3vw, 2.4rem) 0;
+  border-bottom: 1px solid var(--rule-2);
+}
+@media (min-width: 760px) {
+  .dash__count {
+    grid-template-columns: 1fr;
+    align-content: space-between;
+    gap: clamp(2rem, 5vw, 4rem);
+    padding-right: var(--s5);
+    border-bottom: 0;
+    border-left: 1px solid var(--rule-2);
+    padding-left: var(--s5);
+    min-height: 10.5rem;
+  }
+  .dash__count:first-child { border-left: 0; padding-left: 0; }
+}
+.dash__count-label { max-width: 14ch; }
+.dash__count-figure { display: flex; align-items: baseline; gap: 0.5rem; }
+.dash__count-unit {
+  font-family: var(--font-display);
+  font-size: var(--fs-micro);
+  font-weight: var(--w-sign);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+}
+
+/* ── record rows ─────────────────────────────────────────────── */
+.record {
+  display: grid;
+  gap: var(--s3);
+  padding-block: clamp(1.5rem, 3.2vw, 2.4rem);
+  border-bottom: 1px solid var(--rule-2);
+  position: relative;
+}
+
+.record__subject {
+  font-family: var(--font-display);
+  font-size: clamp(1.18rem, 2.3vw, 1.7rem);
+  font-weight: var(--w-plain);
+  letter-spacing: 0.004em;
+  line-height: 1.28;
+  text-wrap: balance;
+}
+
+.record__block { display: grid; gap: 0.4rem; align-content: start; }
+.record__key {
+  font-family: var(--font-display);
+  font-size: var(--fs-micro);
+  font-weight: var(--w-sign);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+}
+.record__value {
+  font-family: var(--font-text);
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--fg-dim);
+  max-width: 46ch;
+}
+.record__toggle { display: none; }
+@media (max-width: 759.98px) {
+  /* Phone: compact evidence cards, never a squeezed table. The status is
+     visible at a glance; the source trail opens only when requested. */
+  .record {
+    gap: var(--s4);
+    margin-top: var(--s4);
+    padding: 1.2rem;
+    border: 1px solid var(--rule);
+    background: color-mix(in srgb, var(--paper) 64%, var(--bg));
+  }
+  .record + .record { margin-top: var(--s3); }
+  .record__lead { order: 1; }
+  .record__status { order: 2; }
+  .record__toggle { order: 3; }
+  .record__meter-wrap { order: 4; }
+  .record__action { order: 5; }
+  .record > .record__block:last-child { order: 6; }
+  .record__subject { font-size: clamp(1.2rem, 5.1vw, 1.5rem); }
+  .record__status {
+    grid-template-columns: minmax(4.5rem, auto) 1fr;
+    align-items: center;
+    gap: var(--s3);
+  }
+  .record__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 48px;
+    padding-top: var(--s3);
+    border-top: 1px solid var(--rule-2);
+    font-family: var(--font-display);
+    font-size: var(--fs-micro);
+    font-weight: var(--w-sign);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+  .record__toggle-mark {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    flex: none;
+  }
+  .record__toggle-mark::before,
+  .record__toggle-mark::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 14px;
+    height: 1px;
+    background: currentColor;
+    transform: translate(-50%, -50%);
+    transition: transform var(--t-mid) var(--ease-out);
+  }
+  .record__toggle-mark::after { transform: translate(-50%, -50%) rotate(90deg); }
+  .record.is-open .record__toggle-mark::after { transform: translate(-50%, -50%) rotate(0); }
+  .js .record:not(.is-open) [data-record-detail] { display: none; }
+  .record[data-record] [data-record-detail] { padding-top: var(--s2); }
+  .js .record .meter__fill {
+    transform: scaleX(0);
+    transition: transform var(--motion-enter) var(--ease-out);
+  }
+  .js .record.is-open .meter__fill { transform: scaleX(1); }
+}
+
+@media (min-width: 760px) {
+  .record {
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    column-gap: var(--gutter);
+    row-gap: var(--s4);
+    align-items: start;
+  }
+  .record__subject   { grid-column: 1 / 4; }
+  .record__tags      { grid-column: 1 / 4; }
+  .record__meter-wrap{ grid-column: 4 / -1; }
+  .record__status    { grid-column: 4 / 5; }
+  .record__action    { grid-column: 5 / -1; }
+}
+
+@media (min-width: 1100px) {
+  .record {
+    grid-template-columns: minmax(0, 3.4fr) minmax(0, 2.1fr) minmax(0, 1.5fr) minmax(0, 3fr) minmax(0, 1.2fr);
+    column-gap: clamp(1.5rem, 3vw, 3rem);
+    align-items: start;
+  }
+  .record__subject, .record__tags, .record__meter-wrap,
+  .record__status, .record__action { grid-column: auto; }
+  .record__lead { display: grid; gap: 0.55rem; }
+}
+
+.record__meter { display: grid; gap: 0.5rem; }
+.record__meter .micro { display: flex; justify-content: space-between; }
+
+@media (hover: hover) {
+  .record:hover .record__subject { color: var(--accent); }
+  .record__subject { transition: color var(--t-fast) var(--ease-ui); }
+}
+
+/* Header row for the record list, desktop only — it labels the columns
+   once instead of repeating a key on every row. */
+.record-head {
+  display: none;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--fg);
+}
+@media (min-width: 1100px) {
+  .record-head {
+    display: grid;
+    grid-template-columns: minmax(0, 3.4fr) minmax(0, 2.1fr) minmax(0, 1.5fr) minmax(0, 3fr) minmax(0, 1.2fr);
+    column-gap: clamp(1.5rem, 3vw, 3rem);
+  }
+  .record .record__key { display: none; }
+}
+
+.dash__foot {
+  display: grid;
+  gap: var(--s5);
+  padding-top: var(--s6);
+}
+@media (min-width: 900px) {
+  .dash__foot { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; gap: var(--s7); }
+}

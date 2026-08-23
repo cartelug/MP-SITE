@@ -1,0 +1,213 @@
+/* ─────────────────────────────────────────────────────────────────
+   BUDADIRI EAST — design tokens
+
+   Two faces carry the identity. Montserrat is the structural voice:
+   signage, labels, data, the big statements. Newsreader is the
+   speaking voice: ledes, quotations, anything that reads like a
+   person wrote it. Nothing else is loaded.
+
+   Montserrat is set light and open here rather than heavy and tight.
+   A constituency office should read as composed, not as a poster
+   shouting at the people it serves — so weight is spent sparingly,
+   space is spent freely, and the photographs are what carry volume.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Both faces are instanced and subset by tools/build-fonts.py: the axes
+   this site never varies are pinned out, and the character set is the one
+   the pages actually contain. 166 KB of webfont becomes 56 KB. */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/montserrat-latin.woff2') format('woff2-variations');
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Newsreader';
+  src: url('/fonts/newsreader-latin.woff2') format('woff2-variations');
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* ── palette ──────────────────────────────────────────────────
+     Paper is the ground the site actually stands on — a warm, near
+     white that lets photography do the colour work. Forest and bark
+     are the two dark bands the page is allowed to fall into; neither
+     is black, because black reads as a screen and these pages are
+     about a place. Clay and gold are rationed: gold appears as a
+     rule, a figure or a marker, never as a surface.               */
+  --ink:        #1c1d15;
+  --forest:     #16412f;
+  --forest-2:   #0d2a1e;
+  --forest-3:   #24664c;
+  --bark:       #2a2419;
+  --paper:      #faf7ef;
+  --paper-2:    #f0ebde;
+  --clay:       #9d4f2e;
+  --clay-2:     #c78a63;
+  --gold:       #b8912c;
+  --gold-2:     #dcbb62;
+
+  /* ── field variables, re-bound per section ─────────────────── */
+  --bg:      var(--paper);
+  --fg:      var(--ink);
+  --fg-dim:  #56594a;
+  --fg-mute: #8b8d7e;
+  --rule:    rgba(28, 29, 21, 0.13);
+  --rule-2:  rgba(28, 29, 21, 0.07);
+  --accent:  var(--clay);
+
+  /* ── type ─────────────────────────────────────────────────────
+     One ratio, applied at three densities. The mega size is allowed
+     to eat a third of the viewport; the quiet sizes stay quiet.    */
+  --font-display: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-text: 'Newsreader', Georgia, 'Times New Roman', serif;
+
+  --fs-mega:    min(clamp(2.9rem, 10.2vw, 9.5rem), 17svh);
+  --fs-display: clamp(2.35rem, 7.4vw, 6rem);
+  --fs-title:   clamp(1.85rem, 4.9vw, 3.7rem);
+  --fs-head:    clamp(1.35rem, 2.7vw, 2.05rem);
+  --fs-sub:     clamp(1.1rem, 1.65vw, 1.38rem);
+  --fs-lede:    clamp(1.09rem, 1.42vw, 1.36rem);
+  --fs-body:    clamp(0.99rem, 1.06vw, 1.075rem);
+  --fs-small:   0.875rem;
+  --fs-label:   0.7rem;
+  --fs-micro:   0.64rem;
+
+  /* Weight and tracking move together: the lighter a setting is, the
+     more air it needs between letters to stay solid on screen. */
+  --w-air:     300;
+  --w-light:   340;
+  --w-plain:   400;
+  --w-sign:    520;
+  --w-strong:  600;
+
+  --track-mega:    0.028em;
+  --track-display: 0.012em;
+  --track-title:   0.006em;
+  --track-label:   0.2em;
+
+  /* ── measure ──────────────────────────────────────────────────
+     Line length is capped in characters, not pixels, so the serif
+     and the sans both land near 62–72 characters.                 */
+  --measure:      64ch;
+  --measure-wide: 78ch;
+
+  /* ── space ────────────────────────────────────────────────── */
+  --s1: 0.25rem;
+  --s2: 0.5rem;
+  --s3: 0.75rem;
+  --s4: 1rem;
+  --s5: 1.5rem;
+  --s6: 2rem;
+  --s7: 3rem;
+  --s8: 4.5rem;
+  --s9: 7rem;
+
+  --section:    clamp(5.25rem, 11vw, 13rem);
+  --section-lg: clamp(7rem, 15vw, 17rem);
+
+  /* ── grid ─────────────────────────────────────────────────────
+     4 columns on a phone, 6 on a tablet, 12 on a desktop. Sections
+     place themselves on it by name; there are no span utilities to
+     scatter through the markup.                                   */
+  --cols: 4;
+  --gutter: 14px;
+  --pad: clamp(20px, 5.2vw, 76px);
+  --max: 1520px;
+
+  /* ── geometry ─────────────────────────────────────────────────
+     Square by default. Radius is a utility affordance, not a look. */
+  --r0: 0;
+  --r1: 2px;
+  --r2: 4px;
+  --r3: 7px;
+
+  /* ── motion ───────────────────────────────────────────────────
+     One ease for entrances, one for interface response.           */
+  --ease:     cubic-bezier(0.22, 0.61, 0.24, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-ui:  cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-instant: 120ms;
+  --motion-fast: 180ms;
+  --motion-ui: 280ms;
+  --motion-enter: 520ms;
+  --motion-editorial: 820ms;
+  --motion-scene: 1100ms;
+  --motion-distance: 12px;
+  --motion-image-scale: 1.035;
+  --motion-stagger: 50ms;
+  --t-fast: var(--motion-fast);
+  --t-mid: var(--motion-enter);
+  --t-slow: var(--motion-editorial);
+
+  --header-h: 68px;
+  --tap: 48px;
+  --mobile-dock-h: 68px;
+  --mobile-surface: color-mix(in srgb, var(--paper) 96%, transparent);
+  --mobile-elevation: 0 -10px 28px rgba(28, 29, 21, 0.09);
+}
+
+@media (min-width: 760px) {
+  :root { --cols: 6; --gutter: 20px; --header-h: 76px; }
+}
+
+@media (min-width: 1100px) {
+  :root {
+    --cols: 12;
+    --gutter: 24px;
+    --header-h: 84px;
+    --motion-distance: 18px;
+    --motion-image-scale: 1.05;
+    --motion-stagger: 70ms;
+  }
+}
+
+/* Wide screens need more margin, not wider prose. This keeps the register
+   and photography architectural at 1440–1920px while the existing measure
+   tokens continue to protect reading length inside each composition. */
+@media (min-width: 1440px) {
+  :root {
+    --pad: clamp(72px, 5.8vw, 104px);
+    --max: 1600px;
+  }
+}
+
+/* ── fields ─────────────────────────────────────────────────────
+   The page moves paper → off-white → deep green → image → bark →
+   paper. A field re-binds the colour variables; everything inside
+   it inherits without knowing where it sits.                      */
+.field { background: var(--bg); color: var(--fg); position: relative; }
+
+.field--paper { --bg: var(--paper); }
+
+.field--stone {
+  --bg: var(--paper-2);
+  --rule: rgba(28, 29, 21, 0.15);
+  --rule-2: rgba(28, 29, 21, 0.08);
+}
+
+.field--forest {
+  --bg: var(--forest);
+  --fg: #f0f2e8;
+  --fg-dim: rgba(240, 242, 232, 0.74);
+  --fg-mute: rgba(240, 242, 232, 0.52);
+  --rule: rgba(240, 242, 232, 0.2);
+  --rule-2: rgba(240, 242, 232, 0.1);
+  --accent: var(--gold-2);
+}
+
+/* Not black. A dark band on this site is bark, soil and shadow —
+   the same warmth as the paper, turned down. */
+.field--ink {
+  --bg: var(--bark);
+  --fg: #f0ece0;
+  --fg-dim: rgba(240, 236, 224, 0.7);
+  --fg-mute: rgba(240, 236, 224, 0.46);
+  --rule: rgba(240, 236, 224, 0.17);
+  --rule-2: rgba(240, 236, 224, 0.09);
+  --accent: var(--gold-2);
+}

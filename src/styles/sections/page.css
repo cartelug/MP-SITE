@@ -1,0 +1,388 @@
+/* ─────────────────────────────────────────────────────────────────
+   Page furniture: inner-page openers, the closing call, the footer,
+   the media archive and the office prototype table.
+   ───────────────────────────────────────────────────────────────── */
+
+/* ── inner page opener ───────────────────────────────────────── */
+.opener {
+  position: relative;
+  padding-top: calc(var(--header-h) + clamp(2.5rem, 8vw, 6.5rem));
+  padding-bottom: clamp(2.5rem, 6vw, 5rem);
+  overflow: clip;
+}
+.opener__marker {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s4);
+  padding-bottom: var(--s3);
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+}
+.opener__title { max-width: 15ch; }
+.opener__body { display: grid; gap: var(--s5); }
+@media (min-width: 1100px) {
+  .opener__body {
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    column-gap: var(--gutter);
+    align-items: end;
+  }
+  .opener__title { grid-column: 1 / 9; }
+  .opener__lede { grid-column: 9 / -1; padding-bottom: 0.5rem; }
+}
+
+/* ── closing call ────────────────────────────────────────────── */
+.close-call {
+  position: relative;
+  overflow: clip;
+  isolation: isolate;
+}
+.close-call__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.close-call__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.34;
+}
+.close-call__inner {
+  display: grid;
+  gap: var(--s6);
+  padding-block: clamp(5rem, 14vw, 11rem);
+}
+.close-call__title { max-width: 13ch; }
+@media (min-width: 1100px) {
+  .close-call__inner {
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    column-gap: var(--gutter);
+    align-items: end;
+  }
+  .close-call__title { grid-column: 1 / 9; }
+  .close-call__side { grid-column: 9 / -1; display: grid; gap: var(--s5); }
+}
+
+/* ── footer ──────────────────────────────────────────────────── */
+.footer { padding-top: clamp(3.5rem, 8vw, 7rem); }
+
+.footer__top {
+  display: grid;
+  gap: var(--s6);
+  padding-bottom: clamp(2.5rem, 6vw, 5rem);
+  border-bottom: 1px solid var(--rule-2);
+}
+@media (min-width: 900px) {
+  .footer__top { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+  .footer__mark { justify-items: end; text-align: right; display: grid; gap: var(--s4); }
+}
+.footer__mantra { max-width: 12ch; }
+
+.footer__cols {
+  row-gap: clamp(2rem, 5vw, 3.5rem);
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+}
+.footer__col--lead { grid-column: 1 / -1; }
+.footer__nav {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: clamp(1.5rem, 4vw, 2.5rem) var(--gutter);
+}
+@media (min-width: 1100px) {
+  .footer__col--lead { grid-column: 1 / 5; padding-right: var(--s6); }
+  .footer__nav { grid-column: 6 / -1; }
+}
+
+.footer__link {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: var(--w-plain);
+  color: var(--fg-dim);
+  /* A thumb, not a cursor: the row is a full 44px target even though
+     the line it holds is much shorter than that. */
+  min-height: 44px;
+  padding-block: 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  width: fit-content;
+  transition: color var(--t-fast) var(--ease-ui);
+}
+@media (hover: hover) { .footer__link:hover { color: var(--fg); } }
+
+.footer__base a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-right: 0.25rem;
+}
+
+.footer__base {
+  display: grid;
+  gap: var(--s3);
+  padding-block: var(--s5) var(--s6);
+  border-top: 1px solid var(--rule-2);
+}
+@media (max-width: 1219.98px) {
+  .footer__base { padding-bottom: calc(var(--s6) + var(--mobile-dock-h) + env(safe-area-inset-bottom)); }
+}
+@media (min-width: 900px) {
+  .footer__base {
+    grid-template-columns: auto minmax(0, 1.4fr) auto;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: baseline;
+  }
+  .footer__base > :nth-child(2) { max-width: 74ch; }
+}
+
+/* ── media archive ───────────────────────────────────────────── */
+.archive-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3);
+  align-items: center;
+  padding-block: var(--s5);
+  border-block: 1px solid var(--rule-2);
+}
+.filter {
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  font-weight: var(--w-sign);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.75rem 1rem;
+  min-height: 44px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r1);
+  color: var(--fg-dim);
+  transition: color var(--t-fast), border-color var(--t-fast), background var(--t-fast);
+}
+.filter[aria-pressed='true'] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+@media (hover: hover) { .filter:hover { border-color: var(--fg); color: var(--fg); } }
+.filter[aria-pressed='true']:hover { color: var(--bg); }
+
+.plates {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1px;
+  background: var(--rule-2);
+  border: 1px solid var(--rule-2);
+}
+/* An evidence archive shows the whole figure. Many of these are wide
+   banners or charts, and cropping them to a tidy square would destroy
+   the thing the reader came to check. */
+.plate {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  background: var(--bg);
+  padding: 7px;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+.plate img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.6s var(--ease-out);
+}
+@media (hover: hover) { .plate:hover img { transform: scale(1.04); } }
+.plate__doc {
+  position: absolute;
+  left: 0; bottom: 0;
+  padding: 0.3rem 0.45rem;
+  font-family: var(--font-display);
+  font-size: 0.56rem;
+  font-weight: var(--w-sign);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--paper);
+  opacity: 0;
+  transition: opacity var(--t-fast) var(--ease-ui);
+}
+.plate:hover .plate__doc, .plate:focus-visible .plate__doc { opacity: 1; }
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: var(--forest-2);
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 5vw, 3rem);
+}
+.lightbox[hidden] { display: none; }
+.lightbox img { max-width: 100%; max-height: 82vh; background: #fff; }
+.lightbox__close {
+  position: absolute;
+  top: clamp(0.75rem, 3vw, 1.75rem);
+  right: clamp(0.75rem, 3vw, 1.75rem);
+  width: 48px; height: 48px;
+  display: grid; place-items: center;
+  color: var(--paper);
+  border: 1px solid rgba(242, 238, 228, 0.3);
+}
+
+/* ── office prototype ────────────────────────────────────────── */
+.console {
+  display: grid;
+  gap: var(--s6);
+}
+@media (min-width: 900px) {
+  .console { grid-template-columns: 15rem minmax(0, 1fr); gap: var(--s7); align-items: start; }
+}
+.console__side { display: grid; gap: 0; }
+.console__side a {
+  font-family: var(--font-display);
+  font-size: var(--fs-small);
+  padding-block: 0.7rem;
+  border-top: 1px solid var(--rule-2);
+  color: var(--fg-mute);
+}
+.console__side a[aria-current='page'] { color: var(--fg); }
+.console__side a:last-child { border-bottom: 1px solid var(--rule-2); }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ── constituency schematic ──────────────────────────────────────
+   Drawn rather than screenshotted, so it carries the site's contour
+   language and stays legible at any size and in either field. */
+.cmap { display: grid; gap: var(--s4); }
+.cmap__svg { width: 100%; height: auto; overflow: visible; }
+.cmap__district { fill: none; stroke: var(--rule); stroke-width: 1.5; }
+.cmap__east { fill: color-mix(in srgb, var(--fg) 7%, transparent); stroke: var(--fg); stroke-width: 1.5; }
+.cmap__elgon ellipse { fill: none; stroke: var(--accent); stroke-width: 1; opacity: 0.75; }
+.cmap__river { fill: none; stroke: var(--fg); stroke-width: 1; stroke-dasharray: 5 4; opacity: 0.6; }
+.cmap__road { fill: none; stroke: var(--fg); stroke-width: 1.5; opacity: 0.35; }
+.cmap__marks circle { fill: var(--accent); }
+.cmap__marks text {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 560;
+  letter-spacing: 0.04em;
+  fill: var(--fg);
+}
+.cmap__region {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: var(--w-sign);
+  letter-spacing: 0.02em;
+  fill: var(--fg-mute);
+  text-transform: uppercase;
+}
+.cmap__region--east { fill: var(--fg); }
+.cmap__region--peak { fill: var(--accent); font-size: 12px; letter-spacing: 0.14em; }
+@media (max-width: 559.98px) {
+  .cmap__marks text { font-size: 15px; }
+  .cmap__region { font-size: 18px; }
+}
+
+/* ── the vision statement, given its own room ────────────────────
+   One block of serif at quotation scale, hung on the grid rather
+   than centred, with the attribution set beneath a rule. */
+.statement-block { display: grid; gap: var(--s6); }
+
+.statement-block__text {
+  font-family: var(--font-text);
+  font-size: clamp(1.5rem, 3.9vw, 3.35rem);
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+  margin: 0;
+  max-width: 24ch;
+  text-wrap: pretty;
+}
+
+.statement-block__foot {
+  display: grid;
+  gap: var(--s4);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--rule);
+}
+@media (min-width: 900px) {
+  .statement-block {
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    column-gap: var(--gutter);
+    row-gap: var(--s6);
+  }
+  .statement-block > .marker { grid-column: 1 / 3; }
+  .statement-block__text { grid-column: 3 / -1; max-width: 20ch; }
+  .statement-block__foot {
+    grid-column: 3 / -1;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--s6);
+  }
+}
+@media (min-width: 1100px) {
+  .statement-block__text { grid-column: 3 / 11; }
+  .statement-block__foot { grid-column: 3 / 11; }
+}
+
+/* ── clauses: the vision read one word at a time ─────────────── */
+.clauses { display: grid; }
+.clause {
+  display: grid;
+  gap: var(--s3);
+  padding-block: clamp(1.5rem, 3.4vw, 2.4rem);
+  border-top: 1px solid var(--rule-2);
+  align-items: baseline;
+}
+.clause:last-child { border-bottom: 1px solid var(--rule-2); }
+.clause__num { font-family: var(--font-display); font-size: var(--fs-micro); font-weight: var(--w-sign); letter-spacing: 0.14em; color: var(--fg-mute); }
+.clause__word {
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 3.4vw, 2.45rem);
+  font-weight: var(--w-light);
+  line-height: 1.14;
+  letter-spacing: 0.006em;
+}
+.clause__obliges {
+  font-family: var(--font-text);
+  font-size: 1.03rem;
+  line-height: 1.55;
+  color: var(--fg-dim);
+  max-width: 52ch;
+}
+@media (min-width: 760px) {
+  .clause {
+    grid-template-columns: 3.5rem minmax(0, 0.85fr) minmax(0, 1.3fr);
+    column-gap: clamp(1.5rem, 3vw, 3rem);
+  }
+}
+
+/* ── map section ────────────────────────────────────────────── */
+.map-section { display: grid; gap: clamp(2.5rem, 6vw, 4.5rem); }
+@media (min-width: 1000px) {
+  .map-section {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(3rem, 6vw, 6rem);
+    align-items: center;
+  }
+}
+
+/* ── profile opener ─────────────────────────────────────────────
+   The portrait is presented as an institutional plate: square
+   corners, a ruled caption, no float and no drop shadow. */
+.profile { display: grid; gap: clamp(2rem, 5vw, 3.5rem); }
+.profile__text .display { font-size: clamp(1.95rem, 4.6vw, 3.7rem); }
+.profile__plate img { width: 100%; height: auto; }
+@media (min-width: 900px) {
+  .profile {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: end;
+  }
+}
+
+/* ── sources ─────────────────────────────────────────────────── */
+.sources { display: grid; gap: clamp(2rem, 5vw, 3.5rem); }
+.sources__group { display: grid; gap: 0.2rem; align-content: start; }
+.sources__group h3 { padding-bottom: var(--s3); margin-bottom: var(--s3); border-bottom: 1px solid var(--rule); }
+@media (min-width: 860px) {
+  .sources { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2.5rem, 5vw, 5rem); }
+}

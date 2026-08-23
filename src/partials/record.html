@@ -1,0 +1,36 @@
+<article class="record" data-record>
+  <div class="record__lead">
+    <h3 class="record__subject" id="record-{{id}}-subject">{{subject}}</h3>
+    <div class="tags record__tags">{{tags::tag}}</div>
+  </div>
+
+  <div class="record__block record__meter-wrap" data-record-detail>
+    <span class="record__key">Stage</span>
+    <div class="record__meter">
+      <span class="meter" style="--value:{{meter}}"><span class="meter__fill"></span></span>
+      <span class="micro"><span>Through the process</span><span class="num">{{meter}}%</span></span>
+    </div>
+  </div>
+
+  <div class="record__block record__status">
+    <span class="record__key">Status</span>
+    <span class="status status--{{status}}">{{stage}}</span>
+  </div>
+
+  <button class="record__toggle" type="button" aria-expanded="false"
+          aria-describedby="record-{{id}}-subject" data-record-toggle>
+    <span data-record-toggle-label>View evidence</span>
+    <span class="record__toggle-mark" aria-hidden="true"></span>
+  </button>
+
+  <div class="record__block record__action" data-record-detail>
+    <span class="record__key">Latest recorded action</span>
+    <p class="record__value">{{action}}</p>
+  </div>
+
+  <div class="record__block" data-record-detail>
+    <span class="record__key">Recorded</span>
+    <span class="record__value num">{{date}}</span>
+    <a class="source-link" href="{{href}}" target="_blank" rel="noopener">Source <span class="arrow" aria-hidden="true">&#8599;</span></a>
+  </div>
+</article>

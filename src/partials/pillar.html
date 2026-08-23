@@ -1,0 +1,27 @@
+<article class="pillar-ch pillar-ch--{{tone}}" id="pillar-{{slug}}" data-chapter>
+  <div class="pillar-ch__inner">
+    <div class="pillar-ch__head">
+      <div class="pillar-ch__meta">
+        <span class="pillar-ch__num num">{{n}}</span>
+        <span class="micro">{{claim}}</span>
+      </div>
+      <h3 class="pillar-ch__title">{{name}}<span class="place">Budadiri.</span></h3>
+      <p class="pillar-ch__lede">{{lede}}</p>
+      <ul class="pillar-ch__list">{{items::li}}</ul>
+    </div>
+
+    <figure class="pillar-ch__plate">
+      <picture>
+        <source type="image/avif" srcset="/img/{{image}}-640.avif 640w, /img/{{image}}-1280.avif 1280w"
+                sizes="(min-width:1100px) 520px, (min-width:760px) 45vw, 100vw">
+        <source type="image/webp" srcset="/img/{{image}}-640.webp 640w, /img/{{image}}-1280.webp 1280w"
+                sizes="(min-width:1100px) 520px, (min-width:760px) 45vw, 100vw">
+        <img src="/img/{{image}}-1280.jpg" width="1280" height="853" loading="lazy" decoding="async" alt="{{alt}}">
+      </picture>
+      <figcaption class="pillar-ch__caption">
+        <span class="micro">{{n}} &middot; {{name}} Budadiri</span>
+        <span>AI-generated vision concept; not an existing project.</span>
+      </figcaption>
+    </figure>
+  </div>
+</article>

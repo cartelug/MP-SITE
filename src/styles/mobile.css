@@ -1,0 +1,125 @@
+/* ─────────────────────────────────────────────────────────────────
+   MOBILE TEMPLATE SYSTEM
+
+   This is not a separate visual theme. It is the small-screen expression of
+   the same public office: decisive entry points, generous reading measures,
+   and evidence presented as a sequence rather than a squeezed desktop page.
+   It deliberately affects shared templates so new pages inherit the standard.
+   ───────────────────────────────────────────────────────────────── */
+
+@media (max-width: 759.98px) {
+  :root {
+    --pad: clamp(18px, 5.4vw, 26px);
+    --section: clamp(4.25rem, 13vw, 5.5rem);
+  }
+
+  /* ── inner-page opening frame ─────────────────────────────── */
+  .opener {
+    min-height: min(61svh, 560px);
+    display: grid;
+    align-content: end;
+    padding-top: calc(var(--header-h) + clamp(2.1rem, 10vw, 4rem));
+    padding-bottom: clamp(2.5rem, 10vw, 4.25rem);
+  }
+  .opener__marker {
+    align-items: start;
+    margin-bottom: clamp(1.6rem, 7vw, 2.5rem);
+  }
+  .opener__marker .micro:last-child {
+    max-width: 16ch;
+    text-align: right;
+    line-height: 1.45;
+  }
+  .opener__body { gap: var(--s4); }
+  .opener__title {
+    max-width: 12ch;
+    font-size: clamp(2.2rem, 10.5vw, 3.65rem);
+    line-height: 1.07;
+  }
+  .opener__lede { max-width: 35ch; font-size: clamp(1.04rem, 4.5vw, 1.22rem); }
+
+  /* ── title / reading rhythm shared by page templates ──────── */
+  .head-split { gap: var(--s4); }
+  .head-split .title { max-width: 13ch; }
+  .marker--rule { gap: 0.9em; }
+  .marker--rule::before { width: 2em; }
+  .caption { line-height: 1.58; }
+
+  /* ── evidence archive: a clear record per subject ─────────── */
+  .archive { gap: var(--s3); }
+  .entry {
+    gap: var(--s3);
+    padding: 1.3rem 1.15rem 1.2rem;
+    border: 1px solid var(--rule);
+    background: color-mix(in srgb, var(--paper) 68%, var(--bg));
+  }
+  .entry:first-child { border-top-color: var(--fg); }
+  .entry__date { color: var(--accent); }
+  .entry__title { font-size: clamp(1.28rem, 5.6vw, 1.65rem); line-height: 1.24; }
+  .entry__where { line-height: 1.45; }
+  .entry__body { font-size: 1rem; line-height: 1.57; }
+  .entry__out { padding-top: var(--s3); border-top: 1px solid var(--rule-2); }
+  .entry__out .source-link { min-height: var(--tap); }
+
+  /* ── news: make the lead feel like a story, not a desktop tile ─ */
+  .news { gap: var(--s7); }
+  .news__lead { gap: var(--s4); }
+  .news__lead-figure img { aspect-ratio: 4 / 3; }
+  .news__lead-title { font-size: clamp(1.9rem, 8.4vw, 2.85rem); }
+  .news__item { padding-block: 1.35rem; gap: var(--s2); }
+  .news__item-title { font-size: 1.12rem; line-height: 1.38; }
+  .news__item-body { font-size: 1rem; line-height: 1.54; }
+  .index-row { gap: var(--s2); padding-block: 1.15rem; }
+
+  /* ── tables: readable public records rather than a narrow grid ─ */
+  .table--stack tbody { display: grid; gap: var(--s3); }
+  .table--stack tr {
+    padding: 1.1rem;
+    border: 1px solid var(--rule);
+    background: color-mix(in srgb, var(--paper) 72%, var(--bg));
+  }
+  .table--stack tbody tr:first-child { border-top-color: var(--fg); }
+  .table--stack td {
+    grid-template-columns: minmax(5.9rem, 0.7fr) minmax(0, 1.3fr);
+    gap: var(--s4);
+    padding-block: 0.5rem;
+  }
+
+  /* ── form template: one comfortable decision at a time ────── */
+  .office__frame { gap: var(--s6); }
+  .office__aside { padding-bottom: var(--s5); border-bottom: 1px solid var(--rule); }
+  .office__form { padding: 1.2rem; border: 1px solid var(--rule); background: color-mix(in srgb, var(--paper) 70%, var(--bg)); }
+  .prototype-notice { padding: 1rem; }
+  .steps { gap: var(--s2); margin-bottom: var(--s6); }
+  .step { gap: var(--s5); }
+  .step__question { font-size: clamp(1.7rem, 7.4vw, 2.2rem); }
+  .step__hint { font-size: 1.05rem; }
+  .input, .textarea, .select { min-height: calc(var(--tap) + 8px); font-size: 16px; }
+  .choice { min-height: var(--tap); }
+
+  /* ── framework / pillars: mobile can show the whole argument ─ */
+  .framework__head { padding-bottom: var(--s7); }
+  .framework__track { padding-left: 1.6rem; }
+  .stage { padding-block: 1.55rem; }
+  .stage__dot { left: -1.6rem; }
+  .stage__name { font-size: clamp(1.5rem, 7vw, 2.15rem); }
+  .pillar-ch { padding-block: clamp(3.5rem, 13vw, 5.25rem); }
+  .pillar-ch__title { font-size: clamp(2.05rem, 10vw, 3.25rem); }
+  .pillar-ch__list li { padding-block: 0.8rem; }
+
+  /* ── footer: distinct groups, no tiny targets ─────────────── */
+  .footer__nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s7) var(--s4); }
+  .footer__nav > :last-child { grid-column: 1 / -1; }
+  .footer__link { min-height: var(--tap); display: flex; align-items: center; }
+}
+
+@media (max-width: 389.98px) {
+  .opener__title { font-size: clamp(2rem, 10vw, 2.75rem); }
+  .office__form { padding: 1rem; }
+  .table--stack td { grid-template-columns: 5.4rem minmax(0, 1fr); gap: var(--s3); }
+}
+
+@media (min-width: 760px) and (max-width: 1219.98px) {
+  /* Tablet keeps the service dock but gains the six-column breathing room. */
+  .mobile-dock__tab { font-size: 0.62rem; }
+}

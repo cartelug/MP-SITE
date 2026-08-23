@@ -1,0 +1,425 @@
+/* ─────────────────────────────────────────────────────────────────
+   Navigation.
+
+   No floating glass bar. The header sits on the page, inverts its
+   own colour to match whatever field is behind it, and becomes
+   opaque only once you have left the first screen.
+   ───────────────────────────────────────────────────────────────── */
+
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 90;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  color: var(--ink);
+  transition: transform var(--t-mid) var(--ease-out),
+              background var(--t-mid) var(--ease-ui),
+              color var(--t-mid) var(--ease-ui),
+              border-color var(--t-mid) var(--ease-ui);
+  border-bottom: 1px solid transparent;
+}
+
+.header--dark { color: #f0f2e8; }
+
+.header--over-menu { background: transparent; border-bottom-color: transparent; }
+
+.header.is-solid {
+  background: var(--paper);
+  border-bottom-color: rgba(28, 29, 21, 0.12);
+}
+.header--dark.is-solid {
+  background: var(--forest-2);
+  border-bottom-color: rgba(240, 242, 232, 0.15);
+}
+
+/* Out of the way on the way down, back on the way up. */
+.header.is-hidden { transform: translateY(-101%); }
+
+.header__inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s5);
+}
+
+/* ── wordmark ─────────────────────────────────────────────────── */
+.wordmark {
+  display: grid;
+  gap: 5px;
+  line-height: 1;
+  padding-block: 0.5rem;
+}
+/* Set the way the name would be cut into a building: open, even and
+   not competing with the page underneath it. */
+.wordmark__name {
+  font-family: var(--font-display);
+  font-size: clamp(0.86rem, 1.35vw, 0.97rem);
+  font-weight: var(--w-sign);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.wordmark__role {
+  font-family: var(--font-display);
+  font-size: var(--fs-micro);
+  font-weight: var(--w-plain);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.58;
+}
+
+/* ── desktop links ────────────────────────────────────────────── */
+.nav {
+  display: none;
+  align-items: center;
+  gap: clamp(0.72rem, 1.25vw, 1.35rem);
+}
+@media (min-width: 1220px) { .nav { display: flex; } }
+
+.nav__link {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: clamp(0.62rem, 0.72vw, 0.7rem);
+  font-weight: var(--w-sign);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding-block: 0.5rem;
+  color: inherit;
+  opacity: 0.66;
+  transition: opacity var(--t-fast) var(--ease-ui);
+}
+.nav__link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--t-mid) var(--ease-out);
+}
+@media (hover: hover) {
+  .nav__link:hover { opacity: 1; }
+  .nav__link:hover::after { transform: scaleX(1); transform-origin: left; }
+}
+.nav__link[aria-current='page'] { opacity: 1; }
+.nav__link[aria-current='page']::after { transform: scaleX(1); }
+
+.header__actions { display: flex; align-items: center; gap: var(--s4); }
+.header .action { padding-block: 0.6em; }
+.header__cta { display: none; }
+@media (min-width: 1220px) { .header__cta { display: inline-flex; } }
+
+/* ── menu button ───────────────────────────────────────────────
+   Two rules that become an x. 48px target, label read by AT.    */
+.menu-btn {
+  width: 48px;
+  height: 48px;
+  margin-right: -12px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 2;
+}
+@media (min-width: 1220px) { .menu-btn { display: none; } }
+
+.menu-btn__bars { display: block; width: 24px; height: 10px; position: relative; }
+.menu-btn__bars::before,
+.menu-btn__bars::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform var(--t-mid) var(--ease-out);
+}
+.menu-btn__bars::before { top: 0; }
+.menu-btn__bars::after { bottom: 0; }
+.menu-btn[aria-expanded='true'] .menu-btn__bars::before { transform: translateY(4.25px) rotate(45deg); }
+.menu-btn[aria-expanded='true'] .menu-btn__bars::after { transform: translateY(-4.25px) rotate(-45deg); }
+
+/* ── full-screen menu ──────────────────────────────────────────
+   A deep green field with the constituency index set as a list.
+   It clips open from the top edge; items follow in sequence.    */
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  background: var(--forest-2);
+  color: #f0f2e8;
+  display: grid;
+  grid-template-rows: var(--header-h) 1fr auto;
+  padding-inline: var(--pad);
+  padding-bottom: max(var(--s6), env(safe-area-inset-bottom));
+  clip-path: inset(0 0 100% 0);
+  visibility: hidden;
+  transition: clip-path 0.62s var(--ease-out), visibility 0s linear 0.62s;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.menu.is-open {
+  clip-path: inset(0 0 0 0);
+  visibility: visible;
+  transition: clip-path 0.62s var(--ease-out), visibility 0s;
+}
+
+/* Phone menus finish quickly enough to feel attached to the tap. Tablets
+   retain the longer architectural reveal because they carry more space. */
+:root[data-motion='mobile'] .menu {
+  transition-duration: var(--motion-ui), 0s;
+  transition-delay: 0s, var(--motion-ui);
+}
+:root[data-motion='mobile'] .menu.is-open {
+  transition-duration: var(--motion-ui), 0s;
+  transition-delay: 0s, 0s;
+}
+:root[data-motion='mobile'] .menu__item,
+:root[data-motion='mobile'] .menu__foot > * {
+  transition-duration: 360ms;
+}
+:root[data-motion='mobile'] .menu.is-open .menu__item,
+:root[data-motion='mobile'] .menu.is-open .menu__foot > * {
+  transition-delay: calc(90ms + var(--i, 0) * 35ms);
+}
+
+.menu__head {
+  display: flex;
+  align-items: center;
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  font-weight: var(--w-sign);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.menu__list {
+  align-self: center;
+  display: grid;
+  width: 100%;
+  max-width: 980px;
+  margin-inline: auto;
+  padding-block: var(--s6);
+  border-top: 1px solid rgba(240, 242, 232, 0.15);
+}
+
+.menu__item { border-bottom: 1px solid rgba(240, 242, 232, 0.15); }
+
+.menu__link {
+  display: grid;
+  grid-template-columns: 3.1rem 1fr auto;
+  align-items: baseline;
+  gap: var(--s3);
+  padding-block: clamp(0.72rem, 2.2vw, 1.1rem);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 6.6vw, 2.55rem);
+  font-weight: var(--w-air);
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  transition: color var(--t-fast) var(--ease-ui);
+}
+.menu__num {
+  font-size: var(--fs-micro);
+  font-weight: var(--w-sign);
+  letter-spacing: 0.14em;
+  opacity: 0.42;
+  transform: translateY(-0.25em);
+}
+.menu__link .arrow {
+  font-size: 0.9rem;
+  opacity: 0;
+  transform: translateX(-0.4em);
+  transition: opacity var(--t-fast) var(--ease-ui), transform var(--t-mid) var(--ease-out);
+}
+.menu__link[aria-current='page'] { color: var(--gold-2); }
+.menu__link[aria-current='page'] .arrow,
+.menu__link:hover .arrow,
+.menu__link:focus-visible .arrow { opacity: 1; transform: none; }
+.menu__link:active { color: var(--gold-2); }
+
+/* Staged entrance; the CSS holds the closed state so the script
+   only has to toggle one class. */
+.menu__item,
+.menu__foot > * {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+}
+.menu.is-open .menu__item,
+.menu.is-open .menu__foot > * {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(0.16s + var(--i, 0) * 0.045s);
+}
+
+.menu__foot {
+  display: grid;
+  gap: var(--s4);
+  padding-top: var(--s5);
+  border-top: 1px solid rgba(240, 242, 232, 0.15);
+}
+.menu__foot .action { --action-fg: var(--gold-2); }
+
+.menu__secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--s5);
+}
+.menu__secondary a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-size: var(--fs-micro);
+  font-weight: var(--w-sign);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(240, 242, 232, 0.66);
+  transition: color var(--t-fast) var(--ease-ui);
+}
+.menu__secondary a[aria-current='page'],
+.menu__secondary a:hover,
+.menu__secondary a:focus-visible { color: var(--gold-2); }
+
+@media (max-height: 720px) and (max-width: 1219.98px) {
+  .menu__list { padding-block: var(--s4); }
+  .menu__link {
+    padding-block: 0.58rem;
+    font-size: clamp(1.3rem, 5.4vw, 2rem);
+  }
+  .menu__foot { gap: var(--s2); padding-top: var(--s3); }
+  .menu__foot > .micro { display: none; }
+}
+
+body.is-locked { overflow: hidden; }
+
+/* ── mobile service dock ───────────────────────────────────────
+   A solid institutional action, revealed only after the opening
+   frame has done its work. It respects the device safe area and
+   stays below the full-screen menu in the layer stack.          */
+.mobile-dock { display: none; }
+
+@media (max-width: 1219.98px) {
+  .mobile-dock {
+    display: block;
+    position: fixed;
+    z-index: 74;
+    left: 0;
+    right: 0;
+    width: 100%;
+    bottom: 0;
+    opacity: 0;
+    transform: translateY(calc(100% + 12px));
+    pointer-events: none;
+    transition: opacity 0.24s var(--ease-ui), transform 0.38s var(--ease-out);
+  }
+  .mobile-dock.is-visible {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  .mobile-dock__tab,
+  .mobile-dock__action {
+    transition: color var(--motion-fast) var(--ease-ui),
+                background var(--motion-fast) var(--ease-ui),
+                opacity var(--motion-instant) var(--ease-ui);
+    touch-action: manipulation;
+  }
+  .mobile-dock__tab:active { background: color-mix(in srgb, var(--forest) 8%, transparent); }
+  .mobile-dock__action:active { opacity: 0.84; }
+  body.is-locked .mobile-dock {
+    opacity: 0;
+    transform: translateY(calc(100% + 12px));
+    pointer-events: none;
+  }
+  .mobile-dock {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(1.2fr, 1.45fr);
+    align-items: center;
+    min-height: var(--mobile-dock-h);
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--mobile-surface);
+    border-top: 1px solid var(--rule);
+    box-shadow: var(--mobile-elevation);
+  }
+  .mobile-dock__tab {
+    min-height: var(--tap);
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 0.25rem;
+    padding-inline: 0.3rem;
+    font-family: var(--font-display);
+    font-size: 0.58rem;
+    font-weight: var(--w-sign);
+    letter-spacing: 0.12em;
+    line-height: 1.15;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+  .mobile-dock__icon {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.55;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+  }
+  .mobile-dock__tab[aria-current='page'] { color: var(--forest); }
+  .mobile-dock__action {
+    min-height: var(--mobile-dock-h);
+    display: grid;
+    align-content: center;
+    gap: 0.12rem;
+    padding: 0.55rem 0.75rem;
+    color: #f7f4ec;
+    background: var(--forest-2);
+    border-top: 2px solid var(--gold);
+  }
+  .mobile-dock__context {
+    font-family: var(--font-display);
+    font-size: 0.58rem;
+    font-weight: var(--w-sign);
+    letter-spacing: 0.16em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: rgba(247, 244, 236, 0.58);
+  }
+  .mobile-dock__label {
+    font-family: var(--font-display);
+    font-size: 0.92rem;
+    font-weight: var(--w-sign);
+    letter-spacing: 0.12em;
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+}
+
+@media (max-width: 389.98px) {
+  .mobile-dock { grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(1.1fr, 1.25fr); }
+  .mobile-dock__tab { font-size: 0.53rem; letter-spacing: 0.08em; }
+  .mobile-dock__context { display: none; }
+}
+
+/* ── scroll indicator ──────────────────────────────────────────
+   A 1px reading position on the very top edge. Not a progress bar
+   with a gradient in it.                                        */
+.readline {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(var(--p, 0));
+  transform-origin: left;
+  background: var(--gold);
+  z-index: 95;
+  pointer-events: none;
+}

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--@ head
+  title="Office prototype — Budadiri County East"
+  desc="A front-end demonstration of how constituency staff would manage community submissions. Read-only and local to this device."
+-->
+</head>
+<body data-page="admin">
+<!--@ header -->
+
+<main id="main">
+
+<section class="opener field field--paper">
+  <div class="wrap">
+    <div class="opener__marker">
+      <span class="micro">Office prototype</span>
+      <span class="micro">Local to this device</span>
+    </div>
+    <div class="opener__body">
+      <h1 class="opener__title display" data-lines>The inbox side of the office.</h1>
+      <p class="opener__lede lede">
+        A demonstration of how staff would work through community submissions.
+        It reads only what this browser recorded, and nothing leaves the device.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section field field--paper section--flush-top">
+  <div class="wrap console">
+    <nav class="console__side" aria-label="Office sections">
+      <a href="/admin.html" aria-current="page">Community issues</a>
+      <a href="/progress.html">Projects</a>
+      <a href="/parliament.html">Parliament log</a>
+      <a href="/community.html#opportunities">Opportunities</a>
+      <a href="/community.html#engagements">Engagements</a>
+      <a href="/media.html">Media</a>
+    </nav>
+
+    <div class="console__main stack stack-5">
+      <div class="dash__head">
+        <h2 class="head">Community issue inbox</h2>
+        <span class="micro">This browser only</span>
+      </div>
+
+      <div class="table-scroll">
+        <table class="table" data-console>
+          <caption class="visually-hidden">Community issues recorded on this device</caption>
+          <thead>
+            <tr>
+              <th scope="col">Reference</th>
+              <th scope="col">Name</th>
+              <th scope="col">Area</th>
+              <th scope="col">Category</th>
+              <th scope="col">Recorded</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <p class="note">
+        The production version requires authenticated server-side access, roles
+        for office staff, an audit trail on every status change, and a
+        retention policy agreed before a single real submission is accepted.
+      </p>
+    </div>
+  </div>
+</section>
+
+</main>
+<!--@ footer -->
+</body>
+</html>

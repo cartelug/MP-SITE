@@ -1,0 +1,16 @@
+{
+  "name": "Budadiri County East — Office of Hon. Julius Nakiyi",
+  "short_name": "Budadiri East",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f2eee4",
+  "theme_color": "#123a2a",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "scope": "./"
+}

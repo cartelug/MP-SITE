@@ -1,0 +1,117 @@
+/* ── reset, only what is actually needed ───────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scrollbar-color: rgba(28, 29, 21, 0.24) transparent;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.55;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+h1, h2, h3, h4, h5, p, figure, blockquote, dl, dd { margin: 0; }
+fieldset { border: 0; margin: 0; padding: 0; min-inline-size: 0; }
+legend { padding: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+img, svg, video { display: block; max-width: 100%; }
+/* Components set their own display, which would otherwise beat the
+   attribute. Anything marked hidden stays hidden. */
+[hidden] { display: none !important; }
+img { height: auto; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+input, textarea, select { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+table { border-collapse: collapse; width: 100%; }
+
+/* Tap highlight is replaced by a real pressed state further down. */
+a, button, input, select, textarea, label { -webkit-tap-highlight-color: transparent; }
+
+::selection { background: var(--gold); color: var(--ink); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+/* Keyboard users get the ring; pointer users never see it. */
+:focus:not(:focus-visible) { outline: none; }
+
+/* A hairline scrollbar on desktop; phones keep the native overlay. */
+@media (hover: hover) and (pointer: fine) {
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(28, 29, 21, 0.2);
+    border: 3px solid var(--paper);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(28, 29, 21, 0.36); }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0; left: 50%;
+  transform: translate(-50%, -120%);
+  z-index: 200;
+  background: var(--forest);
+  color: #fff;
+  padding: 0.85rem 1.4rem;
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  font-weight: var(--w-strong);
+  transition: transform var(--t-fast) var(--ease-ui);
+}
+.skip-link:focus { transform: translate(-50%, 0); }
+
+/* ── grain ──────────────────────────────────────────────────────
+   A 140px tile at low alpha, only over the dark fields where the
+   flat colour would otherwise band. Cheaper than an SVG filter. */
+.field--forest > .grain,
+.field--ink > .grain {
+  position: absolute;
+  inset: 0;
+  background-image: url('/img/grain.png');
+  background-size: 140px 140px;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: overlay;
+}
+.field > * { position: relative; z-index: 1; }
+
+/* ── motion contract ───────────────────────────────────────────
+   Everything scripted checks this too; the CSS side is the floor. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Before the motion layer boots, nothing is hidden: the page is
+   readable with JavaScript switched off or still loading. */
+[data-reveal] { opacity: 1; }
+.js [data-reveal] { opacity: 0; }
+.js [data-reveal].is-in { opacity: 1; }

@@ -1,0 +1,157 @@
+/* ─────────────────────────────────────────────────────────────────
+   HOME ACCESS LAYER
+
+   The long-form home page now opens with a compact service layer:
+   one current sourced record, three common routes and a manual area
+   selector. It stays editorial rather than turning into an app grid.
+   ───────────────────────────────────────────────────────────────── */
+
+.access {
+  padding-block: clamp(1.75rem, 5vw, 4.75rem);
+  border-top: 1px solid var(--rule);
+}
+
+.access__latest {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--s3) var(--s5);
+  align-items: end;
+  padding-block: var(--s4) var(--s5);
+  border-block: 1px solid var(--rule);
+}
+.access__latest > .micro { grid-column: 1 / -1; }
+.access__latest-copy { display: grid; gap: 0.45rem; }
+.access__latest-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.2vw, 1.45rem);
+  font-weight: var(--w-plain);
+  line-height: 1.35;
+  max-width: 38ch;
+}
+.access__latest-arrow {
+  grid-column: 2;
+  grid-row: 2;
+  font-size: 1.1rem;
+  color: var(--accent);
+  transition: transform var(--t-mid) var(--ease-out);
+}
+@media (hover: hover) {
+  .access__latest:hover .access__latest-title { color: var(--accent); }
+  .access__latest:hover .access__latest-arrow { transform: translate(0.22em, -0.22em); }
+}
+
+.access__intro {
+  display: grid;
+  gap: var(--s4);
+  padding-block: clamp(2rem, 5vw, 4rem) var(--s5);
+}
+.access__intro .title { max-width: 14ch; }
+.access__intro .lede { max-width: 50ch; }
+
+.access__cards {
+  display: grid;
+  border-top: 1px solid var(--rule);
+}
+.access-card {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto;
+  gap: var(--s3);
+  align-items: start;
+  min-height: 132px;
+  padding-block: var(--s5);
+  border-bottom: 1px solid var(--rule);
+}
+.access-card__num { padding-top: 0.25rem; }
+.access-card__copy { display: grid; gap: 0.45rem; }
+.access-card__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.7vw, 1.75rem);
+  font-weight: var(--w-light);
+  line-height: 1.25;
+}
+.access-card__note {
+  font-family: var(--font-text);
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--fg-dim);
+  max-width: 32ch;
+}
+.access-card__arrow { color: var(--accent); padding-top: 0.2rem; }
+.access-card__title,
+.access-card__arrow { transition: color var(--t-fast) var(--ease-ui), transform var(--t-mid) var(--ease-out); }
+@media (hover: hover) {
+  .access-card:hover .access-card__title { color: var(--accent); }
+  .access-card:hover .access-card__arrow { transform: translate(0.2em, -0.2em); }
+}
+
+.access__snapshot {
+  display: grid;
+  gap: var(--s4);
+  padding-block: var(--s5);
+  border-bottom: 1px solid var(--rule);
+}
+.access__snapshot-head { display: grid; gap: 0.35rem; }
+.access__snapshot-grid { display: grid; }
+.access__snapshot-grid > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s4);
+  padding-block: 0.72rem;
+  border-top: 1px solid var(--rule-2);
+}
+.access__snapshot-grid dt {
+  font-family: var(--font-display);
+  font-size: var(--fs-small);
+  color: var(--fg-dim);
+}
+.access__snapshot-grid dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: var(--w-light);
+  line-height: 1;
+}
+
+.access__area {
+  display: grid;
+  gap: var(--s4);
+  padding-top: clamp(1.75rem, 4vw, 3rem);
+}
+.access__area-copy { display: grid; gap: 0.35rem; }
+.access__area-fields { display: grid; gap: var(--s3); }
+.access__area .select { background-color: var(--paper); }
+.access__area .action--solid { justify-content: center; width: 100%; }
+
+@media (min-width: 760px) {
+  .access__snapshot { display: none; }
+  .access__latest { grid-template-columns: 9rem minmax(0, 1fr) auto; align-items: center; }
+  .access__latest > .micro { grid-column: 1; }
+  .access__latest-copy { grid-column: 2; }
+  .access__latest-arrow { grid-column: 3; grid-row: auto; }
+  .access__intro {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+    gap: var(--s7);
+  }
+  .access__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .access-card {
+    grid-template-columns: 2.2rem 1fr auto;
+    padding: var(--s5);
+    border-left: 1px solid var(--rule);
+  }
+  .access-card:first-child { border-left: 0; padding-left: 0; }
+  .access__area {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    align-items: end;
+  }
+  .access__area-fields { grid-template-columns: minmax(0, 1fr) auto; }
+  .access__area .action--solid { width: auto; white-space: nowrap; }
+}
+
+@media (min-width: 1100px) {
+  .access__latest { grid-template-columns: 2fr 7fr 3fr; }
+  .access__intro { grid-template-columns: 7fr 5fr; }
+  .access-card { min-height: 180px; padding-block: var(--s6); }
+  .access__area { grid-template-columns: 7fr 5fr; }
+}

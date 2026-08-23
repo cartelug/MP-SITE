@@ -1,0 +1,66 @@
+/* ── leadership studies ───────────────────────────────────────────
+   These are deliberately not a campaign gallery. The generous split
+   puts one listening scene first, then a quieter working scene, and the
+   captions say exactly what the images are. */
+.leadership { overflow: clip; }
+
+.leadership__head {
+  display: grid;
+  gap: var(--s5);
+  padding-bottom: clamp(2.5rem, 6vw, 5rem);
+  border-bottom: 1px solid var(--rule);
+}
+.leadership__head > div { display: grid; gap: var(--s4); }
+.leadership__head .lede { max-width: 50ch; }
+
+.leadership__studies {
+  display: grid;
+  gap: clamp(2.75rem, 5.5vw, 6.5rem);
+  padding-top: clamp(2.5rem, 6vw, 5.25rem);
+}
+.leadership-study { margin: 0; }
+.leadership-study picture {
+  display: block;
+  overflow: hidden;
+  background: var(--paper);
+}
+.leadership-study img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+.leadership-study figcaption {
+  display: grid;
+  gap: var(--s3);
+  max-width: 38rem;
+  padding-top: var(--s5);
+}
+.leadership-study .caption { max-width: 54ch; }
+.leadership-study__title {
+  font-family: var(--font-text);
+  font-size: clamp(1.45rem, 2.4vw, 2.15rem);
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+}
+
+@media (min-width: 760px) {
+  .leadership__head { grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); }
+  .leadership__head > .marker { grid-column: 1 / 3; }
+  .leadership__head > div { grid-column: 3 / -1; }
+  .leadership__studies { grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); }
+  .leadership-study--listening { grid-column: 1 / 5; }
+  .leadership-study--working { grid-column: 3 / -1; }
+}
+
+@media (min-width: 1100px) {
+  .leadership__head > .marker { grid-column: 1 / 4; }
+  .leadership__head > div { grid-column: 5 / 11; }
+  .leadership-study--listening { grid-column: 1 / 8; }
+  .leadership-study--working { grid-column: 9 / -1; margin-top: clamp(5.5rem, 12vw, 12rem); }
+  .leadership-study--working figcaption { padding-left: var(--s4); }
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .leadership-study img { transition: transform var(--t-slow) var(--ease-out); }
+  .leadership-study:hover img { transform: scale(1.025); }
+}
