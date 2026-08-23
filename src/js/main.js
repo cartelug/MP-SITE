@@ -10,6 +10,12 @@ import { initReveals, initLines } from './reveal.js';
 import { initMobileDock, initRecordDisclosures } from './engagement.js';
 import { initMotionEnvironment } from './env.js';
 import { initUI } from './ui.js';
+import { initPreloader } from './preloader.js';
+
+/* First, and synchronously: the decision to show the intro has to land
+   before anything else paints, or a page that is going to show it would
+   flash the real content underneath for a frame first. */
+initPreloader();
 
 initMotionEnvironment();
 markCurrent();

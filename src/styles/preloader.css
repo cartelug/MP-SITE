@@ -1,0 +1,91 @@
+/* ─────────────────────────────────────────────────────────────────
+   PRELOADER — the record being drawn, then resolving into the record.
+
+   An engraved line-portrait of the Member draws itself in, row by
+   row, then resolves into the actual photograph beneath it — same
+   crop, same geometry, so the sketch is not decoration in front of
+   the page but the first mark of the office's own visual language
+   (the hillside contours used everywhere else on the site) arriving
+   at the person it represents. It shows once per browser session,
+   never blocks a no-JS visit, and is skipped outright under reduced
+   motion or a metered connection.
+   ───────────────────────────────────────────────────────────────── */
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(1.25rem, 4vw, 2rem);
+  padding: var(--pad);
+  background: var(--forest-2);
+  opacity: 1;
+  transition: opacity 380ms var(--ease-ui);
+}
+/* The native hidden attribute is the real safety net — this rule only
+   documents it, since a browser applies display:none regardless of
+   whether this stylesheet has loaded. */
+.preloader[hidden] { display: none; }
+
+.preloader.is-done {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.preloader__stage {
+  position: relative;
+  width: min(64vw, 300px);
+  aspect-ratio: 440 / 564;
+}
+
+.preloader__portrait,
+.sketch-portrait {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.preloader__portrait {
+  object-fit: cover;
+  border-radius: var(--r1);
+  opacity: 0;
+  transform: scale(1.035);
+  transition: opacity 820ms var(--ease-out), transform 820ms var(--ease-out);
+}
+.preloader.is-resolving .preloader__portrait { opacity: 1; transform: scale(1); }
+
+.sketch-portrait path {
+  stroke: #f3ecd8;
+  stroke-linecap: round;
+  stroke-width: calc(var(--w) * 1px);
+  stroke-opacity: var(--o);
+  /* pathLength="1" on every path (see tools/build-preloader-sketch.mjs)
+     makes this a plain 0-1 fraction regardless of each row's real
+     length, so one rule draws every row at the same rate. */
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 420ms var(--ease-out);
+  transition-delay: calc(var(--i) * 5.5ms);
+}
+.preloader.is-drawing .sketch-portrait path { stroke-dashoffset: 0; }
+
+.preloader.is-resolving .sketch-portrait {
+  opacity: 0;
+  filter: blur(1.5px);
+  transition: opacity 640ms var(--ease-ui), filter 640ms var(--ease-ui);
+}
+
+.preloader__mark {
+  color: rgba(243, 236, 216, 0.62);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Defence in depth: preloader.js already never shows this under
+     reduced motion, but a stylesheet that outlives a script change
+     should not be able to trap anyone in an animation. */
+  .preloader { display: none !important; }
+}
