@@ -110,16 +110,20 @@ or a news row, copy the matching `<!--@ … -->` line and change the values.
 
 ## Photography
 
-Official identity and documentary visuals come from material supplied by the
-constituency: two portraits and a two-part visual of Budadiri today and a 2036
-projection. The 2036 frame is labelled as an illustrative projection wherever
-it appears.
+Official identity visuals come from material supplied by the constituency:
+two portraits, plus the original "Budadiri today / 2036 projection"
+composite (800×900, retained in `src/media/source/` and still backing the
+five small pillar-detail crops). That composite's own resolution was too
+low to serve the homepage compare-slider at the sizes it needs, so that
+slider now uses a separate, higher-resolution generated "today" / "2036
+projection" pair instead — both frames illustrative, captioned as such.
 
-The five pillar plates are high-resolution AI-generated editorial vision
-concepts. The homepage also contains three AI-generated MP studies, based on
-constituency-supplied portrait references, that consistently use Hon. Julius
-Nakiyi's blue suit, white shirt and orange tie. Every caption and alt
-description identifies these images as illustrative, and the filenames retain
-`*-concept`. They must never be reused as evidence of an existing project, a
-completed activity or a real office visit. Verified local photography should
-replace them as the office builds a permissioned documentary archive.
+The five pillar plates and the today/2036 compare-slider pair are
+high-resolution AI-generated editorial vision concepts. The homepage also
+contains three AI-generated MP studies, based on constituency-supplied
+portrait references, that consistently use Hon. Julius Nakiyi's blue suit,
+white shirt and orange tie. Every caption and alt description identifies
+these images as illustrative, and the filenames retain `*-concept`. They
+must never be reused as evidence of an existing project, a completed
+activity or a real office visit. Verified local photography should replace
+them as the office builds a permissioned documentary archive.

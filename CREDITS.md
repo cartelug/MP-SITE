@@ -9,11 +9,26 @@
   2036" composite visual
 - Budadiri County East constituency map card
 
-The 2036 half of the composite is an **illustrative projection**, not a
-photograph of an existing place. It is labelled as such on every page it
-appears on. The constituency map card informed the drawn schematic used on
-the vision and community pages; that schematic is an original drawing and is
-marked "not to scale".
+The 2036 half of the composite was always an **illustrative projection**,
+not a photograph of an existing place. The composite's own resolution
+(800×900) was too low to serve at the sizes the homepage compare-slider
+needs, so as of this build that slider uses a separate, higher-resolution
+generated pair instead — see **AI-generated Budadiri concepts** below. The
+original composite is retained in `src/media/source/` for provenance and
+still backs the five small pillar-detail crops used elsewhere on the site.
+The constituency map card informed the drawn schematic used on the vision
+and community pages; that schematic is an original drawing and is marked
+"not to scale".
+
+## AI-generated Budadiri concepts
+
+The "today" and "2036 projection" pair on the homepage compare-slider are
+both **AI-generated illustrative concepts**, generated at native
+1915×821 resolution — not photographs, and neither presents anything in
+it as built. This replaces the previous today half, which had been a real
+supplied photograph; both frames are now illustrative and are captioned as
+such wherever they appear. Source files: `budadiri-today-concept.png`,
+`budadiri-tomorrow-concept.png`.
 
 ## AI-generated vision concepts
 
