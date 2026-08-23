@@ -64,7 +64,11 @@
 }
 
 /* ── footer ──────────────────────────────────────────────────── */
-.footer { padding-top: clamp(2.5rem, 5vw, 4.5rem); }
+.footer {
+  padding-top: clamp(2.5rem, 5vw, 4.5rem);
+  position: relative;
+  overflow: clip;
+}
 /* Actions in the footer are controls, not full-width bars: a grid child
    stretches by default, which turned the one footer CTA into a 400px
    slab across the column. */
@@ -80,13 +84,69 @@
   .footer__top { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
   .footer__mark { justify-items: end; text-align: right; display: grid; gap: var(--s4); }
 }
+.footer__session { color: var(--accent); margin-bottom: var(--s3); }
 .footer__mantra { max-width: 12ch; }
+
+/* ── trust strip ──────────────────────────────────────────────
+   The record this office is publishing, restated where a visitor's
+   eye lands last — the same figures as the hero, never new ones. */
+.footer__trust {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s5) var(--gutter);
+  padding-block: clamp(1.75rem, 3.5vw, 2.5rem);
+  border-bottom: 1px solid var(--line-soft);
+}
+@media (min-width: 700px) {
+  .footer__trust { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.footer__trust-item { display: grid; gap: 0.35rem; align-content: start; }
+.footer__trust-num {
+  font-size: clamp(1.7rem, 3vw, 2.15rem);
+  font-weight: var(--w-heavy);
+  color: var(--accent);
+  line-height: 1;
+}
+.footer__trust-label {
+  font-family: var(--font-display);
+  font-size: var(--fs-small);
+  color: var(--fg-mute);
+  line-height: 1.4;
+  max-width: 20ch;
+}
+.footer__trust-item--status { justify-content: start; }
+.footer__trust-item--status .status { margin-bottom: 0.1rem; }
 
 .footer__cols {
   row-gap: clamp(1.75rem, 3.5vw, 2.5rem);
   padding-block: clamp(2rem, 4vw, 3rem);
 }
 .footer__col--lead { grid-column: 1 / -1; }
+.footer__cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s4);
+}
+.footer__social {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  min-height: 44px;
+  padding-inline: 0.9rem;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: var(--w-strong);
+  color: var(--fg-dim);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r2);
+  transition: color var(--t-fast) var(--ease-ui), border-color var(--t-fast) var(--ease-ui), background var(--t-fast) var(--ease-ui);
+}
+.footer__social-icon { width: 16px; height: 16px; fill: currentColor; flex: none; }
+@media (hover: hover) {
+  .footer__social:hover { color: var(--fg); border-color: var(--accent); background: var(--surface); }
+}
+
 .footer__nav {
   grid-column: 1 / -1;
   display: grid;
@@ -115,29 +175,56 @@
 }
 @media (hover: hover) { .footer__link:hover { color: var(--fg); } }
 
+/* ── verification notice ─────────────────────────────────────
+   Kept honest, not buried: a real disclosure, set with the same
+   care as everything else here rather than as an apologetic aside. */
+.footer__notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s3);
+  padding-block: var(--s5);
+  border-top: 1px solid var(--rule-2);
+}
+.footer__notice-icon {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  margin-top: 0.15rem;
+  fill: none;
+  stroke: var(--fg-mute);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.footer__notice .micro { color: var(--fg-mute); max-width: 68ch; }
+
 .footer__base a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   padding-right: 0.25rem;
 }
+.footer__top-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  min-height: 44px;
+  color: var(--fg-mute);
+  transition: color var(--t-fast) var(--ease-ui);
+}
+.footer__top-link .arrow svg { width: 0.85em; height: 0.85em; }
+@media (hover: hover) { .footer__top-link:hover { color: var(--fg); } }
 
 .footer__base {
-  display: grid;
-  gap: var(--s3);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s3) var(--s6);
   padding-block: var(--s5) var(--s6);
-  border-top: 1px solid var(--rule-2);
 }
 @media (max-width: 1219.98px) {
   .footer__base { padding-bottom: calc(var(--s6) + var(--mobile-dock-h) + env(safe-area-inset-bottom)); }
-}
-@media (min-width: 900px) {
-  .footer__base {
-    grid-template-columns: auto minmax(0, 1.4fr) auto;
-    gap: clamp(2rem, 5vw, 4rem);
-    align-items: baseline;
-  }
-  .footer__base > :nth-child(2) { max-width: 74ch; }
 }
 
 /* ── media archive ───────────────────────────────────────────── */
