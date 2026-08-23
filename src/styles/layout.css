@@ -32,10 +32,10 @@ main [id] { scroll-margin-top: calc(var(--header-h) + var(--s5)); }
 
 /* The terrace mark: nine hairlines cut to a hillside profile. */
 .terrace {
-  width: clamp(120px, 15vw, 180px);
+  width: clamp(150px, 20vw, 230px);
   height: auto;
   color: var(--fg);
-  opacity: 0.4;
+  opacity: 0.5;
 }
 
 /* Contour field, sized as a background wash behind a section. */
