@@ -9,6 +9,7 @@ import { initHeader, initMenu, initAnchors, markCurrent } from './nav.js';
 import { initReveals, initLines } from './reveal.js';
 import { initMobileDock, initRecordDisclosures } from './engagement.js';
 import { initMotionEnvironment } from './env.js';
+import { initUI } from './ui.js';
 
 initMotionEnvironment();
 markCurrent();
@@ -19,6 +20,7 @@ initMobileDock();
 initRecordDisclosures();
 initReveals();
 initLines();
+initUI();
 
 /* Draw the hero contours once the first paint is out of the way. */
 const hero = document.querySelector('[data-hero]');

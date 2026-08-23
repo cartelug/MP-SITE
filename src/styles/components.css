@@ -1,110 +1,144 @@
 /* ─────────────────────────────────────────────────────────────────
    Interface parts.
 
-   There are three call-to-action treatments on the whole site and
-   they are not interchangeable: a text action for editorial links,
-   a bordered action for secondary routes, and exactly one solid
-   action per page for the thing we actually want people to do.
+   The previous build had no buttons. Every call to action was an
+   uppercase label with a hairline drawn under it, which is why the
+   pages read as an editorial template rather than as a service: on a
+   phone, "Track progress" and a paragraph of body copy looked like
+   the same kind of object. Actions are controls now — they have an
+   edge, a ground, a pressed state and a target you can hit.
    ───────────────────────────────────────────────────────────────── */
 
-/* ── text action ───────────────────────────────────────────────
-   A rule that draws itself under the label, and an arrow that
-   steps out. No pill, no shadow, no fill.                       */
+/* ── action: the secondary control ──────────────────────────────
+   Bordered, on a surface, square-ish. This is the default because
+   most actions on this site are routes into the record.          */
 .action {
+  --action-bg: var(--surface);
   --action-fg: var(--fg);
+  --action-bd: var(--line-strong);
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.7em;
-  font-family: var(--font-display);
-  font-size: var(--fs-label);
-  font-weight: var(--w-sign);
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  min-height: var(--tap);
+  padding: 0.75rem 1.15rem;
+  background: var(--action-bg);
   color: var(--action-fg);
-  padding-block: 0.95em;
-  position: relative;
-  min-height: 44px;
-  align-content: center;
-  transition: color var(--t-fast) var(--ease-ui);
-}
-.action::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.45em;
-  height: 1px;
-  background: currentColor;
-  opacity: 0.32;
-  transform-origin: left;
-  transition: opacity var(--t-fast) var(--ease-ui),
-              transform var(--t-mid) var(--ease-out);
+  border: 1px solid var(--action-bd);
+  border-radius: var(--r2);
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: var(--w-sign);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  text-align: center;
+  /* A label never breaks inside a word, and never leaves one word on
+     its own line. This is what produced "TRACK / PROGRESS" stacked in
+     a 140px box on every phone in the previous build. */
+  text-wrap: balance;
+  white-space: normal;
+  cursor: pointer;
+  box-shadow: var(--shadow-1);
+  transition: background var(--t-fast) var(--ease-ui),
+              border-color var(--t-fast) var(--ease-ui),
+              color var(--t-fast) var(--ease-ui),
+              box-shadow var(--t-fast) var(--ease-ui),
+              transform var(--motion-instant) var(--ease-ui);
 }
 .action .arrow {
   font-size: 0.95em;
   line-height: 1;
+  flex: none;
   transition: transform var(--t-mid) var(--ease-out);
-  will-change: transform;
 }
 @media (hover: hover) {
-  .action:hover { color: var(--accent); }
-  .action:hover::after { opacity: 1; transform: scaleX(1); }
-  .action:hover .arrow { transform: translate(0.22em, -0.22em); }
+  .action:hover {
+    --action-bd: var(--fg);
+    background: var(--surface-2);
+    box-shadow: var(--shadow-2);
+  }
+  .action:hover .arrow { transform: translate(0.18em, -0.18em); }
 }
-.action:active { transform: translateY(1px); }
+.action:active { transform: translateY(1px); box-shadow: var(--shadow-1); }
 
 .action--lg {
-  font-size: 0.78rem;
-  letter-spacing: 0.19em;
+  min-height: 54px;
+  padding: 0.95rem 1.5rem;
+  font-size: 0.875rem;
 }
+.action--sm { min-height: 40px; padding: 0.5rem 0.85rem; font-size: 0.75rem; }
+.action--block { display: flex; width: 100%; }
 
-/* ── bordered action ─────────────────────────────────────────── */
-.action--outline {
-  border: 1px solid var(--rule);
-  padding: 1.2em 1.9em;
-  border-radius: var(--r0);
-  transition: border-color var(--t-fast) var(--ease-ui),
-              background var(--t-fast) var(--ease-ui),
-              color var(--t-fast) var(--ease-ui);
+/* ── solid action — the one thing we want people to do ────────── */
+.action--solid {
+  --action-bg: var(--forest);
+  --action-fg: #f8f6ee;
+  --action-bd: var(--forest);
+  box-shadow: var(--shadow-2);
 }
-.action--outline::after { display: none; }
+.field--forest .action--solid,
+.field--ink .action--solid {
+  --action-bg: var(--gold-2);
+  --action-fg: var(--ink);
+  --action-bd: var(--gold-2);
+}
 @media (hover: hover) {
-  .action--outline:hover {
-    border-color: var(--fg);
-    background: color-mix(in srgb, var(--fg) 6%, transparent);
-    color: var(--fg);
+  .action--solid:hover {
+    --action-bg: var(--forest-2);
+    --action-bd: var(--forest-2);
+    --action-fg: #f8f6ee;
+    box-shadow: var(--shadow-3);
+  }
+  .field--forest .action--solid:hover,
+  .field--ink .action--solid:hover {
+    --action-bg: var(--gold-3);
+    --action-bd: var(--gold-3);
+    --action-fg: var(--ink);
   }
 }
 
-/* ── solid action — one per page ─────────────────────────────── */
-.action--solid {
-  background: var(--forest);
-  color: #f7f4ec;
-  padding: 1.3em 2em;
-  border-radius: var(--r0);
-  overflow: hidden;
-  transition: background var(--t-fast) var(--ease-ui);
-}
-.action--solid::after { display: none; }
-.field--forest .action--solid,
-.field--ink .action--solid { background: var(--gold); color: var(--ink); }
+/* ── outline action: no ground, just an edge ──────────────────── */
+.action--outline { --action-bg: transparent; box-shadow: none; }
 @media (hover: hover) {
-  .action--solid:hover { background: var(--ink); color: #f7f4ec; }
-  .field--forest .action--solid:hover,
-  .field--ink .action--solid:hover { background: #faf7ef; color: var(--ink); }
+  .action--outline:hover { background: var(--surface-inset); box-shadow: none; }
 }
 
-/* ── inline editorial link ─────────────────────────────────────
-   Underline sits clear of the descenders and thickens on hover. */
+/* ── quiet action: the editorial text link ──────────────────────
+   Kept for inline and footer use, where a bordered control would be
+   too loud. It is the exception now, not the default.            */
+.action--quiet {
+  --action-bg: transparent;
+  --action-bd: transparent;
+  min-height: 40px;
+  padding: 0.4rem 0;
+  box-shadow: none;
+  border-radius: 0;
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.28em;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+}
+@media (hover: hover) {
+  .action--quiet:hover {
+    background: transparent;
+    box-shadow: none;
+    --action-bd: transparent;
+    text-decoration-color: currentColor;
+  }
+}
+
+/* ── inline editorial link ───────────────────────────────────── */
 .link {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.22em;
   text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
-  transition: text-decoration-color var(--t-fast) var(--ease-ui);
+  transition: text-decoration-color var(--t-fast) var(--ease-ui),
+              color var(--t-fast) var(--ease-ui);
 }
 @media (hover: hover) {
-  .link:hover { text-decoration-color: currentColor; }
+  .link:hover { color: var(--accent); text-decoration-color: currentColor; }
 }
 
 .source-link {
@@ -113,10 +147,10 @@
   gap: 0.5em;
   font-family: var(--font-display);
   font-size: var(--fs-small);
-  font-weight: 520;
+  font-weight: var(--w-sign);
   color: var(--fg-dim);
   padding-block: 0.5rem;
-  min-height: 40px;
+  min-height: 44px;
   transition: color var(--t-fast) var(--ease-ui);
 }
 .source-link .arrow { transition: transform var(--t-mid) var(--ease-out); }
@@ -125,64 +159,108 @@
   .source-link:hover .arrow { transform: translate(0.2em, -0.2em); }
 }
 
-/* ── tags ───────────────────────────────────────────────────────
-   Set as text between hairlines rather than as coloured chips.  */
-.tags { display: flex; flex-wrap: wrap; gap: 0.4rem 1.15rem; }
-.tag {
-  font-family: var(--font-display);
-  font-size: var(--fs-micro);
-  font-weight: var(--w-sign);
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--fg-mute);
-  white-space: nowrap;
+/* ── cards ──────────────────────────────────────────────────────
+   A card is a route. It has a ground, an edge and a hover that
+   moves — so a phone user can tell it is tappable without reading. */
+.card {
+  position: relative;
+  display: grid;
+  gap: var(--s3);
+  padding: clamp(1.1rem, 2.2vw, 1.6rem);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r2);
+  box-shadow: var(--shadow-1);
+  transition: transform var(--t-fast) var(--ease-ui),
+              box-shadow var(--t-fast) var(--ease-ui),
+              border-color var(--t-fast) var(--ease-ui);
 }
-/* The separator trails its own tag rather than leading the next one, so
-   a wrapped list never starts a line with an orphaned dot. */
-.tag:not(:last-child)::after {
+/* The accent edge appears on hover rather than sitting there always,
+   so a grid of six cards is not six coloured bars. */
+.card::before {
   content: '';
-  display: inline-block;
-  width: 3px; height: 3px;
-  background: currentColor;
-  vertical-align: 0.35em;
-  margin-left: 1.1rem;
-  margin-right: -0.62rem;
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--accent);
+  border-radius: var(--r2) 0 0 var(--r2);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform var(--t-mid) var(--ease-out);
+}
+@media (hover: hover) {
+  a.card:hover, button.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-3);
+    border-color: var(--line-strong);
+  }
+  a.card:hover::before, button.card:hover::before { transform: scaleY(1); }
+}
+a.card:active, button.card:active { transform: translateY(0); }
+
+/* ── tags ───────────────────────────────────────────────────────
+   Real chips now. Text-between-hairlines was unreadable at 0.64rem
+   on the dark bands, which is where most of them sit.            */
+.tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: var(--w-sign);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  background: var(--surface-inset);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-pill);
+  padding: 0.28em 0.7em;
+  white-space: nowrap;
+  line-height: 1.4;
 }
 
 /* ── status ─────────────────────────────────────────────────────
-   Status is a word with a coloured mark, not a coloured badge.  */
+   A status is a claim about public money, so it is a legible badge
+   with a mark, not a word in a slightly different grey.          */
 .status {
   display: inline-flex;
   align-items: center;
-  gap: 0.55em;
+  gap: 0.5em;
   font-family: var(--font-display);
-  font-size: var(--fs-micro);
+  font-size: 0.6875rem;
   font-weight: var(--w-sign);
-  letter-spacing: 0.13em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
+  padding: 0.3em 0.7em 0.3em 0.6em;
+  border-radius: var(--r-pill);
+  line-height: 1.4;
+  color: var(--status-c, var(--fg-dim));
+  background: color-mix(in srgb, var(--status-c, var(--fg-dim)) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--status-c, var(--fg-dim)) 34%, transparent);
 }
 .status::before {
   content: '';
-  width: 7px; height: 7px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
   background: currentColor;
   flex: none;
 }
-.status--raised { color: var(--gold); }
-.status--parliament { color: var(--forest-3); }
-.status--verified { color: var(--clay); }
-.field--forest .status--parliament,
-.field--ink .status--parliament { color: #7fc4a3; }
-.field--forest .status--verified,
-.field--ink .status--verified { color: var(--clay-2); }
+.status--raised     { --status-c: var(--state-raised); }
+.status--parliament { --status-c: var(--state-delivered); }
+.status--verified   { --status-c: var(--state-verified); }
+.status--active     { --status-c: var(--state-active); }
+.status--blocked    { --status-c: var(--state-blocked); }
 
 /* ── progress line ──────────────────────────────────────────────
-   A measured rule, not a rounded candy bar.                     */
+   A measured rule with a visible track. The old 2px line on a 7%
+   ground was invisible on a phone in daylight.                   */
 .meter {
   --value: 0;
   position: relative;
-  height: 2px;
-  background: var(--rule-2);
+  height: 6px;
+  background: var(--surface-sunk);
+  border-radius: var(--r-pill);
   overflow: hidden;
 }
 .meter__fill {
@@ -190,13 +268,46 @@
   inset: 0 auto 0 0;
   width: calc(var(--value) * 1%);
   background: var(--accent);
+  border-radius: inherit;
   transform-origin: left;
+  transition: width var(--motion-editorial) var(--ease-out);
+}
+.js .meter__fill { width: 0; }
+.js .meter.is-in .meter__fill { width: calc(var(--value) * 1%); }
+
+/* ── statistic ──────────────────────────────────────────────────
+   A published figure with its label under it, on its own ground. */
+.stat {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+  padding: var(--s4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r2);
+}
+.stat__value {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 3.6vw, 2.75rem);
+  font-weight: var(--w-heavy);
+  letter-spacing: -0.035em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--fg);
+}
+.stat__label {
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  font-weight: var(--w-sign);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--fg-mute);
 }
 
 /* ── forms ──────────────────────────────────────────────────────
    Large, quiet fields. The label sits above and stays visible, so
    nobody loses context halfway through typing on a phone.       */
-.field-row { display: grid; gap: 0.55rem; }
+.field-row { display: grid; gap: 0.45rem; }
 
 .field-row > label {
   font-family: var(--font-display);
@@ -211,85 +322,102 @@
 .textarea,
 .select {
   width: 100%;
-  min-height: 56px;
-  padding: 1rem 1.05rem;
-  background: color-mix(in srgb, var(--fg) 3%, transparent);
-  border: 1px solid var(--rule);
-  border-radius: var(--r1);
+  min-height: 52px;
+  padding: 0.85rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r2);
   font-family: var(--font-display);
-  font-size: 1.0625rem;
+  /* 16px minimum, or iOS zooms the whole page on focus. */
+  font-size: 1rem;
   line-height: 1.45;
+  box-shadow: var(--shadow-1);
   transition: border-color var(--t-fast) var(--ease-ui),
-              background var(--t-fast) var(--ease-ui);
+              box-shadow var(--t-fast) var(--ease-ui);
   appearance: none;
 }
-.textarea { min-height: 150px; resize: vertical; padding-top: 0.9rem; }
+.textarea { min-height: 140px; resize: vertical; padding-top: 0.85rem; }
 .select {
-  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
-                    linear-gradient(135deg, currentColor 50%, transparent 50%);
-  background-position: calc(100% - 22px) 26px, calc(100% - 16px) 26px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 22px) calc(50% + 2px), calc(100% - 16px) calc(50% + 2px);
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
   padding-right: 3rem;
+  cursor: pointer;
 }
 .input::placeholder, .textarea::placeholder { color: var(--fg-mute); }
+.input:hover, .textarea:hover, .select:hover { border-color: var(--fg-dim); }
 .input:focus, .textarea:focus, .select:focus {
   outline: none;
-  border-color: var(--fg);
-  background: color-mix(in srgb, var(--fg) 1%, transparent);
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 22%, transparent);
 }
-.input:focus-visible, .textarea:focus-visible, .select:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
+.input:focus-visible, .textarea:focus-visible, .select:focus-visible { outline: none; }
 .input[aria-invalid='true'], .textarea[aria-invalid='true'], .select[aria-invalid='true'] {
-  border-color: var(--clay);
+  border-color: var(--state-blocked);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--state-blocked) 16%, transparent);
 }
 
 .field-error {
   font-family: var(--font-display);
   font-size: var(--fs-small);
-  color: var(--clay);
+  font-weight: var(--w-medium);
+  color: var(--state-blocked);
   display: flex;
   align-items: center;
-  gap: 0.45em;
+  gap: 0.4em;
   min-height: 1.2em;
 }
 .field-error:empty { display: none; }
+.field-error::before { content: '!'; font-weight: var(--w-heavy); }
 
-/* Choice chips: square, bordered, real 44px targets. */
+.field-hint {
+  font-family: var(--font-display);
+  font-size: var(--fs-small);
+  color: var(--fg-mute);
+}
+
+/* Choice chips: real 48px targets, an obvious selected state. */
 .choices { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .choice {
   position: relative;
   display: inline-flex;
   align-items: center;
-  min-height: 48px;
-  padding: 0.7rem 1.05rem;
-  border: 1px solid var(--rule);
-  border-radius: var(--r1);
+  min-height: var(--tap);
+  padding: 0.65rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r2);
   font-family: var(--font-display);
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 0.9375rem;
+  font-weight: var(--w-medium);
   cursor: pointer;
+  box-shadow: var(--shadow-1);
   transition: border-color var(--t-fast) var(--ease-ui),
               background var(--t-fast) var(--ease-ui),
-              color var(--t-fast) var(--ease-ui);
+              color var(--t-fast) var(--ease-ui),
+              box-shadow var(--t-fast) var(--ease-ui);
 }
-.choice input {
-  position: absolute;
-  opacity: 0;
-  inset: 0;
-  cursor: pointer;
-}
+.choice input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
 .choice:has(input:checked) {
-  background: var(--fg);
-  color: var(--bg);
-  border-color: var(--fg);
+  background: var(--forest);
+  color: #f8f6ee;
+  border-color: var(--forest);
+  box-shadow: var(--shadow-2);
 }
-.choice:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
-@media (hover: hover) {
-  .choice:hover { border-color: var(--fg); }
+.field--forest .choice:has(input:checked),
+.field--ink .choice:has(input:checked) {
+  background: var(--gold-2);
+  color: var(--ink);
+  border-color: var(--gold-2);
 }
+.choice:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+@media (hover: hover) { .choice:hover { border-color: var(--fg); } }
 .choice:active { transform: translateY(1px); }
 
 /* ── data table ────────────────────────────────────────────────
@@ -297,20 +425,24 @@
 .table { font-family: var(--font-display); font-size: var(--fs-small); }
 .table th, .table td {
   text-align: left;
-  padding: 1rem 1.2rem 1rem 0;
-  border-bottom: 1px solid var(--rule-2);
+  padding: 0.9rem 1.1rem 0.9rem 0;
+  border-bottom: 1px solid var(--line-soft);
   vertical-align: top;
 }
 .table th {
   font-size: var(--fs-micro);
   font-weight: var(--w-sign);
-  letter-spacing: 0.13em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--fg-mute);
-  border-bottom-color: var(--rule);
-  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 0.7rem;
 }
 .table td.num { font-variant-numeric: tabular-nums; }
+.table tbody tr { transition: background var(--t-fast) var(--ease-ui); }
+@media (hover: hover) {
+  .table tbody tr:hover { background: var(--surface-inset); }
+}
 
 @media (max-width: 759.98px) {
   /* Comparison tables become labelled records instead of asking a phone
@@ -323,29 +455,26 @@
 
   .table--stack thead {
     position: absolute;
-    width: 1px;
-    height: 1px;
+    width: 1px; height: 1px;
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
   }
 
-  .table--stack tr {
-    padding-block: 1.15rem;
-    border-bottom: 1px solid var(--rule);
-  }
-  .table--stack tbody tr:first-child { border-top: 1px solid var(--rule); }
   .table--stack tbody th {
     padding: 0 0 var(--s3);
     border: 0;
-    font-size: 1rem;
+    font-size: 1.0625rem;
+    font-weight: var(--w-strong);
+    letter-spacing: -0.01em;
+    text-transform: none;
     color: var(--fg);
   }
   .table--stack td {
     display: grid;
-    grid-template-columns: 5.7rem minmax(0, 1fr);
+    grid-template-columns: minmax(5.5rem, 0.65fr) minmax(0, 1.35fr);
     gap: var(--s3);
-    padding: 0.42rem 0;
+    padding: 0.4rem 0;
     border: 0;
     line-height: 1.5;
   }
@@ -354,7 +483,7 @@
     font-family: var(--font-display);
     font-size: var(--fs-micro);
     font-weight: var(--w-sign);
-    letter-spacing: 0.13em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--fg-mute);
   }
@@ -363,11 +492,46 @@
 /* ── notes ──────────────────────────────────────────────────────
    Where the site tells the truth about its own data.            */
 .note {
-  border-left: 2px solid var(--accent);
-  padding: 0.15rem 0 0.15rem 1.1rem;
+  border-left: 3px solid var(--accent);
+  background: var(--surface-inset);
+  border-radius: 0 var(--r2) var(--r2) 0;
+  padding: 0.8rem 1rem;
   font-family: var(--font-display);
   font-size: var(--fs-small);
   line-height: 1.55;
   color: var(--fg-dim);
-  max-width: 62ch;
+  max-width: 66ch;
+}
+
+/* ── filter bar ─────────────────────────────────────────────────
+   Used by the dashboard and the archive. A segmented control, not a
+   row of naked words.                                            */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.3rem;
+  background: var(--surface-sunk);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r2);
+  width: fit-content;
+  max-width: 100%;
+}
+.filter {
+  min-height: 40px;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--r1);
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: var(--w-sign);
+  color: var(--fg-dim);
+  white-space: nowrap;
+  transition: background var(--t-fast) var(--ease-ui),
+              color var(--t-fast) var(--ease-ui);
+}
+@media (hover: hover) { .filter:hover { color: var(--fg); background: var(--surface-inset); } }
+.filter[aria-pressed='true'] {
+  background: var(--surface);
+  color: var(--fg);
+  box-shadow: var(--shadow-1);
 }

@@ -1,15 +1,19 @@
 /* ─────────────────────────────────────────────────────────────────
-   BUDADIRI EAST — design tokens
+   BUDADIRI COUNTY EAST — design tokens
 
-   Two faces carry the identity. Montserrat is the structural voice:
-   signage, labels, data, the big statements. Newsreader is the
-   speaking voice: ledes, quotations, anything that reads like a
-   person wrote it. Nothing else is loaded.
+   The reference class for this site is a public institution that
+   publishes a record: an order paper, a budget return, a gazette.
+   Authority here comes from structure, density and evidence — not
+   from whitespace and thin capitals. Two faces carry it.
 
-   Montserrat is set light and open here rather than heavy and tight.
-   A constituency office should read as composed, not as a poster
-   shouting at the people it serves — so weight is spent sparingly,
-   space is spent freely, and the photographs are what carry volume.
+   Montserrat is the institutional voice: the masthead, signage,
+   headings, figures, interface. It is set TIGHT and SOLID, because a
+   constituency office is a body of record and record type has weight.
+
+   Newsreader is the reading voice, and only that: ledes, prose,
+   quotations. It never appears inside a heading. A serif word dropped
+   into the middle of a sans headline is decoration standing in for
+   hierarchy, and this site does not need the help.
    ───────────────────────────────────────────────────────────────── */
 
 /* Both faces are instanced and subset by tools/build-fonts.py: the axes
@@ -33,70 +37,114 @@
 
 :root {
   /* ── palette ──────────────────────────────────────────────────
-     Paper is the ground the site actually stands on — a warm, near
-     white that lets photography do the colour work. Forest and bark
-     are the two dark bands the page is allowed to fall into; neither
-     is black, because black reads as a screen and these pages are
-     about a place. Clay and gold are rationed: gold appears as a
-     rule, a figure or a marker, never as a surface.               */
-  --ink:        #1c1d15;
-  --forest:     #16412f;
-  --forest-2:   #0d2a1e;
-  --forest-3:   #24664c;
-  --bark:       #2a2419;
-  --paper:      #faf7ef;
-  --paper-2:    #f0ebde;
-  --clay:       #9d4f2e;
-  --clay-2:     #c78a63;
-  --gold:       #b8912c;
-  --gold-2:     #dcbb62;
+     Paper is the ground: a warm near-white that lets photography do
+     the colour work. Forest and bark are the two dark bands the page
+     is allowed to fall into; neither is black, because black reads as
+     a screen and these pages are about a place. Clay and gold are
+     rationed — a rule, a figure, a marker, never a surface.        */
+  --ink:        #16170f;
+  --ink-2:      #2b2d20;
+  --forest:     #113828;
+  --forest-2:   #0a2418;
+  --forest-3:   #1f5b42;
+  --forest-4:   #2f7a5b;
+  --bark:       #241f16;
+  --bark-2:     #171309;
+  --paper:      #fbf9f3;
+  --paper-2:    #f2eee2;
+  --paper-3:    #e7e1d0;
+  --clay:       #96462a;
+  --clay-2:     #c37f57;
+  --gold:       #a8801f;
+  --gold-2:     #d9b356;
+  --gold-3:     #f0dca4;
+
+  /* ── semantic state ───────────────────────────────────────────
+     The dashboard publishes claims against evidence, so its states
+     have to be distinguishable at a glance and in one colour word. */
+  --state-delivered: #1f5b42;
+  --state-active:    #a8801f;
+  --state-raised:    #96462a;
+  --state-blocked:   #8d2f2f;
+  --state-verified:  #1f5b42;
 
   /* ── field variables, re-bound per section ─────────────────── */
   --bg:      var(--paper);
   --fg:      var(--ink);
-  --fg-dim:  #56594a;
-  --fg-mute: #8b8d7e;
-  --rule:    rgba(28, 29, 21, 0.13);
-  --rule-2:  rgba(28, 29, 21, 0.07);
+  --fg-dim:  #4c4e40;
+  --fg-mute: #767868;
   --accent:  var(--clay);
+  --accent-fg: #fff;
+
+  /* Surfaces exist so that content can sit ON something. The previous
+     build had only full-bleed bands, which is why every block read as
+     another hero rather than as a card, a panel or a row. */
+  --surface:      #ffffff;
+  --surface-2:    var(--paper-2);
+  --surface-sunk: #efeadc;
+  --surface-inset: rgba(22, 23, 15, 0.035);
+
+  /* Three border strengths, so hierarchy can be drawn and not implied. */
+  --line:       rgba(22, 23, 15, 0.14);
+  --line-soft:  rgba(22, 23, 15, 0.075);
+  --line-strong: rgba(22, 23, 15, 0.30);
+
+  /* Legacy aliases kept so section sheets keep resolving. */
+  --rule:   var(--line);
+  --rule-2: var(--line-soft);
+
+  --focus: #1d4ed8;
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--focus);
+
+  /* Shadows are editorial: a card lifts off paper, it does not float
+     in space. Two steps, both warm, neither blurred into a halo. */
+  --shadow-1: 0 1px 2px rgba(22, 23, 15, 0.05), 0 1px 1px rgba(22, 23, 15, 0.04);
+  --shadow-2: 0 2px 4px rgba(22, 23, 15, 0.05), 0 6px 16px -6px rgba(22, 23, 15, 0.12);
+  --shadow-3: 0 4px 8px rgba(22, 23, 15, 0.06), 0 16px 32px -12px rgba(22, 23, 15, 0.18);
 
   /* ── type ─────────────────────────────────────────────────────
-     One ratio, applied at three densities. The mega size is allowed
-     to eat a third of the viewport; the quiet sizes stay quiet.    */
+     A tighter scale than before, and one that stops growing sooner.
+     Display type that eats a third of the viewport is a poster
+     device; this site has to fit an argument on a screen.          */
   --font-display: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-text: 'Newsreader', Georgia, 'Times New Roman', serif;
 
-  --fs-mega:    min(clamp(2.9rem, 10.2vw, 9.5rem), 17svh);
-  --fs-display: clamp(2.35rem, 7.4vw, 6rem);
-  --fs-title:   clamp(1.85rem, 4.9vw, 3.7rem);
-  --fs-head:    clamp(1.35rem, 2.7vw, 2.05rem);
-  --fs-sub:     clamp(1.1rem, 1.65vw, 1.38rem);
-  --fs-lede:    clamp(1.09rem, 1.42vw, 1.36rem);
-  --fs-body:    clamp(0.99rem, 1.06vw, 1.075rem);
+  --fs-mega:    clamp(2.75rem, 6.6vw, 5.5rem);
+  --fs-display: clamp(2.1rem, 4.6vw, 3.75rem);
+  --fs-title:   clamp(1.65rem, 3.1vw, 2.65rem);
+  --fs-head:    clamp(1.2rem, 1.85vw, 1.55rem);
+  --fs-sub:     clamp(1.02rem, 1.3vw, 1.18rem);
+  --fs-lede:    clamp(1.06rem, 1.35vw, 1.28rem);
+  --fs-body:    clamp(0.975rem, 0.95vw, 1.0625rem);
   --fs-small:   0.875rem;
-  --fs-label:   0.7rem;
-  --fs-micro:   0.64rem;
+  --fs-label:   0.6875rem;
+  --fs-micro:   0.6875rem;
 
-  /* Weight and tracking move together: the lighter a setting is, the
-     more air it needs between letters to stay solid on screen. */
-  --w-air:     300;
-  --w-light:   340;
-  --w-plain:   400;
-  --w-sign:    520;
-  --w-strong:  600;
+  /* Weight is the primary hierarchy device now. Institutional headings
+     are set at 640–700; the old 300-weight display register is gone. */
+  --w-air:     400;
+  --w-light:   450;
+  --w-plain:   450;
+  --w-medium:  520;
+  --w-sign:    600;
+  --w-strong:  650;
+  --w-heavy:   720;
 
-  --track-mega:    0.028em;
-  --track-display: 0.012em;
-  --track-title:   0.006em;
-  --track-label:   0.2em;
+  /* Big type gets NEGATIVE tracking. The old scale opened display type
+     up to +0.028em, which is what made it read as a fashion template. */
+  --track-mega:    -0.028em;
+  --track-display: -0.022em;
+  --track-title:   -0.016em;
+  --track-head:    -0.008em;
+  --track-label:   0.11em;
 
   /* ── measure ──────────────────────────────────────────────────
-     Line length is capped in characters, not pixels, so the serif
-     and the sans both land near 62–72 characters.                 */
-  --measure:      64ch;
+     Line length capped in characters, so serif and sans both land
+     near 62–72 characters.                                        */
+  --measure:      66ch;
   --measure-wide: 78ch;
 
-  /* ── space ────────────────────────────────────────────────── */
+  /* ── space — an 8pt grid ──────────────────────────────────── */
   --s1: 0.25rem;
   --s2: 0.5rem;
   --s3: 0.75rem;
@@ -104,110 +152,135 @@
   --s5: 1.5rem;
   --s6: 2rem;
   --s7: 3rem;
-  --s8: 4.5rem;
-  --s9: 7rem;
+  --s8: 4rem;
+  --s9: 6rem;
 
-  --section:    clamp(5.25rem, 11vw, 13rem);
-  --section-lg: clamp(7rem, 15vw, 17rem);
+  /* Sections are roughly 40% tighter than the previous build. Vertical
+     space was doing the work that structure should be doing. */
+  --section:    clamp(3.5rem, 6.5vw, 6.5rem);
+  --section-lg: clamp(4.5rem, 8.5vw, 8.5rem);
+  --section-sm: clamp(2.5rem, 4.5vw, 4rem);
 
   /* ── grid ─────────────────────────────────────────────────────
-     4 columns on a phone, 6 on a tablet, 12 on a desktop. Sections
-     place themselves on it by name; there are no span utilities to
-     scatter through the markup.                                   */
+     4 columns on a phone, 6 on a tablet, 12 on a desktop.         */
   --cols: 4;
-  --gutter: 14px;
-  --pad: clamp(20px, 5.2vw, 76px);
-  --max: 1520px;
+  --gutter: 16px;
+  --pad: clamp(20px, 4.4vw, 64px);
+  --max: 1440px;
 
   /* ── geometry ─────────────────────────────────────────────────
-     Square by default. Radius is a utility affordance, not a look. */
+     Square is still the default voice, but interface parts get a
+     small radius so they read as controls and not as cut paper. */
   --r0: 0;
-  --r1: 2px;
-  --r2: 4px;
-  --r3: 7px;
+  --r1: 3px;
+  --r2: 6px;
+  --r3: 10px;
+  --r-pill: 999px;
 
-  /* ── motion ───────────────────────────────────────────────────
-     One ease for entrances, one for interface response.           */
+  /* ── motion ─────────────────────────────────────────────────── */
   --ease:     cubic-bezier(0.22, 0.61, 0.24, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-ui:  cubic-bezier(0.4, 0, 0.2, 1);
-  --motion-instant: 120ms;
-  --motion-fast: 180ms;
-  --motion-ui: 280ms;
-  --motion-enter: 520ms;
-  --motion-editorial: 820ms;
-  --motion-scene: 1100ms;
-  --motion-distance: 12px;
-  --motion-image-scale: 1.035;
-  --motion-stagger: 50ms;
+  --motion-instant: 100ms;
+  --motion-fast: 160ms;
+  --motion-ui: 240ms;
+  --motion-enter: 460ms;
+  --motion-editorial: 680ms;
+  --motion-scene: 900ms;
+  --motion-distance: 14px;
+  --motion-image-scale: 1.04;
+  --motion-stagger: 55ms;
   --t-fast: var(--motion-fast);
   --t-mid: var(--motion-enter);
   --t-slow: var(--motion-editorial);
 
-  --header-h: 68px;
+  --header-h: 60px;
   --tap: 48px;
-  --mobile-dock-h: 68px;
-  --mobile-surface: color-mix(in srgb, var(--paper) 96%, transparent);
-  --mobile-elevation: 0 -10px 28px rgba(28, 29, 21, 0.09);
+  --mobile-dock-h: 62px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
 }
 
 @media (min-width: 760px) {
-  :root { --cols: 6; --gutter: 20px; --header-h: 76px; }
+  :root { --cols: 6; --gutter: 20px; --header-h: 68px; }
 }
 
 @media (min-width: 1100px) {
   :root {
     --cols: 12;
     --gutter: 24px;
-    --header-h: 84px;
+    --header-h: 72px;
     --motion-distance: 18px;
-    --motion-image-scale: 1.05;
-    --motion-stagger: 70ms;
+    --motion-stagger: 65ms;
   }
 }
 
-/* Wide screens need more margin, not wider prose. This keeps the register
-   and photography architectural at 1440–1920px while the existing measure
-   tokens continue to protect reading length inside each composition. */
-@media (min-width: 1440px) {
-  :root {
-    --pad: clamp(72px, 5.8vw, 104px);
-    --max: 1600px;
-  }
+/* Wide screens get more margin, not wider prose. */
+@media (min-width: 1600px) {
+  :root { --pad: clamp(64px, 5vw, 96px); --max: 1520px; }
 }
 
 /* ── fields ─────────────────────────────────────────────────────
-   The page moves paper → off-white → deep green → image → bark →
-   paper. A field re-binds the colour variables; everything inside
-   it inherits without knowing where it sits.                      */
+   A field re-binds the colour variables; everything inside it
+   inherits without knowing where it sits.                        */
 .field { background: var(--bg); color: var(--fg); position: relative; }
 
 .field--paper { --bg: var(--paper); }
 
 .field--stone {
   --bg: var(--paper-2);
-  --rule: rgba(28, 29, 21, 0.15);
-  --rule-2: rgba(28, 29, 21, 0.08);
+  --surface: #fbf9f3;
+  --surface-2: #ebe6d8;
+  --surface-sunk: #e4ddcb;
+  --line: rgba(22, 23, 15, 0.15);
+  --line-soft: rgba(22, 23, 15, 0.08);
 }
 
 .field--forest {
   --bg: var(--forest);
-  --fg: #f0f2e8;
-  --fg-dim: rgba(240, 242, 232, 0.74);
-  --fg-mute: rgba(240, 242, 232, 0.52);
-  --rule: rgba(240, 242, 232, 0.2);
-  --rule-2: rgba(240, 242, 232, 0.1);
+  --fg: #f2f5ec;
+  --fg-dim: rgba(242, 245, 236, 0.76);
+  --fg-mute: rgba(242, 245, 236, 0.56);
+  --line: rgba(242, 245, 236, 0.20);
+  --line-soft: rgba(242, 245, 236, 0.10);
+  --line-strong: rgba(242, 245, 236, 0.42);
   --accent: var(--gold-2);
+  --accent-fg: var(--ink);
+  --surface: rgba(255, 255, 255, 0.055);
+  --surface-2: rgba(255, 255, 255, 0.085);
+  --surface-sunk: rgba(0, 0, 0, 0.18);
+  --surface-inset: rgba(255, 255, 255, 0.05);
+  --focus: var(--gold-3);
+  --state-delivered: #64c39a;
+  --state-active: var(--gold-2);
+  --state-raised: var(--clay-2);
+  --state-verified: #64c39a;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-2: 0 2px 4px rgba(0, 0, 0, 0.2), 0 8px 20px -8px rgba(0, 0, 0, 0.4);
+  --shadow-3: 0 4px 8px rgba(0, 0, 0, 0.24), 0 18px 36px -14px rgba(0, 0, 0, 0.5);
 }
 
 /* Not black. A dark band on this site is bark, soil and shadow —
    the same warmth as the paper, turned down. */
 .field--ink {
   --bg: var(--bark);
-  --fg: #f0ece0;
-  --fg-dim: rgba(240, 236, 224, 0.7);
-  --fg-mute: rgba(240, 236, 224, 0.46);
-  --rule: rgba(240, 236, 224, 0.17);
-  --rule-2: rgba(240, 236, 224, 0.09);
+  --fg: #f2eee2;
+  --fg-dim: rgba(242, 238, 226, 0.74);
+  --fg-mute: rgba(242, 238, 226, 0.52);
+  --line: rgba(242, 238, 226, 0.18);
+  --line-soft: rgba(242, 238, 226, 0.09);
+  --line-strong: rgba(242, 238, 226, 0.4);
   --accent: var(--gold-2);
+  --accent-fg: var(--ink);
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-2: rgba(255, 255, 255, 0.08);
+  --surface-sunk: rgba(0, 0, 0, 0.2);
+  --surface-inset: rgba(255, 255, 255, 0.045);
+  --focus: var(--gold-3);
+  --state-delivered: #64c39a;
+  --state-active: var(--gold-2);
+  --state-raised: var(--clay-2);
+  --state-verified: #64c39a;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-2: 0 2px 4px rgba(0, 0, 0, 0.2), 0 8px 20px -8px rgba(0, 0, 0, 0.4);
+  --shadow-3: 0 4px 8px rgba(0, 0, 0, 0.24), 0 18px 36px -14px rgba(0, 0, 0, 0.5);
 }

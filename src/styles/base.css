@@ -3,7 +3,8 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  scrollbar-color: rgba(28, 29, 21, 0.24) transparent;
+  scrollbar-color: rgba(22, 23, 15, 0.24) transparent;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -12,12 +13,15 @@ body {
   color: var(--ink);
   font-family: var(--font-display);
   font-size: var(--fs-body);
-  font-weight: 400;
+  font-weight: var(--w-plain);
   line-height: 1.55;
   font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
+  /* The mobile dock is fixed over the end of the document. Without this
+     the footer's last row sits underneath it on every phone. */
+  padding-bottom: 0;
 }
 
 h1, h2, h3, h4, h5, p, figure, blockquote, dl, dd { margin: 0; }
@@ -33,28 +37,36 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 input, textarea, select { font: inherit; color: inherit; }
 a { color: inherit; text-decoration: none; }
 table { border-collapse: collapse; width: 100%; }
+/* Icon SVGs are drawn, not filled. Scoped rather than global, so an
+   illustrative SVG that does use fill is not silently blanked. */
+.icon, [class$='__icon'] { fill: none; stroke: currentColor; }
 
 /* Tap highlight is replaced by a real pressed state further down. */
 a, button, input, select, textarea, label { -webkit-tap-highlight-color: transparent; }
 
-::selection { background: var(--gold); color: var(--ink); }
+::selection { background: var(--gold-3); color: var(--ink); }
 
+/* ── focus ──────────────────────────────────────────────────────
+   A two-tone ring: a halo in the field colour, then the ring itself.
+   It stays legible on paper, on forest and on a photograph, which a
+   single outline in the accent colour does not. */
 :focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--r1);
 }
-/* Keyboard users get the ring; pointer users never see it. */
 :focus:not(:focus-visible) { outline: none; }
 
 /* A hairline scrollbar on desktop; phones keep the native overlay. */
 @media (hover: hover) and (pointer: fine) {
-  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar { width: 12px; height: 12px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background: rgba(28, 29, 21, 0.2);
-    border: 3px solid var(--paper);
+    background: rgba(22, 23, 15, 0.18);
+    border: 4px solid var(--paper);
+    border-radius: 999px;
   }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(28, 29, 21, 0.36); }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(22, 23, 15, 0.34); }
 }
 
 .visually-hidden {
@@ -70,14 +82,16 @@ a, button, input, select, textarea, label { -webkit-tap-highlight-color: transpa
   position: fixed;
   top: 0; left: 50%;
   transform: translate(-50%, -120%);
-  z-index: 200;
+  z-index: 300;
   background: var(--forest);
   color: #fff;
   padding: 0.85rem 1.4rem;
+  border-radius: 0 0 var(--r2) var(--r2);
   font-size: var(--fs-label);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
-  font-weight: var(--w-strong);
+  font-weight: var(--w-sign);
+  box-shadow: var(--shadow-2);
   transition: transform var(--t-fast) var(--ease-ui);
 }
 .skip-link:focus { transform: translate(-50%, 0); }
@@ -91,12 +105,16 @@ a, button, input, select, textarea, label { -webkit-tap-highlight-color: transpa
   inset: 0;
   background-image: url('/img/grain.png');
   background-size: 140px 140px;
-  opacity: 0.5;
+  opacity: 0.4;
   pointer-events: none;
   z-index: 0;
   mix-blend-mode: overlay;
 }
 .field > * { position: relative; z-index: 1; }
+
+/* Dark fields are separated from the paper by a hairline in the accent,
+   so a band change reads as a deliberate edge rather than as a seam. */
+.field--forest, .field--ink { border-top: 1px solid rgba(168, 128, 31, 0.55); }
 
 /* ── motion contract ───────────────────────────────────────────
    Everything scripted checks this too; the CSS side is the floor. */
@@ -115,3 +133,12 @@ a, button, input, select, textarea, label { -webkit-tap-highlight-color: transpa
 [data-reveal] { opacity: 1; }
 .js [data-reveal] { opacity: 0; }
 .js [data-reveal].is-in { opacity: 1; }
+
+/* ── utilities ──────────────────────────────────────────────── */
+.u-flow > * + * { margin-top: var(--flow, var(--s4)); }
+.u-center { text-align: center; }
+.u-nowrap { white-space: nowrap; }
+.u-fg { color: var(--fg); }
+.u-dim { color: var(--fg-dim); }
+.u-mute { color: var(--fg-mute); }
+.u-accent { color: var(--accent); }

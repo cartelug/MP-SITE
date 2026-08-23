@@ -14,38 +14,33 @@
   align-items: baseline;
   gap: var(--s4);
   padding-bottom: var(--s4);
-  border-bottom: 1px solid var(--fg);
+  border-bottom: 2px solid var(--line-strong);
 }
 
 /* ── the three counts ────────────────────────────────────────── */
+/* Three published figures. They were rows separated by hairlines with
+   10.5rem of forced height each; a return states its totals, it does
+   not give each one a third of a screen. */
 .dash__counts {
   display: grid;
-  border-bottom: 1px solid var(--rule);
+  gap: var(--gutter);
+  margin-block: var(--s5);
 }
-@media (min-width: 760px) {
+@media (min-width: 640px) {
   .dash__counts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 .dash__count {
   display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: baseline;
+  align-content: space-between;
   gap: var(--s4);
-  padding: clamp(1.4rem, 3vw, 2.4rem) 0;
-  border-bottom: 1px solid var(--rule-2);
-}
-@media (min-width: 760px) {
-  .dash__count {
-    grid-template-columns: 1fr;
-    align-content: space-between;
-    gap: clamp(2rem, 5vw, 4rem);
-    padding-right: var(--s5);
-    border-bottom: 0;
-    border-left: 1px solid var(--rule-2);
-    padding-left: var(--s5);
-    min-height: 10.5rem;
-  }
-  .dash__count:first-child { border-left: 0; padding-left: 0; }
+  padding: clamp(1.1rem, 2.2vw, 1.6rem);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--accent);
+  border-radius: var(--r2);
+  box-shadow: var(--shadow-1);
+  min-height: 8rem;
 }
 .dash__count-label { max-width: 14ch; }
 .dash__count-figure { display: flex; align-items: baseline; gap: 0.5rem; }
@@ -69,10 +64,10 @@
 
 .record__subject {
   font-family: var(--font-display);
-  font-size: clamp(1.18rem, 2.3vw, 1.7rem);
-  font-weight: var(--w-plain);
-  letter-spacing: 0.004em;
-  line-height: 1.28;
+  font-size: clamp(1.12rem, 1.75vw, 1.32rem);
+  font-weight: var(--w-strong);
+  letter-spacing: -0.016em;
+  line-height: 1.22;
   text-wrap: balance;
 }
 
@@ -81,7 +76,7 @@
   font-family: var(--font-display);
   font-size: var(--fs-micro);
   font-weight: var(--w-sign);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--fg-mute);
 }
@@ -99,9 +94,11 @@
   .record {
     gap: var(--s4);
     margin-top: var(--s4);
-    padding: 1.2rem;
-    border: 1px solid var(--rule);
-    background: color-mix(in srgb, var(--paper) 64%, var(--bg));
+    padding: 1.15rem;
+    border: 1px solid var(--line);
+    border-radius: var(--r2);
+    background: var(--surface);
+    box-shadow: var(--shadow-1);
   }
   .record + .record { margin-top: var(--s3); }
   .record__lead { order: 1; }
@@ -123,13 +120,13 @@
     width: 100%;
     min-height: 48px;
     padding-top: var(--s3);
-    border-top: 1px solid var(--rule-2);
+    border-top: 1px solid var(--line-soft);
     font-family: var(--font-display);
-    font-size: var(--fs-micro);
+    font-size: 0.8125rem;
     font-weight: var(--w-sign);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--fg-dim);
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--accent);
   }
   .record__toggle-mark {
     position: relative;
@@ -153,11 +150,9 @@
   .record.is-open .record__toggle-mark::after { transform: translate(-50%, -50%) rotate(0); }
   .js .record:not(.is-open) [data-record-detail] { display: none; }
   .record[data-record] [data-record-detail] { padding-top: var(--s2); }
-  .js .record .meter__fill {
-    transform: scaleX(0);
-    transition: transform var(--motion-enter) var(--ease-out);
-  }
-  .js .record.is-open .meter__fill { transform: scaleX(1); }
+  /* The meter inside a closed record is display:none, so an
+     IntersectionObserver never sees it. The disclosure marks it as
+     arrived instead — see initRecordDisclosures. */
 }
 
 @media (min-width: 760px) {
@@ -197,8 +192,8 @@
    once instead of repeating a key on every row. */
 .record-head {
   display: none;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--fg);
+  padding-bottom: 0.7rem;
+  border-bottom: 2px solid var(--line-strong);
 }
 @media (min-width: 1100px) {
   .record-head {
@@ -216,4 +211,35 @@
 }
 @media (min-width: 900px) {
   .dash__foot { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; gap: var(--s7); }
+}
+
+
+/* ── desktop rows ───────────────────────────────────────────────
+   Across five columns a row needs an edge to hold it together. The
+   marker appears on hover and the row lifts onto a surface, so the
+   eye can follow one record from subject to source. */
+@media (min-width: 760px) {
+  .record {
+    padding-inline: var(--s4);
+    margin-inline: calc(var(--s4) * -1);
+    border-radius: var(--r2);
+    transition: background var(--t-fast) var(--ease-ui);
+  }
+  .record::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6rem;
+    bottom: 0.6rem;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform var(--t-mid) var(--ease-out);
+  }
+}
+@media (hover: hover) and (min-width: 760px) {
+  .record:hover { background: var(--surface-inset); }
+  .record:hover::before { transform: scaleY(1); }
 }

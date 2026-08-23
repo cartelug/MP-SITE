@@ -94,11 +94,11 @@
 
 .step__question {
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3.8vw, 2.55rem);
-  font-weight: var(--w-light);
-  line-height: 1.2;
-  letter-spacing: 0.006em;
-  max-width: 20ch;
+  font-size: clamp(1.45rem, 2.8vw, 2.05rem);
+  font-weight: var(--w-strong);
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+  max-width: 22ch;
   text-wrap: balance;
 }
 .step__hint {
@@ -156,12 +156,16 @@
   border: 1px solid var(--fg);
   background: color-mix(in srgb, var(--fg) 3%, transparent);
 }
+/* The reference is the one thing a person must be able to read back
+   over a phone line, so it is set solid, wide and monospaced-by-figure. */
 .receipt__ref {
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 4.5vw, 2.6rem);
-  font-weight: var(--w-light);
-  letter-spacing: 0.08em;
+  font-size: clamp(1.5rem, 3.6vw, 2.25rem);
+  font-weight: var(--w-heavy);
+  letter-spacing: 0.06em;
   font-variant-numeric: tabular-nums;
+  color: var(--fg);
+  user-select: all;
 }
 .receipt__grid { display: grid; gap: var(--s4); }
 @media (min-width: 560px) { .receipt__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -180,3 +184,13 @@
 }
 .office__path li:last-child { border-bottom: 1px solid var(--rule-2); }
 .office__path .num { color: var(--fg-mute); font-size: var(--fs-micro); font-weight: var(--w-sign); letter-spacing: 0.12em; padding-top: 0.25em; }
+
+/* The reference has to leave this screen — read over a phone, written
+   down, or pasted into a message — so it gets a copy control beside it
+   rather than relying on a long-press selection. */
+.receipt__ref-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s3) var(--s4);
+}

@@ -8,7 +8,15 @@
 
 .framework { position: relative; }
 
-.framework__head { display: grid; gap: var(--s5); padding-bottom: clamp(3rem, 7vw, 6rem); }
+.framework__head {
+  display: grid;
+  gap: var(--s4);
+  padding-bottom: var(--s5);
+  margin-bottom: var(--s6);
+  border-bottom: 1px solid var(--line);
+}
+/* The head holds a marker and a title in one column; the rule under it
+   is what opens the section, so the old 6rem of padding is not needed. */
 
 .framework__track {
   position: relative;
@@ -33,13 +41,15 @@
 
 .stage {
   position: relative;
-  padding-block: clamp(1.4rem, 3.4vw, 2.6rem);
+  padding-block: clamp(1.1rem, 2.2vw, 1.6rem);
+  border-top: 1px solid var(--line-soft);
 }
+.stage:first-of-type { border-top: 0; }
 
 .stage__dot {
   position: absolute;
   left: calc(clamp(1.75rem, 4vw, 3.5rem) * -1);
-  top: calc(clamp(1.4rem, 3.4vw, 2.6rem) + 0.55em);
+  top: calc(clamp(1.1rem, 2.2vw, 1.6rem) + 0.75em);
   width: 7px;
   height: 7px;
   margin-left: -3px;
@@ -50,13 +60,16 @@
 
 .stage__name {
   font-family: var(--font-display);
-  font-size: clamp(1.45rem, 3.9vw, 2.85rem);
-  font-weight: var(--w-air);
-  line-height: 1.1;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
+  font-size: clamp(1.3rem, 2.4vw, 1.85rem);
+  font-weight: var(--w-strong);
+  line-height: 1.14;
+  letter-spacing: -0.018em;
+  text-transform: none;
   color: var(--fg);
-  opacity: 0.26;
+  /* A stage that has not arrived yet is dimmed, not erased. At 0.26 the
+     chain was unreadable until it scrolled into its own trigger zone,
+     which left most of the section blank on a first pass. */
+  opacity: 0.55;
   transition: opacity 0.55s var(--ease-out);
 }
 .stage.is-on .stage__name { opacity: 1; }
@@ -88,14 +101,18 @@
 .stage.is-on .stage__doc { opacity: 1; }
 
 @media (min-width: 900px) {
+  /* The document column is reserved whether or not a stage has one, so
+     seven rows line up as a table instead of collapsing to half-width
+     and leaving the band's right side empty. */
   .stage {
     display: grid;
-    grid-template-columns: 7.5rem minmax(0, 1fr) auto;
+    grid-template-columns: 9rem minmax(0, 1fr) minmax(0, 15rem);
     column-gap: clamp(1.5rem, 3vw, 3rem);
     align-items: baseline;
   }
-  .stage__scale { text-align: right; padding-top: 0.55rem; }
-  .stage__doc { justify-self: end; }
+  .stage__scale { text-align: right; padding-top: 0.4rem; }
+  .stage__doc { justify-self: end; align-self: center; }
+  .stage__note { max-width: none; }
 }
 @media (prefers-reduced-motion: reduce) { .stage__doc { opacity: 1; } }
 

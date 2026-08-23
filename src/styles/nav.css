@@ -1,417 +1,468 @@
 /* ─────────────────────────────────────────────────────────────────
    Navigation.
 
-   No floating glass bar. The header sits on the page, inverts its
-   own colour to match whatever field is behind it, and becomes
-   opaque only once you have left the first screen.
+   A constituency office needs a masthead, not a floating menu. The
+   header is opaque from the first pixel, carries the wordmark at a
+   readable weight, marks the current page unambiguously, and puts
+   the one service action in a solid button rather than in a row of
+   uppercase words that look exactly like the six links beside it.
    ───────────────────────────────────────────────────────────────── */
 
 .header {
   position: fixed;
-  inset: 0 0 auto;
+  top: 0; left: 0; right: 0;
   z-index: 90;
-  height: var(--header-h);
+  min-height: var(--header-h);
   display: flex;
   align-items: center;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid var(--line-soft);
   color: var(--ink);
-  transition: transform var(--t-mid) var(--ease-out),
-              background var(--t-mid) var(--ease-ui),
-              color var(--t-mid) var(--ease-ui),
-              border-color var(--t-mid) var(--ease-ui);
-  border-bottom: 1px solid transparent;
+  transition: transform var(--motion-ui) var(--ease-ui),
+              background var(--motion-ui) var(--ease-ui),
+              border-color var(--motion-ui) var(--ease-ui),
+              box-shadow var(--motion-ui) var(--ease-ui);
 }
-
-.header--dark { color: #f0f2e8; }
-
-.header--over-menu { background: transparent; border-bottom-color: transparent; }
-
+/* Once the page has moved, the masthead gains a ground and an edge so
+   it never dissolves into a photograph scrolling under it. */
 .header.is-solid {
-  background: var(--paper);
-  border-bottom-color: rgba(28, 29, 21, 0.12);
+  background: color-mix(in srgb, var(--paper) 97%, transparent);
+  border-bottom-color: var(--line);
+  box-shadow: var(--shadow-2);
 }
-.header--dark.is-solid {
-  background: var(--forest-2);
-  border-bottom-color: rgba(240, 242, 232, 0.15);
-}
-
-/* Out of the way on the way down, back on the way up. */
 .header.is-hidden { transform: translateY(-101%); }
+.header--over-menu { background: transparent; border-bottom-color: transparent; box-shadow: none; }
+.header--over-menu.is-solid { background: transparent; box-shadow: none; }
 
 .header__inner {
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--s5);
+  gap: var(--s4);
+  width: 100%;
+  min-height: var(--header-h);
 }
 
-/* ── wordmark ─────────────────────────────────────────────────── */
+/* ── wordmark ───────────────────────────────────────────────────
+   The name is the masthead. It is set solid and tight, with the
+   office under it in signage, separated by a rule on desktop. */
 .wordmark {
   display: grid;
-  gap: 5px;
-  line-height: 1;
-  padding-block: 0.5rem;
+  gap: 0.1rem;
+  align-content: center;
+  min-height: var(--tap);
+  padding-right: var(--s3);
+  flex: none;
+  max-width: 62vw;
 }
-/* Set the way the name would be cut into a building: open, even and
-   not competing with the page underneath it. */
 .wordmark__name {
   font-family: var(--font-display);
-  font-size: clamp(0.86rem, 1.35vw, 0.97rem);
-  font-weight: var(--w-sign);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
+  font-size: clamp(0.95rem, 1.5vw, 1.0625rem);
+  font-weight: var(--w-heavy);
+  letter-spacing: -0.018em;
+  line-height: 1.1;
+  color: var(--fg);
+  white-space: nowrap;
 }
 .wordmark__role {
   font-family: var(--font-display);
-  font-size: var(--fs-micro);
-  font-weight: var(--w-plain);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  opacity: 0.58;
-}
-
-/* ── desktop links ────────────────────────────────────────────── */
-.nav {
-  display: none;
-  align-items: center;
-  gap: clamp(0.72rem, 1.25vw, 1.35rem);
-}
-@media (min-width: 1220px) { .nav { display: flex; } }
-
-.nav__link {
-  position: relative;
-  font-family: var(--font-display);
-  font-size: clamp(0.62rem, 0.72vw, 0.7rem);
+  font-size: 0.625rem;
   font-weight: var(--w-sign);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding-block: 0.5rem;
-  color: inherit;
-  opacity: 0.66;
-  transition: opacity var(--t-fast) var(--ease-ui);
+  color: var(--fg-mute);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.nav__link::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform var(--t-mid) var(--ease-out);
-}
-@media (hover: hover) {
-  .nav__link:hover { opacity: 1; }
-  .nav__link:hover::after { transform: scaleX(1); transform-origin: left; }
-}
-.nav__link[aria-current='page'] { opacity: 1; }
-.nav__link[aria-current='page']::after { transform: scaleX(1); }
+.header--over-menu .wordmark__name { color: #f2f5ec; }
+.header--over-menu .wordmark__role { color: rgba(242, 245, 236, 0.6); }
 
-.header__actions { display: flex; align-items: center; gap: var(--s4); }
-.header .action { padding-block: 0.6em; }
+/* On a phone the masthead shares 390px with a 110px menu button, so the
+   office line is set smaller and tighter rather than being ellipsised
+   halfway through the constituency's name. */
+@media (max-width: 479.98px) {
+  .wordmark { max-width: 58vw; }
+  .wordmark__name { font-size: 0.9375rem; }
+  .wordmark__role { font-size: 0.5625rem; letter-spacing: 0.06em; }
+}
+
+/* ── primary nav ────────────────────────────────────────────────
+   Hidden below the desktop breakpoint, where the drawer takes over. */
+.nav { display: none; }
+
+@media (min-width: 1220px) {
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    margin-inline: auto;
+  }
+  .nav__link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0.4rem 0.7rem;
+    border-radius: var(--r1);
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: var(--w-medium);
+    letter-spacing: -0.002em;
+    color: var(--fg-dim);
+    white-space: nowrap;
+    transition: color var(--t-fast) var(--ease-ui),
+                background var(--t-fast) var(--ease-ui);
+  }
+  /* The current page is marked by a solid rule under the label, in the
+     accent, at full width — not by a 30% opacity difference. */
+  .nav__link::after {
+    content: '';
+    position: absolute;
+    left: 0.7rem; right: 0.7rem;
+    bottom: 0.05rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform var(--motion-ui) var(--ease-out);
+  }
+  .nav__link:hover { color: var(--fg); background: var(--surface-inset); }
+  .nav__link[aria-current='page'] { color: var(--fg); font-weight: var(--w-sign); }
+  .nav__link[aria-current='page']::after { transform: scaleX(1); }
+}
+
+.header__actions { display: flex; align-items: center; gap: var(--s2); flex: none; }
 .header__cta { display: none; }
-@media (min-width: 1220px) { .header__cta { display: inline-flex; } }
+@media (min-width: 1220px) {
+  .header__cta { display: inline-flex; min-height: 42px; padding: 0.55rem 1.1rem; font-size: 0.8125rem; }
+}
 
-/* ── menu button ───────────────────────────────────────────────
-   Two rules that become an x. 48px target, label read by AT.    */
+/* ── menu button ────────────────────────────────────────────────
+   A real bordered control at 48px, not two floating hairlines. */
 .menu-btn {
-  width: 48px;
-  height: 48px;
-  margin-right: -12px;
-  display: grid;
-  place-items: center;
-  position: relative;
-  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r2);
+  background: var(--surface);
+  color: var(--fg);
+  box-shadow: var(--shadow-1);
+  transition: background var(--t-fast) var(--ease-ui),
+              border-color var(--t-fast) var(--ease-ui);
 }
 @media (min-width: 1220px) { .menu-btn { display: none; } }
-
-.menu-btn__bars { display: block; width: 24px; height: 10px; position: relative; }
+.menu-btn:active { transform: translateY(1px); }
+.menu-btn__label {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: var(--w-sign);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.menu-btn__bars { display: block; width: 18px; height: 12px; position: relative; flex: none; }
 .menu-btn__bars::before,
 .menu-btn__bars::after {
   content: '';
   position: absolute;
-  left: 0;
-  width: 100%;
-  height: 1.5px;
+  left: 0; right: 0;
+  height: 2px;
+  border-radius: 2px;
   background: currentColor;
-  transition: transform var(--t-mid) var(--ease-out);
+  transition: transform var(--motion-ui) var(--ease-ui);
 }
-.menu-btn__bars::before { top: 0; }
-.menu-btn__bars::after { bottom: 0; }
-.menu-btn[aria-expanded='true'] .menu-btn__bars::before { transform: translateY(4.25px) rotate(45deg); }
-.menu-btn[aria-expanded='true'] .menu-btn__bars::after { transform: translateY(-4.25px) rotate(-45deg); }
+.menu-btn__bars::before { top: 1px; }
+.menu-btn__bars::after { bottom: 1px; }
+.menu-btn[aria-expanded='true'] {
+  background: transparent;
+  border-color: rgba(242, 245, 236, 0.4);
+  color: #f2f5ec;
+}
+.menu-btn[aria-expanded='true'] .menu-btn__bars::before { transform: translateY(4px) rotate(45deg); }
+.menu-btn[aria-expanded='true'] .menu-btn__bars::after { transform: translateY(-4px) rotate(-45deg); }
 
-/* ── full-screen menu ──────────────────────────────────────────
-   A deep green field with the constituency index set as a list.
-   It clips open from the top edge; items follow in sequence.    */
+/* ── drawer ─────────────────────────────────────────────────────
+   Full-screen, forest ground, large targets, and it scrolls if the
+   device is short. Every row is a 56px tap area.                 */
 .menu {
   position: fixed;
   inset: 0;
-  z-index: 85;
+  z-index: 88;
   background: var(--forest-2);
-  color: #f0f2e8;
+  color: #f2f5ec;
   display: grid;
-  grid-template-rows: var(--header-h) 1fr auto;
-  padding-inline: var(--pad);
-  padding-bottom: max(var(--s6), env(safe-area-inset-bottom));
-  clip-path: inset(0 0 100% 0);
+  grid-template-rows: auto 1fr auto;
+  opacity: 0;
   visibility: hidden;
-  transition: clip-path 0.62s var(--ease-out), visibility 0s linear 0.62s;
+  pointer-events: none;
   overflow-y: auto;
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  transition: opacity var(--motion-ui) var(--ease-ui),
+              visibility 0s linear var(--motion-ui);
 }
 .menu.is-open {
-  clip-path: inset(0 0 0 0);
+  opacity: 1;
   visibility: visible;
-  transition: clip-path 0.62s var(--ease-out), visibility 0s;
+  pointer-events: auto;
+  transition: opacity var(--motion-ui) var(--ease-ui), visibility 0s;
 }
 
-/* Phone menus finish quickly enough to feel attached to the tap. Tablets
-   retain the longer architectural reveal because they carry more space. */
-:root[data-motion='mobile'] .menu {
-  transition-duration: var(--motion-ui), 0s;
-  transition-delay: 0s, var(--motion-ui);
-}
-:root[data-motion='mobile'] .menu.is-open {
-  transition-duration: var(--motion-ui), 0s;
-  transition-delay: 0s, 0s;
-}
-:root[data-motion='mobile'] .menu__item,
-:root[data-motion='mobile'] .menu__foot > * {
-  transition-duration: 360ms;
-}
-:root[data-motion='mobile'] .menu.is-open .menu__item,
-:root[data-motion='mobile'] .menu.is-open .menu__foot > * {
-  transition-delay: calc(90ms + var(--i, 0) * 35ms);
-}
-
-.menu__head {
-  display: flex;
-  align-items: center;
-  font-family: var(--font-display);
-  font-size: var(--fs-label);
-  font-weight: var(--w-sign);
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-  opacity: 0.6;
-}
+.menu__head { min-height: var(--header-h); flex: none; }
 
 .menu__list {
+  padding: var(--s5) var(--pad) var(--s4);
   align-self: center;
-  display: grid;
   width: 100%;
-  max-width: 980px;
+  max-width: calc(var(--max) + var(--pad) * 2);
   margin-inline: auto;
-  padding-block: var(--s6);
-  border-top: 1px solid rgba(240, 242, 232, 0.15);
 }
-
-.menu__item { border-bottom: 1px solid rgba(240, 242, 232, 0.15); }
+.menu__item { border-bottom: 1px solid rgba(242, 245, 236, 0.14); }
+.menu__item:first-child { border-top: 1px solid rgba(242, 245, 236, 0.14); }
 
 .menu__link {
-  display: grid;
-  grid-template-columns: 3.1rem 1fr auto;
-  align-items: baseline;
-  gap: var(--s3);
-  padding-block: clamp(0.72rem, 2.2vw, 1.1rem);
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  min-height: 60px;
+  padding-block: 0.7rem;
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 6.6vw, 2.55rem);
-  font-weight: var(--w-air);
-  letter-spacing: 0.045em;
-  text-transform: uppercase;
+  font-size: clamp(1.5rem, 6.5vw, 2.25rem);
+  font-weight: var(--w-strong);
+  letter-spacing: -0.024em;
   line-height: 1.1;
-  transition: color var(--t-fast) var(--ease-ui);
+  color: #f2f5ec;
+  transition: color var(--t-fast) var(--ease-ui), padding-left var(--t-fast) var(--ease-ui);
 }
 .menu__num {
-  font-size: var(--fs-micro);
+  font-size: 0.6875rem;
   font-weight: var(--w-sign);
-  letter-spacing: 0.14em;
-  opacity: 0.42;
-  transform: translateY(-0.25em);
+  letter-spacing: 0.1em;
+  color: var(--gold-2);
+  flex: none;
+  width: 1.8rem;
 }
 .menu__link .arrow {
-  font-size: 0.9rem;
+  margin-left: auto;
+  font-size: 1rem;
+  color: var(--gold-2);
   opacity: 0;
-  transform: translateX(-0.4em);
-  transition: opacity var(--t-fast) var(--ease-ui), transform var(--t-mid) var(--ease-out);
+  transform: translateX(-6px);
+  transition: opacity var(--t-fast) var(--ease-ui), transform var(--t-fast) var(--ease-out);
 }
 .menu__link[aria-current='page'] { color: var(--gold-2); }
 .menu__link[aria-current='page'] .arrow,
 .menu__link:hover .arrow,
 .menu__link:focus-visible .arrow { opacity: 1; transform: none; }
+@media (hover: hover) { .menu__link:hover { padding-left: 0.4rem; } }
 .menu__link:active { color: var(--gold-2); }
 
-/* Staged entrance; the CSS holds the closed state so the script
-   only has to toggle one class. */
+/* Rows arrive in sequence once the drawer is open. */
 .menu__item,
 .menu__foot > * {
   opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+  transform: translateY(10px);
+  transition: opacity var(--motion-ui) var(--ease-out),
+              transform var(--motion-ui) var(--ease-out);
 }
 .menu.is-open .menu__item,
 .menu.is-open .menu__foot > * {
   opacity: 1;
   transform: none;
-  transition-delay: calc(0.16s + var(--i, 0) * 0.045s);
+  transition-delay: calc(var(--i, 0) * 38ms + 60ms);
 }
 
 .menu__foot {
   display: grid;
   gap: var(--s4);
-  padding-top: var(--s5);
-  border-top: 1px solid rgba(240, 242, 232, 0.15);
+  padding: var(--s4) var(--pad) calc(var(--s6) + var(--safe-b));
+  width: 100%;
+  max-width: calc(var(--max) + var(--pad) * 2);
+  margin-inline: auto;
+  border-top: 1px solid rgba(242, 245, 236, 0.14);
 }
-.menu__foot .action { --action-fg: var(--gold-2); }
+.menu__foot .action {
+  --action-bg: var(--gold-2);
+  --action-fg: var(--ink);
+  --action-bd: var(--gold-2);
+  justify-self: start;
+}
 
 .menu__secondary {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 var(--s5);
+  gap: 0.4rem 0.5rem;
 }
 .menu__secondary a {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 40px;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid rgba(242, 245, 236, 0.2);
+  border-radius: var(--r-pill);
   font-family: var(--font-display);
-  font-size: var(--fs-micro);
-  font-weight: var(--w-sign);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(240, 242, 232, 0.66);
-  transition: color var(--t-fast) var(--ease-ui);
+  font-size: 0.8125rem;
+  font-weight: var(--w-medium);
+  color: rgba(242, 245, 236, 0.78);
+  transition: color var(--t-fast) var(--ease-ui),
+              border-color var(--t-fast) var(--ease-ui),
+              background var(--t-fast) var(--ease-ui);
 }
 .menu__secondary a[aria-current='page'],
 .menu__secondary a:hover,
-.menu__secondary a:focus-visible { color: var(--gold-2); }
+.menu__secondary a:focus-visible {
+  color: var(--ink);
+  background: var(--gold-2);
+  border-color: var(--gold-2);
+}
 
-@media (max-height: 720px) and (max-width: 1219.98px) {
-  .menu__list { padding-block: var(--s4); }
-  .menu__link {
-    padding-block: 0.58rem;
-    font-size: clamp(1.3rem, 5.4vw, 2rem);
-  }
-  .menu__foot { gap: var(--s2); padding-top: var(--s3); }
+@media (max-height: 700px) {
+  .menu__list { padding-block: var(--s3); }
+  .menu__link { min-height: 50px; padding-block: 0.45rem; font-size: clamp(1.25rem, 5.4vw, 1.75rem); }
+  .menu__foot { gap: var(--s3); }
   .menu__foot > .micro { display: none; }
 }
 
 body.is-locked { overflow: hidden; }
 
 /* ── mobile service dock ───────────────────────────────────────
-   A solid institutional action, revealed only after the opening
-   frame has done its work. It respects the device safe area and
-   stays below the full-screen menu in the layer stack.          */
+   Below the desktop breakpoint the three main routes and the one
+   service action live at the thumb. It respects the safe area and
+   sits under the drawer in the layer stack.                     */
 .mobile-dock { display: none; }
 
 @media (max-width: 1219.98px) {
+  /* The dock covers the last rows of the page, so the document is
+     padded by exactly its height. This was missing before, and the
+     footer's final line sat underneath it on every phone. */
+  body { padding-bottom: calc(var(--mobile-dock-h) + var(--safe-b)); }
+
   .mobile-dock {
-    display: block;
+    display: grid;
+    /* The action column gets a floor in pixels, not only a fraction: at
+       360px a 1.5fr column is 120px and "Continue report" breaks across
+       two lines inside a 62px-tall bar. */
+    grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(124px, 1.45fr);
+    align-items: stretch;
     position: fixed;
     z-index: 74;
-    left: 0;
-    right: 0;
+    left: 0; right: 0; bottom: 0;
     width: 100%;
-    bottom: 0;
+    min-height: var(--mobile-dock-h);
+    padding-bottom: var(--safe-b);
+    background: color-mix(in srgb, var(--paper) 96%, transparent);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -6px 20px -8px rgba(22, 23, 15, 0.18);
     opacity: 0;
     transform: translateY(calc(100% + 12px));
     pointer-events: none;
-    transition: opacity 0.24s var(--ease-ui), transform 0.38s var(--ease-out);
+    transition: opacity var(--motion-ui) var(--ease-ui),
+                transform var(--motion-enter) var(--ease-out);
   }
-  .mobile-dock.is-visible {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-  }
-  .mobile-dock__tab,
-  .mobile-dock__action {
-    transition: color var(--motion-fast) var(--ease-ui),
-                background var(--motion-fast) var(--ease-ui),
-                opacity var(--motion-instant) var(--ease-ui);
-    touch-action: manipulation;
-  }
-  .mobile-dock__tab:active { background: color-mix(in srgb, var(--forest) 8%, transparent); }
-  .mobile-dock__action:active { opacity: 0.84; }
+  .mobile-dock.is-visible { opacity: 1; transform: none; pointer-events: auto; }
   body.is-locked .mobile-dock {
     opacity: 0;
     transform: translateY(calc(100% + 12px));
     pointer-events: none;
   }
-  .mobile-dock {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(1.2fr, 1.45fr);
-    align-items: center;
-    min-height: var(--mobile-dock-h);
-    padding-bottom: env(safe-area-inset-bottom);
-    background: var(--mobile-surface);
-    border-top: 1px solid var(--rule);
-    box-shadow: var(--mobile-elevation);
-  }
+
   .mobile-dock__tab {
-    min-height: var(--tap);
+    min-height: var(--mobile-dock-h);
     display: grid;
     place-items: center;
     align-content: center;
-    gap: 0.25rem;
-    padding-inline: 0.3rem;
+    gap: 0.2rem;
+    padding: 0.4rem 0.25rem;
     font-family: var(--font-display);
-    font-size: 0.58rem;
+    font-size: 0.625rem;
     font-weight: var(--w-sign);
-    letter-spacing: 0.12em;
-    line-height: 1.15;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
     text-align: center;
-    text-transform: uppercase;
-    color: var(--fg-dim);
+    color: var(--fg-mute);
+    touch-action: manipulation;
+    transition: color var(--motion-fast) var(--ease-ui),
+                background var(--motion-fast) var(--ease-ui);
   }
   .mobile-dock__icon {
-    width: 17px;
-    height: 17px;
+    width: 20px; height: 20px;
     fill: none;
     stroke: currentColor;
-    stroke-width: 1.55;
-    stroke-linecap: square;
-    stroke-linejoin: miter;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
   .mobile-dock__tab[aria-current='page'] { color: var(--forest); }
+  /* The active tab is marked at the top edge, where a native tab bar
+     marks it, so it survives being read at arm's length. */
+  .mobile-dock__tab[aria-current='page']::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 26px;
+    height: 3px;
+    border-radius: 0 0 3px 3px;
+    background: var(--forest);
+  }
+  .mobile-dock__tab { position: relative; }
+  .mobile-dock__tab:active { background: var(--surface-inset); }
+
   .mobile-dock__action {
     min-height: var(--mobile-dock-h);
     display: grid;
     align-content: center;
-    gap: 0.12rem;
-    padding: 0.55rem 0.75rem;
-    color: #f7f4ec;
-    background: var(--forest-2);
-    border-top: 2px solid var(--gold);
+    gap: 0.05rem;
+    padding: 0.5rem 0.7rem;
+    color: #f8f6ee;
+    background: var(--forest);
+    touch-action: manipulation;
+    transition: background var(--motion-fast) var(--ease-ui);
   }
+  .mobile-dock__action:active { background: var(--forest-2); }
   .mobile-dock__context {
     font-family: var(--font-display);
-    font-size: 0.58rem;
+    font-size: 0.5625rem;
     font-weight: var(--w-sign);
-    letter-spacing: 0.16em;
-    line-height: 1.3;
+    letter-spacing: 0.08em;
+    line-height: 1.25;
     text-transform: uppercase;
-    color: rgba(247, 244, 236, 0.58);
+    color: rgba(248, 246, 238, 0.62);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .mobile-dock__label {
     font-family: var(--font-display);
-    font-size: 0.92rem;
-    font-weight: var(--w-sign);
-    letter-spacing: 0.12em;
-    line-height: 1.35;
-    text-transform: uppercase;
+    font-size: 0.875rem;
+    font-weight: var(--w-strong);
+    letter-spacing: -0.014em;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
-@media (max-width: 389.98px) {
-  .mobile-dock { grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(1.1fr, 1.25fr); }
-  .mobile-dock__tab { font-size: 0.53rem; letter-spacing: 0.08em; }
+@media (max-width: 359.98px) {
+  .mobile-dock { grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.3fr); }
+  .mobile-dock__tab { font-size: 0.5625rem; }
   .mobile-dock__context { display: none; }
 }
 
 /* ── scroll indicator ──────────────────────────────────────────
-   A 1px reading position on the very top edge. Not a progress bar
-   with a gradient in it.                                        */
+   A reading position on the very top edge. Not a progress bar with
+   a gradient in it.                                             */
 .readline {
   position: fixed;
   top: 0; left: 0;
@@ -419,7 +470,8 @@ body.is-locked { overflow: hidden; }
   width: 100%;
   transform: scaleX(var(--p, 0));
   transform-origin: left;
-  background: var(--gold);
+  background: var(--accent);
   z-index: 95;
   pointer-events: none;
+  transition: opacity var(--motion-ui) var(--ease-ui);
 }
