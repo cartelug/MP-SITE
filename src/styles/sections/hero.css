@@ -1,28 +1,34 @@
 /* ─────────────────────────────────────────────────────────────────
-   HERO — a title frame, not a text/photo split.
+   HERO
 
-   The statement is set flush left across nine columns and is allowed
-   to run wide. The portrait plate enters from the right and its left
-   edge is dissolved into the paper, so the photograph and the
-   typography occupy the same space without either being illegible.
+   The previous hero was a poster: three lines of 300-weight capitals
+   running two-thirds of the way across a 100svh field, with the last
+   line switched into a serif, and the portrait dissolved into the
+   paper behind it. It read as a template because it was one.
+
+   This is a masthead frame instead. The statement is set solid and
+   tight in four columns; the portrait is a framed plate with a
+   caption, not a ghost; the two service routes are buttons; and a
+   record strip along the bottom states what the office publishes.
+   It occupies the screen once, and then the page starts.
    ───────────────────────────────────────────────────────────────── */
 
 .hero {
   position: relative;
-  padding-top: calc(var(--header-h) + clamp(1rem, 3.5vw, 2.5rem));
-  padding-bottom: clamp(2rem, 5vw, 4rem);
-  min-height: 100svh;
+  padding-top: calc(var(--header-h) + clamp(1.25rem, 3vw, 2.25rem));
+  padding-bottom: clamp(1.5rem, 3.5vw, 2.75rem);
   display: flex;
   flex-direction: column;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
   overflow: clip;
 }
 
 .hero__contours {
   position: absolute;
-  inset: -12% -18% auto auto;
-  width: min(84vw, 940px);
+  inset: -18% -22% auto auto;
+  width: min(76vw, 820px);
   color: var(--forest);
-  opacity: 0.14;
+  opacity: 0.09;
   pointer-events: none;
 }
 .hero__contours path {
@@ -32,131 +38,113 @@
   stroke-opacity: var(--o);
 }
 
+/* ── the strip above the statement ───────────────────────────── */
 .hero__marker {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: var(--s4);
   padding-bottom: var(--s3);
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--line);
 }
 .hero__marker .micro:last-child { text-align: right; }
 
+/* ── body ───────────────────────────────────────────────────── */
 .hero__body {
   flex: 1;
   display: grid;
-  align-content: center;
-  gap: clamp(1.5rem, 3.5vw, 2.75rem);
-  padding-block: clamp(1.25rem, 4vw, 3rem);
+  align-content: start;
+  gap: clamp(1.25rem, 2.4vw, 2rem);
 }
 
 .hero__statement {
   position: relative;
   z-index: 2;
-  display: grid;
-  width: fit-content;
-  max-width: 100%;
+  max-width: 15ch;
 }
 .hero__line { display: block; }
 
-/* The closing line changes voice: the sans states it, the serif lands it. */
-.hero__line--turn {
-  font-family: var(--font-text);
-  font-weight: 300;
-  font-size: 0.96em;
-  text-transform: none;
-  letter-spacing: -0.032em;
-  color: var(--forest);
-}
+/* The closing line takes the accent, in the same face and weight.
+   It is emphasis, not a change of voice. */
+.hero__line--turn { color: var(--forest-3); }
 
+/* ── portrait plate ─────────────────────────────────────────────
+   A framed, captioned plate. The old mask dissolved two edges into
+   the paper, which on a phone cropped the subject's shoulder and
+   left the caption floating in the margin. */
 .hero__plate {
   position: relative;
   z-index: 1;
-  width: min(62vw, 300px);
-  justify-self: end;
-  margin-top: -6vw;
+  display: grid;
+  gap: 0;
+  align-self: start;
+  border-radius: var(--r2);
+  overflow: hidden;
+  background: var(--surface-sunk);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-2);
 }
 .hero__plate img {
   width: 100%;
-  aspect-ratio: 454 / 568;
+  aspect-ratio: 454 / 500;
   object-fit: cover;
-  /* Dissolved on the type side and along the bottom, so the portrait
-     enters the page rather than sitting in a box on top of it. */
-  -webkit-mask-image: linear-gradient(100deg, transparent, #000 26%);
-  mask-image:
-    linear-gradient(100deg, transparent, #000 26%),
-    linear-gradient(180deg, #000 76%, transparent);
-  mask-composite: intersect;
+  object-position: 50% 22%;
 }
 
-/* Set outside the frame, reading up the right edge — a plate caption,
-   not a label floating on the subject's face. */
+/* The credit is a caption bar under the plate, in the signage face. */
 .hero__plate-caption {
-  position: absolute;
-  right: -1.55rem;
-  bottom: 0;
-  writing-mode: vertical-rl;
-  color: var(--fg-mute);
-  white-space: nowrap;
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.7rem 0.85rem;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  color: var(--fg-dim);
+  writing-mode: horizontal-tb;
+  position: static;
+  white-space: normal;
 }
-.hero__plate-caption span { display: block; }
-.hero__plate-caption span + span {
-  margin-top: 0.5rem;
-  color: var(--fg-mute);
-  font-size: 0.9em;
-  letter-spacing: 0.12em;
-}
-@media (max-width: 759.98px) {
-  /* Vertical setting needs a margin the phone does not have; the credit
-     runs under the plate instead — and is allowed to wrap, because the
-     name and the office together are longer than a phone is wide. */
-  .hero__plate-caption {
-    position: static;
-    writing-mode: horizontal-tb;
-    text-align: right;
-    white-space: normal;
-    line-height: 1.5;
-    padding-top: 0.6rem;
-  }
-  .hero__plate-caption span + span { margin-top: 0.2rem; }
-}
+.hero__plate-caption span:last-child { color: var(--fg-mute); font-size: 0.9em; }
 
 .hero__note {
   font-family: var(--font-text);
-  font-size: clamp(1.02rem, 1.35vw, 1.2rem);
-  font-weight: 350;
-  line-height: 1.5;
-  max-width: 34ch;
+  font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+  font-weight: 400;
+  line-height: 1.55;
+  max-width: 38ch;
   color: var(--fg-dim);
-  border-left: 1px solid var(--accent);
+  border-left: 3px solid var(--accent);
   padding-left: var(--s4);
 }
 
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 var(--s6);
+  gap: var(--s3);
   align-items: center;
 }
+.hero__actions .action { flex: 1 1 auto; min-width: 0; }
 
+/* ── the strip below ────────────────────────────────────────────
+   Replaces the "Scroll" hint, which told a phone user something
+   their thumb already knew. This states what the site publishes. */
 .hero__foot {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: var(--s4);
   padding-top: var(--s3);
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--line);
 }
 
 .hero__scroll {
   display: inline-flex;
   align-items: center;
-  gap: 0.7em;
+  gap: 0.6em;
   color: var(--fg-mute);
 }
 .hero__scroll::after {
   content: '';
-  width: 34px;
+  width: 28px;
   height: 1px;
   background: currentColor;
   transform-origin: left;
@@ -167,13 +155,25 @@
   50%      { transform: scaleX(1);    opacity: 1; }
 }
 
-/* ── phone: type stays enormous, the plate becomes a right column ── */
+/* ── phone ──────────────────────────────────────────────────────
+   Order matters more than composition here: identity, statement,
+   what it means, then the two things you can actually do. The
+   portrait comes last because it cannot answer a question. */
 @media (max-width: 759.98px) {
-  .hero { min-height: auto; padding-bottom: var(--s6); }
+  .hero { padding-bottom: var(--s5); gap: var(--s4); }
+  /* Two lines each at most: at 0.5625rem with 0.04em of tracking the
+     term line fits "Twelfth Parliament · 2026–2031" in two, where the
+     previous setting broke it into three ragged ones. */
+  .hero__marker { align-items: flex-start; gap: var(--s3); }
+  .hero__marker .micro { font-size: 0.5625rem; letter-spacing: 0.04em; line-height: 1.35; }
+  .hero__marker .micro:first-child { flex: 1 1 auto; min-width: 0; }
+  .hero__marker .micro:last-child { flex: 0 1 auto; max-width: 20ch; }
   .hero__body { gap: var(--s5); }
-  .hero__statement { margin-left: -0.04em; }
-  /* On a phone, the two useful routes arrive before the portrait. The
-     image still carries identity, but it cannot hide the service entry. */
+  .hero__statement { max-width: 100%; }
+  .hero__note { font-size: 1.06rem; max-width: 100%; }
+
+  /* Two buttons, side by side, that fit their labels. The previous
+     build let these wrap mid-phrase in a 150px box. */
   .hero__actions {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -181,60 +181,109 @@
     width: 100%;
   }
   .hero__actions .action {
-    min-height: 54px;
-    justify-content: center;
-    padding: 0.75rem 0.65rem;
-    text-align: center;
-    line-height: 1.25;
+    padding-inline: 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0;
   }
   .hero__actions .action .arrow { display: none; }
-  .hero__actions .action:not(.action--solid) {
-    border: 1px solid var(--rule);
-    color: var(--fg);
-  }
-  .hero__actions .action:not(.action--solid)::after { display: none; }
-  /* The plate rises into the second line; its left edge is already
-     dissolved, so the type reads straight through it. */
-  .hero__plate {
-    width: min(72%, 336px);
-    margin-top: calc(var(--s2) * -1);
-    margin-right: calc(var(--pad) * -0.6);
-  }
-  .hero__note { font-size: 1.04rem; }
-  .hero__actions { gap: 0 var(--s5); }
+
+  .hero__plate { width: 100%; }
+  .hero__plate img { aspect-ratio: 5 / 4; object-position: 50% 18%; }
   .hero__foot .micro:last-child { display: none; }
 }
 
+/* ── tablet and up ──────────────────────────────────────────── */
 @media (min-width: 760px) {
   .hero__body {
     grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
     column-gap: var(--gutter);
+    row-gap: clamp(1.25rem, 2.4vw, 2rem);
     align-items: start;
   }
-  .hero__statement { grid-column: 1 / -1; grid-row: 1; }
-  .hero__plate {
-    grid-column: 4 / -1;
-    grid-row: 1 / span 2;
-    width: 100%;
-    margin-top: clamp(1.5rem, 7vw, 4.5rem);
-    align-self: start;
-  }
-  .hero__note { grid-column: 1 / 5; grid-row: 2; margin-top: var(--s5); }
-  .hero__actions { grid-column: 1 / 5; grid-row: 3; margin-top: var(--s5); }
+  .hero__statement { grid-column: 1 / 5; grid-row: 1; }
+  .hero__plate { grid-column: 5 / -1; grid-row: 1 / span 3; margin-top: 0.35rem; }
+  .hero__note { grid-column: 1 / 5; grid-row: 2; }
+  .hero__actions { grid-column: 1 / 5; grid-row: 3; }
 }
 
 @media (min-width: 1100px) {
-  .hero__body { align-content: center; row-gap: clamp(1.5rem, 3vw, 3rem); }
-  .hero__statement { grid-column: 1 / 11; }
+  .hero { min-height: min(100svh, 860px); }
+  .hero__body { align-content: center; }
+  .hero__statement { grid-column: 1 / 8; }
+  .hero__note { grid-column: 1 / 6; grid-row: 2; }
+  .hero__actions { grid-column: 1 / 8; grid-row: 3; }
+  .hero__actions .action { flex: 0 0 auto; }
   .hero__plate {
     grid-column: 9 / -1;
     grid-row: 1 / span 3;
-    margin-top: clamp(1rem, 5vw, 4.5rem);
-    max-width: 380px;
+    max-width: 400px;
     justify-self: end;
+    align-self: center;
   }
-  .hero__note { grid-column: 1 / 5; grid-row: 2; }
-  .hero__actions { grid-column: 5 / 9; grid-row: 2; align-self: end; margin-top: 0; }
 }
 
-@media (min-width: 1440px) { .hero__plate { max-width: 430px; } }
+/* ── the record block ───────────────────────────────────────────
+   The hero used to end in ~500px of empty paper between the
+   statement and the portrait. A hero on a service site should say
+   what the service currently holds, so that space now carries the
+   three figures the rest of the site is accountable to. */
+.hero__record {
+  display: grid;
+  gap: var(--s4);
+  padding: clamp(1rem, 1.8vw, 1.4rem);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r2);
+  box-shadow: var(--shadow-1);
+  align-self: start;
+}
+.hero__record-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s2);
+  padding-bottom: var(--s3);
+  border-bottom: 1px solid var(--line-soft);
+}
+.hero__record-list { display: grid; gap: 0; }
+.hero__record-list > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s4);
+  padding-block: 0.6rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+.hero__record-list > div:last-child { border-bottom: 0; }
+.hero__record-list dt {
+  font-family: var(--font-display);
+  font-size: var(--fs-small);
+  font-weight: var(--w-medium);
+  color: var(--fg-dim);
+  line-height: 1.35;
+}
+.hero__record-list dd {
+  margin: 0;
+  font-size: 1.65rem;
+  font-weight: var(--w-heavy);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--fg);
+  flex: none;
+}
+.hero__record-note {
+  font-family: var(--font-display);
+  font-size: var(--fs-small);
+  line-height: 1.5;
+  color: var(--fg-mute);
+}
+
+@media (min-width: 760px) {
+  .hero__record { grid-column: 1 / 5; grid-row: 4; margin-top: var(--s2); }
+}
+@media (min-width: 1100px) {
+  .hero__record { grid-column: 5 / 8; grid-row: 2 / span 2; margin-top: 0; }
+  .hero__note { grid-column: 1 / 5; }
+  .hero__actions { grid-column: 1 / 5; grid-row: 3; align-self: end; }
+}

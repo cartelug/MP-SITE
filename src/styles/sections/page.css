@@ -64,13 +64,17 @@
 }
 
 /* ── footer ──────────────────────────────────────────────────── */
-.footer { padding-top: clamp(3.5rem, 8vw, 7rem); }
+.footer { padding-top: clamp(2.5rem, 5vw, 4.5rem); }
+/* Actions in the footer are controls, not full-width bars: a grid child
+   stretches by default, which turned the one footer CTA into a 400px
+   slab across the column. */
+.footer .action { justify-self: start; }
 
 .footer__top {
   display: grid;
-  gap: var(--s6);
-  padding-bottom: clamp(2.5rem, 6vw, 5rem);
-  border-bottom: 1px solid var(--rule-2);
+  gap: var(--s5);
+  padding-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
+  border-bottom: 1px solid var(--line-soft);
 }
 @media (min-width: 900px) {
   .footer__top { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
@@ -79,8 +83,8 @@
 .footer__mantra { max-width: 12ch; }
 
 .footer__cols {
-  row-gap: clamp(2rem, 5vw, 3.5rem);
-  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+  row-gap: clamp(1.75rem, 3.5vw, 2.5rem);
+  padding-block: clamp(2rem, 4vw, 3rem);
 }
 .footer__col--lead { grid-column: 1 / -1; }
 .footer__nav {
@@ -96,13 +100,13 @@
 
 .footer__link {
   font-family: var(--font-display);
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
   font-weight: var(--w-plain);
   color: var(--fg-dim);
   /* A thumb, not a cursor: the row is a full 44px target even though
      the line it holds is much shorter than that. */
-  min-height: 44px;
-  padding-block: 0.55rem;
+  min-height: 42px;
+  padding-block: 0.4rem;
   display: inline-flex;
   align-items: center;
   gap: 0.4em;
@@ -327,30 +331,39 @@
 .clauses { display: grid; }
 .clause {
   display: grid;
-  gap: var(--s3);
-  padding-block: clamp(1.5rem, 3.4vw, 2.4rem);
-  border-top: 1px solid var(--rule-2);
+  gap: var(--s2) var(--s3);
+  padding-block: clamp(1rem, 1.9vw, 1.4rem);
+  border-top: 1px solid var(--line);
   align-items: baseline;
 }
-.clause:last-child { border-bottom: 1px solid var(--rule-2); }
-.clause__num { font-family: var(--font-display); font-size: var(--fs-micro); font-weight: var(--w-sign); letter-spacing: 0.14em; color: var(--fg-mute); }
+.clause:last-child { border-bottom: 1px solid var(--line); }
+.clause__num {
+  font-family: var(--font-display);
+  font-size: var(--fs-micro);
+  font-weight: var(--w-heavy);
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
 .clause__word {
   font-family: var(--font-display);
-  font-size: clamp(1.45rem, 3.4vw, 2.45rem);
-  font-weight: var(--w-light);
-  line-height: 1.14;
-  letter-spacing: 0.006em;
+  font-size: clamp(1.35rem, 2.6vw, 1.95rem);
+  font-weight: var(--w-strong);
+  line-height: 1.1;
+  letter-spacing: -0.022em;
 }
 .clause__obliges {
   font-family: var(--font-text);
   font-size: 1.03rem;
   line-height: 1.55;
   color: var(--fg-dim);
-  max-width: 52ch;
+  max-width: 62ch;
 }
 @media (min-width: 760px) {
+  /* The definition column is the widest, so it takes the measure cap and
+     the row ends where the rule does — rather than leaving a third of the
+     band empty to the right of every clause. */
   .clause {
-    grid-template-columns: 3.5rem minmax(0, 0.85fr) minmax(0, 1.3fr);
+    grid-template-columns: 3rem minmax(0, 0.75fr) minmax(0, 1fr);
     column-gap: clamp(1.5rem, 3vw, 3rem);
   }
 }

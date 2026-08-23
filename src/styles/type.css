@@ -1,11 +1,16 @@
 /* ─────────────────────────────────────────────────────────────────
    Typographic roles.
 
-   Hierarchy is built from scale, width and space rather than from
-   weight, colour or decoration. Headings are set light and open: at
-   these sizes a light letterform reads as confidence and a heavy one
-   reads as a poster. Emphasis, where a heading needs it, comes from
-   the serif turning a phrase — not from more ink.
+   The previous build set every heading at weight 300–340 in open
+   capitals and then dropped a serif word into the middle of the line
+   for emphasis. That is the house style of a template, not of an
+   office of record, and it is the single thing that made this site
+   read as generic. It is gone.
+
+   Hierarchy is now built the way institutional typography builds it:
+   from SIZE, WEIGHT and SPACE, in one face, with tight tracking at
+   the top of the scale and open tracking only in signage. The serif
+   is the reading voice and is never used to decorate a heading.
    ───────────────────────────────────────────────────────────────── */
 
 .statement,
@@ -13,76 +18,97 @@
 .title,
 .head {
   font-family: var(--font-display);
-  font-weight: var(--w-light);
+  color: var(--fg);
   text-wrap: balance;
+  font-optical-sizing: auto;
 }
 
-/* Hero-scale. Occupies 30–45% of a desktop viewport by design. */
+/* Hero-scale. Sentence case, tightly tracked, solidly weighted.
+   It is allowed to be big; it is not allowed to be thin or to sprawl. */
 .statement {
   font-size: var(--fs-mega);
-  font-weight: var(--w-air);
-  line-height: 1.02;
+  font-weight: var(--w-heavy);
+  line-height: 0.96;
   letter-spacing: var(--track-mega);
-  text-transform: uppercase;
-  text-wrap: nowrap;
+  text-transform: none;
 }
 
 .display {
   font-size: var(--fs-display);
-  font-weight: var(--w-air);
-  line-height: 1.1;
+  font-weight: var(--w-strong);
+  line-height: 1.03;
   letter-spacing: var(--track-display);
 }
 
 .title {
   font-size: var(--fs-title);
-  font-weight: var(--w-light);
-  line-height: 1.16;
+  font-weight: var(--w-strong);
+  line-height: 1.1;
   letter-spacing: var(--track-title);
 }
 
 .head {
   font-size: var(--fs-head);
-  font-weight: var(--w-plain);
-  line-height: 1.32;
-  letter-spacing: 0.004em;
+  font-weight: var(--w-sign);
+  line-height: 1.28;
+  letter-spacing: var(--track-head);
   text-wrap: pretty;
 }
 
 .sub {
   font-family: var(--font-display);
   font-size: var(--fs-sub);
-  font-weight: var(--w-plain);
-  line-height: 1.42;
-  letter-spacing: 0.004em;
+  font-weight: var(--w-medium);
+  line-height: 1.4;
+  letter-spacing: -0.004em;
 }
 
-/* The serif carries anything written in a human voice. */
+/* Emphasis inside a heading is a colour shift within the same face —
+   never a change of typeface. `.turn` is kept as a hook because the
+   markup uses it, but it now resolves to accent colour, not to serif. */
+.statement .turn,
+.display .turn,
+.title .turn,
+.head .turn,
+.turn {
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: var(--accent);
+}
+
+/* ── the reading voice ──────────────────────────────────────────
+   Newsreader, and only here. A lede introduces; prose explains. */
 .lede {
   font-family: var(--font-text);
   font-size: var(--fs-lede);
-  font-weight: 350;
-  line-height: 1.52;
-  letter-spacing: 0.003em;
+  font-weight: 400;
+  line-height: 1.55;
+  letter-spacing: 0;
+  color: var(--fg-dim);
   max-width: var(--measure);
   text-wrap: pretty;
 }
 
 .prose {
   font-family: var(--font-text);
-  font-size: 1.05rem;
-  font-weight: 380;
-  line-height: 1.66;
+  font-size: 1.075rem;
+  font-weight: 400;
+  line-height: 1.68;
   max-width: var(--measure);
   color: var(--fg-dim);
   text-wrap: pretty;
 }
-.prose > * + * { margin-top: 0.95em; }
-.prose strong { font-weight: var(--w-strong); color: var(--fg); }
+.prose > * + * { margin-top: 0.9em; }
+.prose strong { font-weight: 600; color: var(--fg); }
+.prose em { font-style: italic; }
 
-/* Signage: section markers, field labels, table headers, eyebrows.
-   Small type is the one place weight is spent, because a 0.7rem
-   label set light disappears on a cheap screen. */
+/* ── signage ────────────────────────────────────────────────────
+   Section markers, field labels, table headers, eyebrows. Small
+   type is where weight is spent, because a 0.69rem label set light
+   disappears on the cheap screens most of this audience is using. */
 .marker {
   font-family: var(--font-display);
   font-size: var(--fs-label);
@@ -91,28 +117,42 @@
   text-transform: uppercase;
   color: var(--fg-dim);
   display: block;
+  line-height: 1.35;
 }
 
 .marker--rule {
   display: flex;
   align-items: center;
-  gap: 1.1em;
+  gap: 0.8em;
 }
 .marker--rule::before {
   content: '';
-  width: 2.6em;
-  height: 1px;
+  width: 1.8em;
+  height: 2px;
   background: var(--accent);
   flex: none;
+  border-radius: 2px;
+}
+
+/* An eyebrow that reads as a category tab rather than as floating text. */
+.marker--tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.4em 0.7em;
+  background: var(--surface-inset);
+  border-left: 2px solid var(--accent);
+  color: var(--fg);
 }
 
 .micro {
   font-family: var(--font-display);
   font-size: var(--fs-micro);
   font-weight: var(--w-sign);
-  letter-spacing: 0.18em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--fg-mute);
+  line-height: 1.4;
 }
 
 .caption {
@@ -121,10 +161,13 @@
   font-weight: var(--w-plain);
   line-height: 1.5;
   color: var(--fg-mute);
-  max-width: 44ch;
+  max-width: 46ch;
 }
 
-/* Figures line up in columns wherever they are compared. */
+/* ── figures ────────────────────────────────────────────────────
+   Numbers line up in columns wherever they are compared, and they
+   are set solid: a published figure is the most load-bearing thing
+   on a dashboard and it should look like it. */
 .num {
   font-family: var(--font-display);
   font-variant-numeric: tabular-nums lining-nums;
@@ -133,24 +176,54 @@
 }
 
 .figure-lg {
-  font-size: clamp(2.6rem, 6.5vw, 5.2rem);
-  font-weight: var(--w-air);
-  line-height: 0.94;
-  letter-spacing: -0.01em;
+  font-size: clamp(2.25rem, 4.6vw, 3.75rem);
+  font-weight: var(--w-heavy);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
-/* Chapter numbering. Set in outline so it never shouts. */
+/* Chapter numbering. Solid and quiet rather than outlined — an
+   outlined numeral at 5rem is ornament, and it reads as filler. */
 .index {
   font-family: var(--font-display);
-  font-weight: var(--w-light);
-  font-size: clamp(2.4rem, 6.4vw, 5rem);
-  line-height: 0.86;
-  letter-spacing: -0.02em;
-  /* currentColor would resolve to the transparent fill, so the stroke
-     colour has to be named outright. */
-  -webkit-text-stroke: 1px var(--fg);
-  color: transparent;
-  opacity: 0.4;
+  font-weight: var(--w-heavy);
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  -webkit-text-stroke: 0;
+  opacity: 1;
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
 .measure-wide { max-width: var(--measure-wide); }
+.measure { max-width: var(--measure); }
+
+/* ── small screens ──────────────────────────────────────────────
+   The scale resets rather than merely shrinking: a phone heading is
+   a heading, not a scaled-down poster. Balance is switched off below
+   the tablet breakpoint because balanced wrapping on a 3-word line
+   produces orphans on narrow columns. */
+@media (max-width: 759.98px) {
+  .statement {
+    font-size: clamp(2.35rem, 10.2vw, 3.4rem);
+    line-height: 0.99;
+    letter-spacing: -0.026em;
+    text-wrap: pretty;
+  }
+  .display {
+    font-size: clamp(1.85rem, 8.2vw, 2.6rem);
+    line-height: 1.06;
+    text-wrap: pretty;
+  }
+  .title {
+    font-size: clamp(1.5rem, 6.6vw, 2.1rem);
+    line-height: 1.14;
+    text-wrap: pretty;
+  }
+  .head { font-size: 1.14rem; }
+  .lede { font-size: 1.075rem; line-height: 1.58; }
+  .prose { font-size: 1.05rem; line-height: 1.66; }
+  .figure-lg { font-size: clamp(2rem, 9vw, 2.75rem); }
+}

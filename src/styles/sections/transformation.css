@@ -16,15 +16,18 @@
 }
 .transform__title {
   /* Its own scale: the display token is tuned for a one-line statement,
-     and this headline is a sentence that turns over four lines. */
-  font-size: clamp(2.2rem, 6.2vw, 5.2rem);
-  max-width: 18ch;
+     and this headline is a sentence that turns over three lines. */
+  font-size: clamp(1.95rem, 4.2vw, 3.4rem);
+  max-width: 20ch;
 }
+/* The second half of the sentence takes the accent colour and stays
+   in the same face. It was set in the serif at weight 300, which is
+   the "generated landing page" tell this rebuild removes everywhere. */
 .transform__title .turn {
   display: block;
-  font-family: var(--font-text);
-  font-weight: 300;
-  letter-spacing: -0.028em;
+  font-family: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
   color: var(--accent);
   text-transform: none;
 }

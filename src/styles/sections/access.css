@@ -1,157 +1,216 @@
 /* ─────────────────────────────────────────────────────────────────
    HOME ACCESS LAYER
 
-   The long-form home page now opens with a compact service layer:
-   one current sourced record, three common routes and a manual area
-   selector. It stays editorial rather than turning into an app grid.
+   The three common routes into the site. Previously these were three
+   rows divided by hairlines, which on a phone were indistinguishable
+   from the editorial rows further down the page — nothing said "this
+   is a control you can press". They are cards now, on a stone band,
+   with the latest record above them as a banner.
    ───────────────────────────────────────────────────────────────── */
 
 .access {
-  padding-block: clamp(1.75rem, 5vw, 4.75rem);
-  border-top: 1px solid var(--rule);
+  padding-block: clamp(2rem, 4.5vw, 3.75rem);
+  border-top: 1px solid var(--line);
 }
 
+/* ── the current record banner ──────────────────────────────────
+   The single most useful thing on the home page: the most recent
+   sourced entry, always one tap away. */
 .access__latest {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: var(--s3) var(--s5);
-  align-items: end;
-  padding-block: var(--s4) var(--s5);
-  border-block: 1px solid var(--rule);
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--s2) var(--s5);
+  align-items: center;
+  padding: var(--s4) var(--s5);
+  background: var(--forest);
+  color: #f2f5ec;
+  border-radius: var(--r2);
+  box-shadow: var(--shadow-2);
+  transition: background var(--t-fast) var(--ease-ui),
+              transform var(--t-fast) var(--ease-ui),
+              box-shadow var(--t-fast) var(--ease-ui);
 }
-.access__latest > .micro { grid-column: 1 / -1; }
-.access__latest-copy { display: grid; gap: 0.45rem; }
+.access__latest > .micro { grid-column: 1 / -1; color: var(--gold-2); }
+.access__latest-copy { display: grid; gap: 0.3rem; }
 .access__latest-title {
   font-family: var(--font-display);
-  font-size: clamp(1.05rem, 2.2vw, 1.45rem);
-  font-weight: var(--w-plain);
-  line-height: 1.35;
-  max-width: 38ch;
+  font-size: clamp(1.05rem, 1.9vw, 1.35rem);
+  font-weight: var(--w-strong);
+  letter-spacing: -0.014em;
+  line-height: 1.32;
+  max-width: 46ch;
 }
+.access__latest-copy .micro { color: rgba(242, 245, 236, 0.62); }
 .access__latest-arrow {
   grid-column: 2;
   grid-row: 2;
-  font-size: 1.1rem;
-  color: var(--accent);
+  font-size: 1.15rem;
+  color: var(--gold-2);
   transition: transform var(--t-mid) var(--ease-out);
 }
 @media (hover: hover) {
-  .access__latest:hover .access__latest-title { color: var(--accent); }
+  .access__latest:hover {
+    background: var(--forest-2);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-3);
+  }
   .access__latest:hover .access__latest-arrow { transform: translate(0.22em, -0.22em); }
 }
+.access__latest:active { transform: translateY(0); }
 
 .access__intro {
   display: grid;
   gap: var(--s4);
-  padding-block: clamp(2rem, 5vw, 4rem) var(--s5);
+  padding-block: clamp(1.75rem, 4vw, 3rem) var(--s5);
 }
-.access__intro .title { max-width: 14ch; }
-.access__intro .lede { max-width: 50ch; }
+.access__intro .title { max-width: 18ch; }
+.access__intro .lede { max-width: 52ch; }
 
+/* ── the three routes ───────────────────────────────────────── */
 .access__cards {
   display: grid;
-  border-top: 1px solid var(--rule);
+  gap: var(--gutter);
 }
 .access-card {
+  position: relative;
   display: grid;
-  grid-template-columns: 2.5rem 1fr auto;
-  gap: var(--s3);
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--s2) var(--s4);
   align-items: start;
-  min-height: 132px;
-  padding-block: var(--s5);
-  border-bottom: 1px solid var(--rule);
+  align-content: start;
+  min-height: 120px;
+  padding: var(--s5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r2);
+  box-shadow: var(--shadow-1);
+  transition: transform var(--t-fast) var(--ease-ui),
+              box-shadow var(--t-fast) var(--ease-ui),
+              border-color var(--t-fast) var(--ease-ui);
 }
-.access-card__num { padding-top: 0.25rem; }
-.access-card__copy { display: grid; gap: 0.45rem; }
+.access-card__num {
+  grid-row: 1;
+  color: var(--accent);
+  font-weight: var(--w-heavy);
+  letter-spacing: 0.04em;
+}
+.access-card__copy { grid-column: 2 / -1; grid-row: 2; display: grid; gap: 0.4rem; }
 .access-card__title {
   font-family: var(--font-display);
-  font-size: clamp(1.2rem, 2.7vw, 1.75rem);
-  font-weight: var(--w-light);
-  line-height: 1.25;
+  font-size: clamp(1.15rem, 1.9vw, 1.4rem);
+  font-weight: var(--w-strong);
+  letter-spacing: -0.018em;
+  line-height: 1.22;
 }
 .access-card__note {
   font-family: var(--font-text);
   font-size: 1rem;
-  line-height: 1.45;
+  line-height: 1.5;
   color: var(--fg-dim);
-  max-width: 32ch;
+  max-width: 34ch;
 }
-.access-card__arrow { color: var(--accent); padding-top: 0.2rem; }
-.access-card__title,
-.access-card__arrow { transition: color var(--t-fast) var(--ease-ui), transform var(--t-mid) var(--ease-out); }
+.access-card__arrow {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  color: var(--accent);
+  font-size: 1.05rem;
+  transition: transform var(--t-mid) var(--ease-out);
+}
 @media (hover: hover) {
+  .access-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-3);
+  }
   .access-card:hover .access-card__title { color: var(--accent); }
-  .access-card:hover .access-card__arrow { transform: translate(0.2em, -0.2em); }
+  .access-card:hover .access-card__arrow { transform: translate(0.22em, -0.22em); }
 }
+.access-card:active { transform: translateY(0); }
 
+/* ── the phone snapshot ─────────────────────────────────────────
+   Desktop gets these figures in the hero; a phone gets them here,
+   after the routes, where they read as a summary of the record. */
 .access__snapshot {
   display: grid;
   gap: var(--s4);
-  padding-block: var(--s5);
-  border-bottom: 1px solid var(--rule);
+  margin-top: var(--s5);
+  padding: var(--s4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r2);
 }
-.access__snapshot-head { display: grid; gap: 0.35rem; }
+.access__snapshot-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s2);
+}
 .access__snapshot-grid { display: grid; }
 .access__snapshot-grid > div {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--s4);
-  padding-block: 0.72rem;
-  border-top: 1px solid var(--rule-2);
+  padding-block: 0.65rem;
+  border-top: 1px solid var(--line-soft);
 }
 .access__snapshot-grid dt {
   font-family: var(--font-display);
   font-size: var(--fs-small);
+  font-weight: var(--w-medium);
   color: var(--fg-dim);
 }
 .access__snapshot-grid dd {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 1.55rem;
-  font-weight: var(--w-light);
+  font-size: 1.5rem;
+  font-weight: var(--w-heavy);
+  letter-spacing: -0.03em;
   line-height: 1;
 }
 
+/* ── the area selector ──────────────────────────────────────────
+   A real form control on a panel, so it reads as something to fill
+   in rather than as a caption with a dropdown next to it. */
 .access__area {
   display: grid;
   gap: var(--s4);
-  padding-top: clamp(1.75rem, 4vw, 3rem);
+  margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+  padding: clamp(1.15rem, 2.4vw, 1.75rem);
+  background: var(--surface-sunk);
+  border: 1px solid var(--line);
+  border-radius: var(--r2);
+  align-items: end;
 }
-.access__area-copy { display: grid; gap: 0.35rem; }
+.access__area-copy { display: grid; gap: 0.3rem; }
 .access__area-fields { display: grid; gap: var(--s3); }
-.access__area .select { background-color: var(--paper); }
 .access__area .action--solid { justify-content: center; width: 100%; }
 
 @media (min-width: 760px) {
   .access__snapshot { display: none; }
-  .access__latest { grid-template-columns: 9rem minmax(0, 1fr) auto; align-items: center; }
-  .access__latest > .micro { grid-column: 1; }
-  .access__latest-copy { grid-column: 2; }
-  .access__latest-arrow { grid-column: 3; grid-row: auto; }
+  .access__latest { grid-template-columns: 9.5rem minmax(0, 1fr) auto; align-items: center; }
+  .access__latest > .micro { grid-column: 1; grid-row: 1; }
+  .access__latest-copy { grid-column: 2; grid-row: 1; }
+  .access__latest-arrow { grid-column: 3; grid-row: 1; }
   .access__intro {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: end;
     gap: var(--s7);
   }
   .access__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .access-card {
-    grid-template-columns: 2.2rem 1fr auto;
-    padding: var(--s5);
-    border-left: 1px solid var(--rule);
-  }
-  .access-card:first-child { border-left: 0; padding-left: 0; }
   .access__area {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
-    align-items: end;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    gap: var(--s5);
   }
   .access__area-fields { grid-template-columns: minmax(0, 1fr) auto; }
   .access__area .action--solid { width: auto; white-space: nowrap; }
 }
 
 @media (min-width: 1100px) {
-  .access__latest { grid-template-columns: 2fr 7fr 3fr; }
+  .access__latest { grid-template-columns: 11rem minmax(0, 1fr) auto; }
   .access__intro { grid-template-columns: 7fr 5fr; }
-  .access-card { min-height: 180px; padding-block: var(--s6); }
-  .access__area { grid-template-columns: 7fr 5fr; }
+  .access-card { min-height: 150px; }
+  .access__area { grid-template-columns: 5fr 7fr; }
 }

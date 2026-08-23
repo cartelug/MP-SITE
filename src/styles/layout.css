@@ -1,10 +1,10 @@
 /* ─────────────────────────────────────────────────────────────────
    Grid and structure.
 
-   4 / 6 / 12 columns. Sections place themselves on the grid by name
-   in their own stylesheet — there is no span-utility vocabulary to
-   sprinkle through the markup, so every composition is deliberate
-   and lives in one readable place.
+   4 / 6 / 12 columns. The change from the previous build is that
+   structure is now visible: sections have compact heads instead of
+   full-height title frames, and content sits on panels and rows
+   rather than floating in an unbounded field of paper.
    ───────────────────────────────────────────────────────────────── */
 
 .wrap {
@@ -13,6 +13,7 @@
   margin-inline: auto;
   padding-inline: var(--pad);
 }
+.wrap--narrow { max-width: calc(980px + var(--pad) * 2); }
 
 .grid {
   display: grid;
@@ -21,18 +22,20 @@
 }
 
 .section { padding-block: var(--section); }
+.section--lg { padding-block: var(--section-lg); }
+.section--sm { padding-block: var(--section-sm); }
 .section--flush-top { padding-top: 0; }
+.section--flush-bottom { padding-bottom: 0; }
 
 /* Cross-page hash links land clear of the fixed header. */
-main [id] { scroll-margin-top: calc(var(--header-h) + var(--s4)); }
+main [id] { scroll-margin-top: calc(var(--header-h) + var(--s5)); }
 
-/* The terrace mark: nine hairlines cut to a hillside profile. Used
-   where a section change needs more than a single line. */
+/* The terrace mark: nine hairlines cut to a hillside profile. */
 .terrace {
-  width: clamp(150px, 20vw, 230px);
+  width: clamp(120px, 15vw, 180px);
   height: auto;
   color: var(--fg);
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 /* Contour field, sized as a background wash behind a section. */
@@ -40,36 +43,79 @@ main [id] { scroll-margin-top: calc(var(--header-h) + var(--s4)); }
   position: absolute;
   inset: 0;
   background: url('/img/contour-dark.svg') no-repeat center / cover;
-  opacity: 0.055;
+  opacity: 0.04;
   pointer-events: none;
   z-index: 0;
 }
 .field--forest .contour-wash,
 .field--ink .contour-wash {
   background-image: url('/img/contour-light.svg');
-  opacity: 0.09;
+  opacity: 0.07;
 }
 
-/* ── section headers ────────────────────────────────────────────
-   Deliberately not one shape. Sections choose whichever of these
-   reads correctly for their content; several use none of them.  */
+/* ── section heads ──────────────────────────────────────────────
+   One compact shape, used everywhere, that costs a fraction of the
+   vertical space the old title frame did. The rule under it is what
+   makes a section read as a section — not 11rem of padding. */
 .head-split {
   display: grid;
-  gap: var(--s5);
+  gap: var(--s4);
   align-items: end;
+  padding-bottom: var(--s5);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: var(--s7);
 }
 @media (min-width: 900px) {
   .head-split {
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
     gap: var(--s7);
+    align-items: end;
   }
+  .head-split > :last-child { padding-bottom: 0.2rem; }
 }
+/* Some sections open a band and supply their own rule below. */
+.head-split--bare { border-bottom: 0; padding-bottom: 0; margin-bottom: var(--s6); }
 
 /* ── stacks ─────────────────────────────────────────────────── */
 .stack { display: grid; align-content: start; }
+.stack-2 { gap: var(--s2); }
 .stack-3 { gap: var(--s3); }
 .stack-4 { gap: var(--s4); }
 .stack-5 { gap: var(--s5); }
+.stack-6 { gap: var(--s6); }
+
+.cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3); }
+.cluster--between { justify-content: space-between; }
+
+/* ── panels ─────────────────────────────────────────────────────
+   The surface layer the previous build did not have. A panel is a
+   bounded piece of the record: it has an edge, a ground and a top
+   rule. Content that belongs together now looks like it does. */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r2);
+  padding: clamp(1.15rem, 2.4vw, 1.9rem);
+  box-shadow: var(--shadow-1);
+}
+.panel--sunk { background: var(--surface-sunk); box-shadow: none; }
+.panel--flat { box-shadow: none; }
+.panel--flush { padding: 0; overflow: hidden; }
+
+/* A panel that leads with a coloured edge, for anything the office is
+   flagging: a caveat, a prototype notice, a verification status. */
+.panel--marked { border-left: 3px solid var(--accent); }
+
+.panel__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s3);
+  padding-bottom: var(--s3);
+  margin-bottom: var(--s4);
+  border-bottom: 1px solid var(--line-soft);
+}
 
 /* ── figures ────────────────────────────────────────────────────
    Photography is square-cornered and edge-aware. Captions sit under
@@ -79,14 +125,38 @@ main [id] { scroll-margin-top: calc(var(--header-h) + var(--s4)); }
 .figure__frame {
   position: relative;
   overflow: hidden;
-  background: var(--paper-2);
-  border-radius: var(--r0);
+  background: var(--surface-sunk);
+  border-radius: var(--r2);
 }
 .figure__frame img { width: 100%; height: 100%; object-fit: cover; }
 
 .figure__caption {
   display: grid;
-  gap: 0.35rem;
+  gap: 0.3rem;
   padding-top: var(--s3);
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--line);
 }
+
+/* ── auto grids ─────────────────────────────────────────────────
+   Used wherever a set of equal things is listed. Declaring the
+   minimum once here stops each section inventing its own. */
+.auto-grid {
+  display: grid;
+  gap: var(--gutter);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--min, 260px)), 1fr));
+}
+.auto-grid--wide { --min: 320px; }
+.auto-grid--tight { --min: 200px; }
+
+/* ── divider ────────────────────────────────────────────────── */
+.rule { height: 1px; background: var(--line); border: 0; margin: 0; }
+.rule--strong { background: var(--line-strong); }
+.rule--accent { height: 2px; background: var(--accent); width: 2.5rem; border-radius: 2px; }
+
+/* A section head already draws a rule. When the next block is itself a
+   ruled list, its first row would draw a second one a few rem below —
+   two hairlines with an empty band between them. Fold them together. */
+.head-split + .clauses .clause:first-child,
+.head-split + .archive .entry:first-child,
+.head-split + * > .clause:first-child { border-top: 0; padding-top: 0; }
+.head-split:has(+ .clauses) { margin-bottom: var(--s5); }

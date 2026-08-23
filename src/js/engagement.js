@@ -65,6 +65,15 @@ export function initRecordDisclosures() {
       toggle.setAttribute('aria-expanded', String(open));
       if (label) label.textContent = open ? 'Hide evidence' : 'View evidence';
 
+      /* A meter inside a closed record is display:none, so the observer in
+         ui.js never sees it arrive. Mark it here, on the frame after the
+         row becomes visible, so the fill has a width to animate from. */
+      if (open) {
+        requestAnimationFrame(() => {
+          record.querySelectorAll('.meter').forEach((meter) => meter.classList.add('is-in'));
+        });
+      }
+
       /* The disclosure remains an instant CSS state change everywhere.
          On phones, newly visible evidence gets one short directional settle
          so the reader can see what the tap revealed. */

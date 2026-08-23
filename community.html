@@ -212,7 +212,12 @@
 
         <div class="receipt" data-receipt hidden tabindex="-1">
           <span class="marker marker--rule">Saved on this device</span>
-          <p class="receipt__ref num" data-ref>BE-2026-0000</p>
+          <div class="receipt__ref-row">
+            <p class="receipt__ref num" id="receipt-ref" data-ref>BE-2026-0000</p>
+            <button class="action action--sm" type="button" data-copy="receipt-ref">
+              <span data-copy-label>Copy reference</span>
+            </button>
+          </div>
           <div class="receipt__grid">
             <div class="receipt__cell">
               <span class="micro">Area</span>
