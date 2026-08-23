@@ -6,9 +6,12 @@
    crop, same geometry, so the sketch is not decoration in front of
    the page but the first mark of the office's own visual language
    (the hillside contours used everywhere else on the site) arriving
-   at the person it represents. It shows once per browser session,
-   never blocks a no-JS visit, and is skipped outright under reduced
-   motion or a metered connection.
+   at the person it represents. The photograph itself has its
+   background removed (see tools/build-preloader-sketch.mjs), so what
+   resolves is him, standing on the same forest ground the sketch
+   already sits on — not a rectangle with a room behind it. It shows
+   once per browser session, never blocks a no-JS visit, and is
+   skipped outright under reduced motion or a metered connection.
    ───────────────────────────────────────────────────────────────── */
 
 .preloader {
@@ -49,8 +52,9 @@
 }
 
 .preloader__portrait {
+  /* No border-radius, no frame: the source has no background left to
+     round the corner of — the image ends at his own silhouette. */
   object-fit: cover;
-  border-radius: var(--r1);
   opacity: 0;
   transform: scale(1.035);
   transition: opacity 820ms var(--ease-out), transform 820ms var(--ease-out);

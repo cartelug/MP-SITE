@@ -1,21 +1,40 @@
 /* Builds the preloader's two registered layers from one shared crop box:
- *   1. src/partials/sketch.html   — an engraved line-portrait, as inline SVG
- *   2. public/img/preloader-portrait-*.{avif,webp,jpg} — the same crop as a photo
+ *   1. src/partials/sketch.html         — an engraved line-portrait, as inline SVG
+ *   2. public/img/preloader-portrait-*.webp — the same crop, background removed
  *
  * Both read the same CROP constant, so when the preloader lays the photo
  * under the sketch at the same box and cross-fades, the jaw, eyes and
  * shoulders line up exactly — the sketch is resolving into the photo
  * beneath it, not two unrelated images swapping.
  *
+ * The photo layer is cut from nakiyi-portrait-concept-cutout.png, an
+ * alpha-matted export (rembg, u2net_human_seg) of the same source the
+ * sketch reads — see the note above SRC_CUTOUT for how to regenerate it.
+ * With the background gone, the resolve reveals him standing on the
+ * preloader's own forest ground rather than swapping in a photo's own
+ * room and out-of-focus plant.
+ *
  * Run: node tools/build-preloader-sketch.mjs
  */
 import sharp from 'sharp';
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const SRC = path.join(root, 'src/media/source/nakiyi-portrait-concept.png');
+// Regenerate with:
+//   python3 -c "
+//   from rembg import remove, new_session
+//   s = new_session('u2net_human_seg')
+//   open('src/media/source/nakiyi-portrait-concept-cutout.png','wb').write(
+//     remove(open('src/media/source/nakiyi-portrait-concept.png','rb').read(),
+//            session=s, alpha_matting=True,
+//            alpha_matting_foreground_threshold=240,
+//            alpha_matting_background_threshold=10,
+//            alpha_matting_erode_size=8))"
+// (pip install rembg onnxruntime — first run downloads the ~176MB model)
+const SRC_CUTOUT = path.join(root, 'src/media/source/nakiyi-portrait-concept-cutout.png');
 const PARTIALS = path.join(root, 'src/partials');
 const IMG_OUT = path.join(root, 'public/img');
 
@@ -114,18 +133,22 @@ async function buildSketch() {
   console.log(`sketch.html — ${ROWS} rows, ${rowPaths.length} paths, viewBox ${SK_W} ${SK_H}`);
 }
 
-// ── photo: the same crop, at display resolution ───────────────────────
+// ── photo: the same crop, background removed, at display resolution ───
+// No jpeg output: jpeg has no alpha channel, and a flattened fallback
+// would put a visible rectangle back — exactly what this cutout removes.
 async function buildPhoto() {
+  if (!existsSync(SRC_CUTOUT)) {
+    throw new Error(`missing ${SRC_CUTOUT} — see the regeneration note above SRC_CUTOUT`);
+  }
   mkdirSync(IMG_OUT, { recursive: true });
   for (const w of [340, 680]) {
     const h = Math.round(w * CROP.height / CROP.width);
-    const base = () => sharp(SRC).extract(CROP).resize(w, h, { fit: 'fill' })
-      .sharpen({ sigma: 0.6, m1: 0.4, m2: 0.9 });
     const stem = path.join(IMG_OUT, `preloader-portrait-${w}`);
-    await base().avif({ quality: 58, effort: 4 }).toFile(`${stem}.avif`);
-    await base().webp({ quality: 76 }).toFile(`${stem}.webp`);
-    await base().jpeg({ quality: 82, mozjpeg: true }).toFile(`${stem}.jpg`);
-    console.log(`preloader-portrait-${w}.{avif,webp,jpg} — ${w}x${h}`);
+    await sharp(SRC_CUTOUT).extract(CROP).resize(w, h, { fit: 'fill' })
+      .sharpen({ sigma: 0.6, m1: 0.4, m2: 0.9 })
+      .webp({ quality: 82 })
+      .toFile(`${stem}.webp`);
+    console.log(`preloader-portrait-${w}.webp — ${w}x${h}, background removed`);
   }
 }
 
