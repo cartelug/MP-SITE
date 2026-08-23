@@ -62,6 +62,11 @@
   overflow: hidden;
   background: var(--forest-2);
   aspect-ratio: 780 / 365;
+  /* --wipe lives here once and is read by the future layer's clip, the
+     seam and the handle below — one value, set in one place by JS,
+     inherited by everything that needs to move with it. */
+  --wipe: 50%;
+  cursor: ew-resize;
 }
 /* Phone: the frame leaves the text measure and runs edge to edge, on a
    4:3 re-crop, so the comparison is not a letterbox sliver. */
@@ -90,7 +95,6 @@
    The CSS default is a half-and-half split so the comparison still reads
    with JavaScript off; the script sets it on init and takes over. */
 .transform__layer--future {
-  --wipe: 50%;
   clip-path: inset(0 0 0 var(--wipe));
 }
 
@@ -157,37 +161,75 @@
   padding-top: var(--s4);
 }
 
-/* The scrub is a real control at every width: scroll drives the wipe,
-   but a keyboard, a screen reader or a thumb can drive it directly. */
-.transform__scrub {
+/* ── the handle ────────────────────────────────────────────────
+   A physical grip that sits directly on the seam, on the photograph
+   itself — not a separate strip of track underneath it. This is the
+   part a first-time visitor's thumb actually finds; the real control
+   below is stretched under the whole frame so touching anywhere on
+   the photo moves it, not just this circle. */
+.transform__handle {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: var(--wipe);
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: var(--s4);
-  margin-top: var(--s3);
+  place-items: center;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--gold-2);
+  box-shadow: 0 2px 5px rgba(8, 20, 15, 0.28), 0 8px 18px -8px rgba(8, 20, 15, 0.4);
+  color: var(--forest);
+  pointer-events: none;
+  transition: outline-color var(--t-fast) var(--ease-ui);
+}
+.transform__handle-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
+/* The real control: stretched over the entire frame, fully invisible.
+   A horizontal range input reports the same value regardless of where
+   in its box the pointer lands vertically, so this works exactly like
+   dragging the handle even though the hit area is the whole photo. */
 .transform__control {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
   width: 100%;
+  height: 100%;
+  margin: 0;
   appearance: none;
   background: transparent;
-  height: 44px;
+  cursor: ew-resize;
+  touch-action: pan-y;
 }
-.transform__control::-webkit-slider-runnable-track {
-  height: 1px;
-  background: var(--rule);
+.transform__control::-webkit-slider-runnable-track,
+.transform__control::-webkit-slider-thumb { appearance: none; background: transparent; border: 0; }
+.transform__control::-webkit-slider-thumb { width: 100%; height: 100%; }
+.transform__control::-moz-range-track { background: transparent; border: 0; }
+.transform__control::-moz-range-thumb { width: 1px; height: 100%; background: transparent; border: 0; opacity: 0; }
+
+/* Focus lands on the handle, not on an outline around the whole
+   photograph — :has() reaches from the input up to its visible sibling. */
+.transform__frame:has(.transform__control:focus-visible) .transform__handle {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
 }
-.transform__control::-moz-range-track { height: 1px; background: var(--rule); }
-.transform__control::-webkit-slider-thumb {
-  appearance: none;
-  width: 2px;
-  height: 26px;
-  margin-top: -13px;
-  background: var(--gold-2);
-  border-radius: 0;
-  border: 0;
+
+@media (hover: hover) {
+  .transform__frame:hover .transform__handle { border-color: var(--gold-3); }
 }
-.transform__control::-moz-range-thumb {
-  width: 2px; height: 26px; background: var(--gold-2); border: 0; border-radius: 0;
+.transform__control:active { cursor: grabbing; }
+
+.transform__hint {
+  margin-top: var(--s3);
+  color: var(--fg-mute);
 }
-.transform__control:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }

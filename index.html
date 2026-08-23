@@ -307,14 +307,25 @@
           <span class="transform__seam" data-seam aria-hidden="true"></span>
           <span class="transform__stamp transform__stamp--today" data-stamp="today">Today</span>
           <span class="transform__stamp transform__stamp--future" data-stamp="future">2036 projection</span>
-        </div>
 
-        <div class="transform__scrub">
-          <label class="micro" for="transform-control">Drag to compare</label>
+          <span class="transform__handle" data-handle aria-hidden="true">
+            <svg class="transform__handle-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M9 6 5 12l4 6"/>
+              <path d="M15 6l4 6-4 6"/>
+            </svg>
+          </span>
+
+          <!-- The real control: stretched over the whole frame so the seam
+               can be picked up and dragged anywhere on the photograph, not
+               just on a thin strip beneath it. Fully transparent — the
+               handle above is its visible face; a click anywhere jumps the
+               seam there, same as dragging it. -->
           <input class="transform__control" id="transform-control" type="range" min="0" max="100" value="0"
                  aria-label="Move between Budadiri today and the 2036 projection"
                  data-transform-control>
         </div>
+
+        <p class="transform__hint micro" aria-hidden="true">Drag the photo to compare</p>
       </div>
 
       <div class="transform__words">
