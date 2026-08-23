@@ -231,6 +231,15 @@
   color: var(--paper);
   border: 1px solid rgba(242, 238, 228, 0.3);
 }
+.lightbox__close svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
 /* ── office prototype ────────────────────────────────────────── */
 .console {

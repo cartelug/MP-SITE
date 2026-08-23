@@ -66,11 +66,28 @@ const BANDS = [
 ];
 
 async function buildSketch() {
+  if (!existsSync(SRC_CUTOUT)) {
+    throw new Error(`missing ${SRC_CUTOUT} — see the regeneration note above SRC_CUTOUT`);
+  }
   const { data, info } = await sharp(SRC)
     .extract(CROP)
     .resize(SK_W, SK_H, { fit: 'fill' })
     .greyscale()
     .blur(0.45)
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  /* The source crop box is a rectangle, but the person isn't — it also
+     catches a slice of whatever is behind him (in this source, part of
+     a doorway/room edge at the left). Rather than hand-tune the crop to
+     dodge it, hatching is masked to the same alpha silhouette the photo
+     layer already uses, so anything that isn't him never gets a line —
+     the sketch's outline is his outline, not the crop box's corners. */
+  const { data: maskData } = await sharp(SRC_CUTOUT)
+    .extract(CROP)
+    .resize(SK_W, SK_H, { fit: 'fill' })
+    .ensureAlpha()
+    .extractChannel('alpha')
     .raw()
     .toBuffer({ resolveWithObject: true });
 
@@ -86,6 +103,11 @@ async function buildSketch() {
     v /= n;
     return Math.max(0, Math.min(255, (v - 128) * CONTRAST + 128));
   };
+  const covered = (x, y) => {
+    x = Math.max(0, Math.min(width - 1, Math.round(x)));
+    y = Math.max(0, Math.min(height - 1, Math.round(y)));
+    return maskData[y * width + x] > 128;
+  };
   const bandOf = (v) => BANDS.findIndex((b) => v < b.max);
 
   const rowPaths = [];
@@ -100,7 +122,7 @@ async function buildSketch() {
       const flush = (end) => { if (open) { segsByBand[band].push([start, end]); open = false; } };
       for (let s = 0; s <= nSteps; s++) {
         const x = s * STEP;
-        const b = bandOf(sample(x, srcY));
+        const b = covered(x, srcY) ? bandOf(sample(x, srcY)) : -1;
         if (b === band && !open) { open = true; start = x; }
         else if (b !== band && open) flush(x);
       }

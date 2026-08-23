@@ -45,6 +45,24 @@
               box-shadow var(--t-fast) var(--ease-ui),
               transform var(--motion-instant) var(--ease-ui);
 }
+/* Every decorative directional mark on the site (arrow, close) is this
+   one shape family: a stroked inline SVG sized off the font-size each
+   context already sets, never a Unicode arrow character. A character
+   glyph is left to the platform's font stack, and on at least one
+   mobile browser that meant an unwanted colour emoji rendering instead
+   of a plain mark — an SVG path can't be reinterpreted that way. */
+.arrow svg,
+.access-card__arrow svg,
+.access__latest-arrow svg {
+  width: 1em;
+  height: 1em;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 .action .arrow {
   font-size: 0.95em;
   line-height: 1;

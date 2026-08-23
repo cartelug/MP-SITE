@@ -41,6 +41,12 @@
   position: relative;
   width: min(64vw, 300px);
   aspect-ratio: 440 / 564;
+  /* Both layers are silhouettes with nothing in their corners — the crop
+     box's only hard edge left is the flat line at the bottom, where it
+     cuts straight across the suit. Rounding the plate turns that from
+     an accidental crop line into a deliberate portrait-plate shape. */
+  overflow: hidden;
+  border-radius: clamp(14px, 9%, 30px);
 }
 
 .preloader__portrait,
@@ -83,8 +89,24 @@
 }
 
 .preloader__mark {
-  color: rgba(243, 236, 216, 0.62);
+  display: grid;
+  gap: 0.5em;
   text-align: center;
+}
+.preloader__name {
+  font-family: var(--font-text);
+  font-size: clamp(1.55rem, 5.2vw, 2.15rem);
+  font-weight: 500;
+  letter-spacing: 0.004em;
+  color: #f3ecd8;
+}
+.preloader__role {
+  font-family: var(--font-display);
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  font-weight: var(--w-sign);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(243, 236, 216, 0.62);
 }
 
 @media (prefers-reduced-motion: reduce) {
