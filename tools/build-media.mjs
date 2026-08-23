@@ -7,6 +7,16 @@
  *  the consuming markup labels them as illustrative, never as evidence.
  *  Nothing here is decorative resizing: each entry is a framing decision.
  *
+ *  The today/tomorrow compare-slider pair (budadiri-today-concept.png,
+ *  budadiri-tomorrow-concept.png) are both AI-generated illustrative
+ *  concepts — the original supplied budadiri-today.jpg/tomorrow.jpg
+ *  composite was only 800x900 and had to be upscaled well past its native
+ *  resolution to serve at desktop width. The originals stay in this
+ *  directory for provenance and still back the five pillar-* detail crops
+ *  below, whose framing was tuned against them specifically. See
+ *  CREDITS.md and the alt text in index.html for the disclosure this
+ *  requires — both frames are now labelled illustrative, not just 2036.
+ *
  *  Run with: npm run media
  */
 import sharp from 'sharp';
@@ -21,34 +31,40 @@ const HILITE = { r: 0xf7, g: 0xf2, b: 0xe6 };   // warm paper, keeps highlights 
 
 await fs.mkdir(OUT, { recursive: true });
 
-/* Two halves of the same supplied composite. Cropped to an identical
-   365px band so the today → tomorrow transition registers exactly. */
-const BAND = { width: 780, height: 365 };
+/* Two matched illustrative concepts, generated at the same 1915x821 (~21:9)
+   frame specifically so one crop box works for both. Both source images
+   put their subject on the left third with the road/mountains receding
+   right, so the band takes the full native height (821px — real headroom
+   over the 365px it is ever displayed at) and the portrait crop reads
+   from the left edge, not centred, or it lands on empty road and sky. */
+const CONCEPT_H = 821;
+const CONCEPT_BAND_CROP = { left: 80, top: 0, width: 1754, height: CONCEPT_H };
+const CONCEPT_PORTRAIT_CROP = { left: 0, top: 0, width: 1095, height: CONCEPT_H };
 
 const plates = [
   {
     name: 'budadiri-today',
-    file: 'budadiri-today.jpg',
-    crop: { left: 10, top: 458, ...BAND },
+    file: 'budadiri-today-concept.png',
+    crop: CONCEPT_BAND_CROP,
     widths: [780, 1170, 1560],
   },
   {
     name: 'budadiri-tomorrow',
-    file: 'budadiri-tomorrow.jpg',
-    crop: { left: 10, top: 460, ...BAND },
+    file: 'budadiri-tomorrow-concept.png',
+    crop: CONCEPT_BAND_CROP,
     widths: [780, 1170, 1560],
   },
-  /* Square-ish re-crops so the phone never gets a letterbox sliver. */
+  /* Taller re-crops so the phone never gets a letterbox sliver. */
   {
     name: 'budadiri-today-portrait',
-    file: 'budadiri-today.jpg',
-    crop: { left: 150, top: 458, width: 487, height: 365 },
+    file: 'budadiri-today-concept.png',
+    crop: CONCEPT_PORTRAIT_CROP,
     widths: [487, 974],
   },
   {
     name: 'budadiri-tomorrow-portrait',
-    file: 'budadiri-tomorrow.jpg',
-    crop: { left: 180, top: 460, width: 487, height: 365 },
+    file: 'budadiri-tomorrow-concept.png',
+    crop: CONCEPT_PORTRAIT_CROP,
     widths: [487, 974],
   },
   /* Five detail crops, one per development pillar. Each is a real place
@@ -173,9 +189,9 @@ await sharp(path.join(SRC, 'budadiri-east-map-card.jpg'))
   .toFile(`${OUT}/budadiri-map-card.webp`);
 
 /* Social card: the constituency band, darkened, with the statement set on it. */
-const ogBand = await sharp(path.join(SRC, 'budadiri-today.jpg'))
-  .extract({ left: 10, top: 458, ...BAND })
-  .resize(1200, 630, { fit: 'cover', position: 'centre', kernel: 'lanczos3' })
+const ogBand = await sharp(path.join(SRC, 'budadiri-today-concept.png'))
+  .extract(CONCEPT_BAND_CROP)
+  .resize(1200, 630, { fit: 'cover', position: 'left', kernel: 'lanczos3' })
   .modulate({ brightness: 0.62, saturation: 0.72 })
   .toBuffer();
 
