@@ -109,7 +109,7 @@ function rebaseAbsoluteUrls() {
 
 const pages = [
   'index', 'vision', 'development', 'progress', 'parliament',
-  'community', 'news', 'about', 'resources', 'media', 'admin',
+  'community', 'news', 'about', 'resources', 'media', 'gallery', 'admin',
   '404', 'impact', 'updates',
 ];
 
