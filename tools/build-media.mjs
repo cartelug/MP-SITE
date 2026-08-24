@@ -113,6 +113,12 @@ const plates = [
   { name: 'budadiri-backdrop-plate', file: 'budadiri-backdrop-plate.png',
     crop: { left: 0, top: 0, width: 1448, height: 1086 }, widths: [560, 852] },
 
+  /* Poster frame for the gallery's first video (a real clip, filmed
+     directly by the office — not a generated image, so no illustrative
+     disclosure). Native 9:16, no crop. */
+  { name: 'nakiyi-session-01-poster', file: 'nakiyi-session-01-poster.jpg',
+    crop: { left: 0, top: 0, width: 576, height: 1024 }, widths: [360, 576] },
+
   /* The official portrait, cropped to 4:5 with the eyes near the upper third. */
   {
     name: 'nakiyi-portrait',

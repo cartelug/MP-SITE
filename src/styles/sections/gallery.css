@@ -1,0 +1,37 @@
+/* ── gallery ───────────────────────────────────────────────────
+   Primary-source footage and photography, filmed or taken directly
+   by the office. Not a campaign reel — the same captioned, dated
+   treatment as everything else on the site, just for video and
+   stills instead of records and figures. Cards stay a real phone-
+   video shape and wrap as more are added; nothing here stretches to
+   fill a wide desktop column just because the column is wide. */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 300px));
+  gap: clamp(2rem, 4vw, 3rem);
+  justify-content: start;
+}
+
+.gallery-item { margin: 0; }
+.gallery-item__frame {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  background: var(--surface-sunk);
+  border: 1px solid var(--line);
+  border-radius: var(--r2);
+}
+.gallery-item__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.gallery-item figcaption {
+  display: grid;
+  gap: 0.3rem;
+  padding-top: var(--s4);
+  border-top: 1px solid var(--line);
+  margin-top: var(--s4);
+}
+.gallery-item .caption { color: var(--fg-dim); }
