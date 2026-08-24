@@ -97,13 +97,21 @@ const plates = [
 
   /* Generated studies of Hon. Julius Nakiyi. The homepage captions make the
      distinction explicit: these are art-directed illustrative concepts based
-     on constituency-supplied reference photography, never event evidence. */
+     on constituency-supplied reference photography, never event evidence.
+     As of this build, all three carry a Budadiri backdrop (Mount Elgon
+     foothills / trading-centre setting) baked in at generation time rather
+     than a plain studio background. */
   { name: 'nakiyi-portrait-concept', file: 'nakiyi-portrait-concept.png',
-    crop: { left: 0, top: 0, width: 1122, height: 1402 }, widths: [454, 680] },
+    crop: { left: 0, top: 0, width: 1003, height: 1254 }, widths: [454, 680] },
   { name: 'nakiyi-listening-concept', file: 'nakiyi-listening-concept.png',
     crop: { left: 0, top: 0, width: 1536, height: 1024 }, widths: [768, 1280] },
   { name: 'nakiyi-working-concept', file: 'nakiyi-working-concept.png',
     crop: { left: 0, top: 0, width: 1536, height: 1024 }, widths: [768, 1280] },
+
+  /* Standalone Budadiri landscape, no person in it — used as a CSS backdrop
+     mat behind the two real (unaltered) photographs on the About page. */
+  { name: 'budadiri-backdrop-plate', file: 'budadiri-backdrop-plate.png',
+    crop: { left: 0, top: 0, width: 1448, height: 1086 }, widths: [560, 852] },
 
   /* The official portrait, cropped to 4:5 with the eyes near the upper third. */
   {
