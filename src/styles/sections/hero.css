@@ -161,13 +161,15 @@
    portrait comes last because it cannot answer a question. */
 @media (max-width: 759.98px) {
   .hero { padding-bottom: var(--s5); gap: var(--s4); }
-  /* Two lines each at most: at 0.5625rem with 0.04em of tracking the
-     term line fits "Twelfth Parliament · 2026–2031" in two, where the
-     previous setting broke it into three ragged ones. */
-  .hero__marker { align-items: flex-start; gap: var(--s3); }
-  .hero__marker .micro { font-size: 0.5625rem; letter-spacing: 0.04em; line-height: 1.35; }
-  .hero__marker .micro:first-child { flex: 1 1 auto; min-width: 0; }
-  .hero__marker .micro:last-child { flex: 0 1 auto; max-width: 20ch; }
+  /* Side by side, neither line has room to be itself: "Twelfth
+     Parliament · 2026–2031" wraps and orphans its date on a second
+     line while the shorter line beside it sits flush on one — two
+     marks that no longer read as a matched pair. Stacked, each gets
+     the full measure and reads on one line at any width down to a
+     320px phone, both flush to the same left edge. */
+  .hero__marker { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+  .hero__marker .micro { font-size: 0.6875rem; letter-spacing: 0.05em; line-height: 1.4; }
+  .hero__marker .micro:last-child { text-align: left; }
   .hero__body { gap: var(--s5); }
   .hero__statement { max-width: 100%; }
   .hero__note { font-size: 1.06rem; max-width: 100%; }
