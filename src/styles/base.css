@@ -128,6 +128,25 @@ a, button, input, select, textarea, label { -webkit-tap-highlight-color: transpa
   }
 }
 
+/* ── cross-page transitions ─────────────────────────────────────
+   Static multi-page site: this is what keeps a page swap reading
+   as one continuum instead of a hard reload flash. Chromium-family
+   browsers animate the default cross-fade; every other browser gets
+   exactly the instant navigation it already had — pure progressive
+   enhancement, nothing to design a fallback for. The pseudo-elements
+   this generates live outside the normal DOM tree, so the blanket
+   reduced-motion rule above can't reach them; disabling navigation
+   outright keeps reduced-motion behaving the same everywhere else
+   on the site: off means off, not "faster." */
+@view-transition {
+  navigation: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
 /* Before the motion layer boots, nothing is hidden: the page is
    readable with JavaScript switched off or still loading. */
 [data-reveal] { opacity: 1; }
