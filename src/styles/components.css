@@ -72,7 +72,7 @@
 @media (hover: hover) {
   .action:hover {
     --action-bd: var(--fg);
-    background: var(--surface-2);
+    --action-bg: var(--surface-2);
     box-shadow: var(--shadow-2);
   }
   .action:hover .arrow { transform: translate(0.18em, -0.18em); }
@@ -118,7 +118,7 @@
 /* ── outline action: no ground, just an edge ──────────────────── */
 .action--outline { --action-bg: transparent; box-shadow: none; }
 @media (hover: hover) {
-  .action--outline:hover { background: var(--surface-inset); box-shadow: none; }
+  .action--outline:hover { --action-bg: var(--surface-inset); box-shadow: none; }
 }
 
 /* ── quiet action: the editorial text link ──────────────────────

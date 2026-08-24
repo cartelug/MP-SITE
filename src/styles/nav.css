@@ -463,7 +463,10 @@ body.is-locked { overflow: hidden; }
 }
 
 @media (max-width: 359.98px) {
-  .mobile-dock { grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.3fr); }
+  /* Keep the same 124px floor the wider rule above added — this width
+     needs it more, not less; dropping it re-breaks the exact label
+     wrap that floor exists to prevent. */
+  .mobile-dock { grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(124px, 1.3fr); }
   .mobile-dock__tab { font-size: 0.5625rem; }
   .mobile-dock__context { display: none; }
 }

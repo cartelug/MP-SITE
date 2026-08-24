@@ -162,8 +162,7 @@
     row-gap: var(--s4);
     align-items: start;
   }
-  .record__subject   { grid-column: 1 / 4; }
-  .record__tags      { grid-column: 1 / 4; }
+  .record__lead       { grid-column: 1 / 4; }
   .record__meter-wrap{ grid-column: 4 / -1; }
   .record__status    { grid-column: 4 / 5; }
   .record__action    { grid-column: 5 / -1; }
